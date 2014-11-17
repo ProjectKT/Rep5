@@ -1,3 +1,5 @@
+package Frame;
+
 /*
  AIDemonProcReadTest.java
   すべての種類のデモン手続きのスーパークラス
@@ -6,7 +8,7 @@
   返さなけらばならない
 */
 
-import java.util.*;
+import java.util.Iterator;
 
 class AIDemonProcReadTest extends AIDemonProc {
 

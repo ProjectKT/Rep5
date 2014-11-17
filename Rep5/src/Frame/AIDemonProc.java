@@ -1,9 +1,11 @@
+package Frame;
+
 /*
  AIDemonProc.java
   すべての種類のデモン手続きのスーパークラス
 */
 
-import java.util.*;
+import java.util.Iterator;
 
 abstract
 class AIDemonProc {

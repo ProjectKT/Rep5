@@ -1,9 +1,11 @@
+package Frame;
+
 /*
  AIFrameSystem.java
   フレームシステム
 */
 
-import java.util.*;
+import java.util.HashMap;
 
 public
 class AIFrameSystem {
