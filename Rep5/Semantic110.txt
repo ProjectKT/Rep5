@@ -4,3 +4,6 @@ Taro speciality AI
 Ferrari is-a car
 car is-a engine
 Taro hobby baseball
+
+Kouta is-a NIT-student
+Kouta specially AI
