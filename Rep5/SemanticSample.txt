@@ -1,0 +1,6 @@
+baseball is-a sports
+Tato is-a NIT-student
+Taro speciality AI
+Ferrari is-a car
+car is-a engine
+Taro hobby baseball
