@@ -1,3 +1,4 @@
+package SemanticNet;
 import java.util.*;
 
 /***
