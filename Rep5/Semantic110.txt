@@ -7,3 +7,6 @@ Taro hobby baseball
 
 Kouta is-a NIT-student
 Kouta specially AI
+Housei is-a NIT-student
+Housei specially media
+Housei lile cat
