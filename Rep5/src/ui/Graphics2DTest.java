@@ -1,13 +1,16 @@
 package ui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+
+import ui.components.MapComponent;
+import ui.components.MapPanel;
+import ui.components.UIFrame;
+import ui.components.input.MapDragListener;
 
 public class Graphics2DTest extends JFrame {
+	
+	public MapPanel mapPanel;
+	public MapComponent comp;
 
 	public Graphics2DTest() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -15,32 +18,36 @@ public class Graphics2DTest extends JFrame {
 		setTitle("タイトル");
 		setVisible(true);
 
-		MyPanel panel = new MyPanel();
-		getContentPane().add(panel);
-	}
-
-	class MyPanel extends JPanel {
-
-		public MyPanel() {
-
-		}
+		mapPanel = new MapPanel();
+		MapDragListener l = new MapDragListener(mapPanel);
+		mapPanel.addMouseListener(l);
+		mapPanel.addMouseMotionListener(l);
+		getContentPane().add(mapPanel);
 		
-		@Override
-		protected void paintComponent(Graphics g) {
-
-			// 何か描く
-
-			g.setColor(Color.red);
-			g.fillRect(40, 20, 200, 120);
-
-			g.setColor(Color.blue);
-			g.drawString("Hello Java2D", 10, 50);
-
-		}
+		comp = new UIFrame();
+		
+		mapPanel.add(comp);
 	}
 	
 	
 	public static void main(String[] args) {
-		new Graphics2DTest().setVisible(true);
+		final Graphics2DTest f = new Graphics2DTest();
+		f.setVisible(true);
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println(f.mapPanel);
+					System.out.println(f.comp);
+				}
+			}
+		}).start();
 	}
 }
