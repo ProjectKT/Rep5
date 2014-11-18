@@ -1,15 +1,16 @@
 package Frame;
+
 /*
  AIWhenConstructedProc.java
 
-*/
+ */
 
-public
-abstract class AIWhenConstructedProc {
+public abstract class AIWhenConstructedProc {
 
-public boolean isWhenConstructedProc() { return true; }
- 
-abstract public
-void eval( AIFrameSystem inFrameSystem, AIFrame inFrame );
+	public boolean isWhenConstructedProc() {
+		return true;
+	}
+
+	abstract public void eval(AIFrameSystem inFrameSystem, AIFrame inFrame);
 
 }

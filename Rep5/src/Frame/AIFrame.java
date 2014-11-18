@@ -3,441 +3,338 @@ package Frame;
 /*
  AIFrame.java
 
-*/
+ */
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-abstract
-class AIFrame {
- 
-private boolean mIsInstance;
-private String mName;
-private HashMap<String,AISlot> mSlots = new HashMap<String,AISlot>();
-private AIWhenConstructedProc mWhenConstructedProc = null;
+abstract class AIFrame {
 
-/*
- * AIFrame
- *  コンストラクタ
- */
-AIFrame( AIFrameSystem inFrameSystem,
- AIClassFrame inSuperFrame,
- String inName,
- boolean inIsInstance )
-{
- mName = inName;
- mIsInstance = inIsInstance;
- if ( inSuperFrame != null )
-  setSlotValue( getSuperSlotName(), inSuperFrame );
- evalWhenConstructedProc( inFrameSystem, this );
-}
+	private boolean mIsInstance;
+	private String mName;
+	private HashMap<String, AISlot> mSlots = new HashMap<String, AISlot>();
+	private AIWhenConstructedProc mWhenConstructedProc = null;
 
+	/*
+	 * AIFrame コンストラクタ
+	 */
+	AIFrame(AIFrameSystem inFrameSystem, AIClassFrame inSuperFrame,
+			String inName, boolean inIsInstance) {
+		mName = inName;
+		mIsInstance = inIsInstance;
+		if (inSuperFrame != null)
+			setSlotValue(getSuperSlotName(), inSuperFrame);
+		evalWhenConstructedProc(inFrameSystem, this);
+	}
 
-/*
- * AIFrame
- *  コンストラクタ
- */
-AIFrame( AIFrameSystem inFrameSystem,
- Iterator inSuperFrames,
- String inName,
- boolean inIsInstance )
-{
- mName = inName;
- mIsInstance = inIsInstance;
- while ( inSuperFrames.hasNext() == true ) {
-  AIFrame frame = (AIFrame) inSuperFrames.next();
-  addSlotValue( getSuperSlotName(), frame );
- }
- evalWhenConstructedProc( inFrameSystem, this );
-}
+	/*
+	 * AIFrame コンストラクタ
+	 */
+	AIFrame(AIFrameSystem inFrameSystem, Iterator inSuperFrames, String inName,
+			boolean inIsInstance) {
+		mName = inName;
+		mIsInstance = inIsInstance;
+		while (inSuperFrames.hasNext() == true) {
+			AIFrame frame = (AIFrame) inSuperFrames.next();
+			addSlotValue(getSuperSlotName(), frame);
+		}
+		evalWhenConstructedProc(inFrameSystem, this);
+	}
 
+	/*
+	 * setWhenConstructedProc when-constructed proc を登録
+	 */
+	public void setWhenConstructedProc(AIWhenConstructedProc inProc) {
+		mWhenConstructedProc = inProc;
+	}
 
-/*
- * setWhenConstructedProc
- *  when-constructed proc を登録
- */
-public
-void setWhenConstructedProc( AIWhenConstructedProc inProc ) {
- mWhenConstructedProc = inProc;
-}
+	/*
+	 * getWhenConstructedProc when-constructed proc を返す
+	 */
+	public AIWhenConstructedProc getWhenConstructedProc() {
+		return mWhenConstructedProc;
+	}
 
+	/*
+	 * evalWhenConstructedProc when-constructed proc を評価
+	 */
+	void evalWhenConstructedProc(AIFrameSystem inFrameSystem, AIFrame inFrame) {
+		Iterator supers = getSupers();
+		if (supers != null) {
+			while (supers.hasNext() == true) {
+				AIClassFrame frame = (AIClassFrame) supers.next();
+				frame.evalWhenConstructedProc(inFrameSystem, inFrame);
+			}
+		}
+		if (mWhenConstructedProc != null)
+			mWhenConstructedProc.eval(inFrameSystem, inFrame);
+	}
 
-/*
- * getWhenConstructedProc
- *  when-constructed proc を返す
- */
-public
-AIWhenConstructedProc getWhenConstructedProc() {
- return mWhenConstructedProc;
-}
+	/*
+	 * isInstance このフレームがインスタンスフレームなら true を返す
+	 */
+	public boolean isInstance() {
+		return mIsInstance;
+	}
 
+	/*
+	 * getSupers このフレームのスーパーフレームを返す
+	 */
+	public Iterator getSupers() {
+		return getSlotValues(getSuperSlotName());
+	}
 
-/*
- * evalWhenConstructedProc
- *  when-constructed proc を評価
- */
-void evalWhenConstructedProc(
- AIFrameSystem inFrameSystem,
- AIFrame inFrame )
-{
- Iterator supers = getSupers();
- if ( supers != null ) {
-  while ( supers.hasNext() == true ) {
-   AIClassFrame frame = (AIClassFrame) supers.next();
-   frame.evalWhenConstructedProc( inFrameSystem, inFrame );
-  }
- }
- if ( mWhenConstructedProc != null )
-  mWhenConstructedProc.eval( inFrameSystem, inFrame );
-}
+	/**
+	 * readSlotValue スロット inSlotName に格納されているスロット値を返す．
+	 * 複数のスロット値が格納されているときは，最初のオブジェクトを返す．
+	 * 
+	 * スロット値の優先度 1. 自分の when-requested procedure 2. スーパークラスの when-requested
+	 * procedure 3. 自分の when-read procedure 4. スーパークラスの when-read procedure 5.
+	 * 自分のスロット値 6. スーパークラスのスロット値
+	 */
+	public Object readSlotValue(AIFrameSystem inFrameSystem, String inSlotName,
+			boolean inDefault) {
+		return getFirst(readSlotValues(inFrameSystem, inSlotName, inDefault));
+	}
 
+	/**
+	 * readSlotValues スロット inSlotName に格納されているスロット値を返す．
+	 */
+	public Iterator readSlotValues(AIFrameSystem inFrameSystem,
+			String inSlotName, boolean inDefault) {
+		Iterator obj = null;
 
-/*
- * isInstance
- *  このフレームがインスタンスフレームなら true を返す
- */
-public boolean isInstance() { return mIsInstance; }
+		if (inDefault == false) {
+			AISlot slot = getSlot(inSlotName);
+			if (slot != null)
+				obj = slot.getSlotValues();
+		}
 
+		if (obj == null)
+			obj = readSlotValuesWithWhenRequestedProc(inFrameSystem, inSlotName);
 
-/*
- * getSupers
- *  このフレームのスーパーフレームを返す
- */
-public
-Iterator getSupers() {
- return getSlotValues( getSuperSlotName() );
-}
+		if (obj == null) {
+			Iterator supers = getSupers();
+			while (supers.hasNext() == true) {
+				AIClassFrame frame = (AIClassFrame) supers.next();
+				obj = frame.getSlotValues(inSlotName);
+				if (obj != null)
+					break;
+			}
+		}
 
+		return readSlotValuesWithWhenReadProc(inFrameSystem, inSlotName, obj);
+	}
 
-/**
- * readSlotValue
- *  スロット inSlotName に格納されているスロット値を返す．
- *  複数のスロット値が格納されているときは，最初のオブジェクトを返す．
- *
- *  スロット値の優先度
- *   1. 自分の when-requested procedure
- *   2. スーパークラスの when-requested procedure
- *   3. 自分の when-read procedure
- *   4. スーパークラスの when-read procedure
- *   5. 自分のスロット値
- *   6. スーパークラスのスロット値
- */
-public
-Object
-readSlotValue(
- AIFrameSystem inFrameSystem,
- String inSlotName,
- boolean inDefault )
-{
- return getFirst(
-         readSlotValues( inFrameSystem, inSlotName, inDefault ) );
-}
+	/**
+	 * readSlotValuesWithWhenRequestedProc スロット inSlotName に格納されているスロット値を返す．
+	 */
+	Iterator readSlotValuesWithWhenRequestedProc(AIFrameSystem inFrameSystem,
+			String inSlotName) {
+		return readSlotValuesWithWhenRequestedProc(inFrameSystem, this,
+				inSlotName);
+	}
 
+	protected Iterator readSlotValuesWithWhenRequestedProc(
+			AIFrameSystem inFrameSystem, AIFrame inFrame, String inSlotName) {
+		Iterator obj = null;
+		AISlot slot = getSlot(inSlotName);
 
-/**
- * readSlotValues
- *  スロット inSlotName に格納されているスロット値を返す．
- */
-public Iterator readSlotValues(
- AIFrameSystem inFrameSystem,
- String inSlotName,
- boolean inDefault )
-{
- Iterator obj = null;
- 
- if ( inDefault == false ) {
-  AISlot slot = getSlot( inSlotName );
-  if ( slot != null )
-   obj = slot.getSlotValues();
- }
-  
- if ( obj == null )
-  obj = readSlotValuesWithWhenRequestedProc(
-         inFrameSystem, inSlotName );
+		obj = evalWhenRequestedProc(inFrameSystem, inFrame, slot, inSlotName);
+		if (obj != null)
+			return obj;
 
- if ( obj == null ) {
-  Iterator supers = getSupers();
-  while ( supers.hasNext() == true ) {
-   AIClassFrame frame = (AIClassFrame) supers.next();
-   obj = frame.getSlotValues( inSlotName );
-   if ( obj != null )
-    break;
-  }
- }
+		Iterator supers = getSupers();
+		if (supers != null) {
+			while (supers.hasNext() == true) {
+				AIClassFrame frame = (AIClassFrame) supers.next();
+				slot = frame.getSlot(inSlotName);
+				obj = frame.evalWhenRequestedProc(inFrameSystem, inFrame, slot,
+						inSlotName);
+				if (obj != null)
+					return obj;
+			}
+		}
 
- return readSlotValuesWithWhenReadProc(
-         inFrameSystem, inSlotName, obj );
-}
+		return null;
+	}
 
+	protected Iterator evalWhenRequestedProc(AIFrameSystem inFrameSystem,
+			AIFrame inFrame, AISlot inSlot, String inSlotName) {
+		if (inSlot != null && inSlot.getWhenRequestedProc() != null) {
+			AIDemonProc demon = inSlot.getWhenRequestedProc();
+			if (demon != null)
+				return (Iterator) demon.eval(inFrameSystem, inFrame,
+						inSlotName, null);
+		}
+		return null;
+	}
 
-/**
- * readSlotValuesWithWhenRequestedProc
- *  スロット inSlotName に格納されているスロット値を返す．
- */
-Iterator readSlotValuesWithWhenRequestedProc(
- AIFrameSystem inFrameSystem,
- String inSlotName )
-{
- return readSlotValuesWithWhenRequestedProc(
-         inFrameSystem, this, inSlotName );
-}
+	/**
+	 * readSlotValuesWithWhenReadProc スロット inSlotName に格納されているスロット値を返す．
+	 */
+	Iterator readSlotValuesWithWhenReadProc(AIFrameSystem inFrameSystem,
+			String inSlotName, Iterator inSlotValue) {
+		return readSlotValuesWithWhenReadProc(inFrameSystem, this, inSlotName,
+				inSlotValue);
+	}
 
-protected
-Iterator readSlotValuesWithWhenRequestedProc(
- AIFrameSystem inFrameSystem,
- AIFrame inFrame,
- String inSlotName )
-{
- Iterator obj = null;
- AISlot slot = getSlot( inSlotName );
-  
-  obj = evalWhenRequestedProc(
-         inFrameSystem, inFrame, slot, inSlotName );
- if ( obj != null )
-  return obj;
+	protected Iterator readSlotValuesWithWhenReadProc(
+			AIFrameSystem inFrameSystem, AIFrame inFrame, String inSlotName,
+			Iterator inSlotValue) {
+		AISlot slot;
 
- Iterator supers = getSupers();
- if ( supers != null ) {
-  while ( supers.hasNext() == true ) {
-   AIClassFrame frame = (AIClassFrame) supers.next();
-   slot = frame.getSlot( inSlotName );
-   obj = frame.evalWhenRequestedProc(
-          inFrameSystem, inFrame, slot, inSlotName );
-   if ( obj != null )
-    return obj;
-  }
- }
- 
- return null;
-}
+		Iterator supers = getSupers();
+		if (supers != null) {
+			while (supers.hasNext() == true) {
+				AIClassFrame frame = (AIClassFrame) supers.next();
+				slot = frame.getSlot(inSlotName);
+				inSlotValue = frame.evalWhenReadProc(inFrameSystem, inFrame,
+						slot, inSlotName, inSlotValue);
+			}
+		}
 
-protected
-Iterator evalWhenRequestedProc(
- AIFrameSystem inFrameSystem,
- AIFrame inFrame,
- AISlot inSlot,
- String inSlotName )
-{
-  if ( inSlot != null && inSlot.getWhenRequestedProc() != null ) {
-  AIDemonProc demon = inSlot.getWhenRequestedProc();
-  if ( demon != null )
-   return (Iterator) demon.eval(
-           inFrameSystem, inFrame, inSlotName, null );
-  }
- return null;
-}
+		slot = getSlot(inSlotName);
+		return evalWhenReadProc(inFrameSystem, inFrame, slot, inSlotName,
+				inSlotValue);
+	}
 
+	protected Iterator evalWhenReadProc(AIFrameSystem inFrameSystem,
+			AIFrame inFrame, AISlot inSlot, String inSlotName,
+			Iterator inSlotValue) {
+		if (inSlot != null && inSlot.getWhenReadProc() != null) {
+			AIDemonProc demon = inSlot.getWhenReadProc();
+			if (demon != null)
+				inSlotValue = (Iterator) demon.eval(inFrameSystem, inFrame,
+						inSlotName, inSlotValue);
+		}
 
-/**
- * readSlotValuesWithWhenReadProc
- *  スロット inSlotName に格納されているスロット値を返す．
- */
-Iterator
-readSlotValuesWithWhenReadProc(
- AIFrameSystem inFrameSystem,
- String inSlotName,
- Iterator inSlotValue )
-{
- return readSlotValuesWithWhenReadProc(
-         inFrameSystem, this, inSlotName, inSlotValue );
-}
+		return inSlotValue;
+	}
 
-protected
-Iterator readSlotValuesWithWhenReadProc(
- AIFrameSystem inFrameSystem,
- AIFrame inFrame,
- String inSlotName,
- Iterator inSlotValue )
-{
- AISlot slot;
-  
- Iterator supers = getSupers();
- if ( supers != null ) {
-  while ( supers.hasNext() == true ) {
-   AIClassFrame frame = (AIClassFrame) supers.next();
-   slot = frame.getSlot( inSlotName );
-   inSlotValue =
-    frame.evalWhenReadProc(
-     inFrameSystem, inFrame, slot, inSlotName, inSlotValue );
-  }
- }
+	/**
+	 * writeSlotValue スロット inSlotName にスロット値 inSlotValue を設定する．
+	 */
+	public void writeSlotValue(AIFrameSystem inFrameSystem, String inSlotName,
+			Object inSlotValue) {
+		AISlot slot = getSlot(inSlotName);
+		if (slot == null) {
+			slot = new AISlot();
+			mSlots.put(inSlotName, slot);
+		}
 
- slot = getSlot( inSlotName );
-  return evalWhenReadProc( inFrameSystem, inFrame,
-          slot, inSlotName, inSlotValue );
-}
+		slot.setSlotValue(inSlotValue);
 
-protected
-Iterator evalWhenReadProc(
- AIFrameSystem inFrameSystem,
- AIFrame inFrame,
- AISlot inSlot,
- String inSlotName,
- Iterator inSlotValue )
-{
-  if ( inSlot != null && inSlot.getWhenReadProc() != null ) {
-  AIDemonProc demon = inSlot.getWhenReadProc();
-  if ( demon != null )
-   inSlotValue =
-    (Iterator) demon.eval( inFrameSystem, inFrame,
-                   inSlotName, inSlotValue );
-  }
- 
- return inSlotValue; 
-}
+		writeSlotValueWithWhenWrittenProc(inFrameSystem, inSlotName,
+				inSlotValue);
+	}
 
-/**
- * writeSlotValue
- *  スロット inSlotName にスロット値 inSlotValue を設定する．
- */
-public
-void
-writeSlotValue(
- AIFrameSystem inFrameSystem,
- String inSlotName,
- Object inSlotValue )
-{
- AISlot slot = getSlot( inSlotName );
- if ( slot == null ) {
-  slot = new AISlot();
-  mSlots.put( inSlotName, slot );
- }
+	void writeSlotValueWithWhenWrittenProc(AIFrameSystem inFrameSystem,
+			String inSlotName, Object inSlotValue) {
+		Iterator supers = getSupers();
+		if (supers != null) {
+			while (supers.hasNext() == true) {
+				AIClassFrame frame = (AIClassFrame) supers.next();
+				frame.writeSlotValueWithWhenWrittenProc(inFrameSystem,
+						inSlotName, inSlotValue);
+			}
+		}
 
- slot.setSlotValue( inSlotValue );
+		AISlot slot = getSlot(inSlotName);
+		if (slot != null) {
+			AIDemonProc demon = slot.getWhenWrittenProc();
+			if (demon != null)
+				demon.eval(inFrameSystem, this, inSlotName,
+						makeEnum(inSlotValue));
+		}
+	}
 
- writeSlotValueWithWhenWrittenProc(
-  inFrameSystem, inSlotName, inSlotValue );
-}
+	// ----------------------------------------------------------------------
+	public Object getSlotValue(String inSlotName) {
+		Iterator iter = getSlotValues(inSlotName);
+		if (iter != null && iter.hasNext() == true)
+			return iter.next();
+		return null;
+	}
 
+	public Iterator getSlotValues(String inSlotName) {
+		AISlot slot = getSlot(inSlotName);
+		if (slot == null)
+			return null;
+		return slot.getSlotValues();
+	}
 
-void writeSlotValueWithWhenWrittenProc(
- AIFrameSystem inFrameSystem,
- String inSlotName,
- Object inSlotValue )
-{
- Iterator supers = getSupers();
- if ( supers != null ) {
-  while ( supers.hasNext() == true ) {
-   AIClassFrame frame = (AIClassFrame) supers.next();
-   frame.writeSlotValueWithWhenWrittenProc(
-    inFrameSystem, inSlotName, inSlotValue );
-  }
- }
+	public void setSlotValue(String inSlotName, Object inSlotValue) {
+		AISlot slot = getSlot(inSlotName);
+		if (slot == null) {
+			slot = new AISlot();
+			mSlots.put(inSlotName, slot);
+		}
+		slot.setSlotValue(inSlotValue);
+	}
 
- AISlot slot = getSlot( inSlotName );
- if ( slot != null ) {
-  AIDemonProc demon = slot.getWhenWrittenProc();
-  if ( demon != null )
-   demon.eval( inFrameSystem, this,
-    inSlotName, makeEnum( inSlotValue ) );  
- }
-}
+	public void addSlotValue(String inSlotName, Object inSlotValue) {
+		AISlot slot = getSlot(inSlotName);
+		if (slot == null) {
+			slot = new AISlot();
+			mSlots.put(inSlotName, slot);
+		}
+		slot.addSlotValue(inSlotValue);
+	}
 
+	public void removeSlotValue(String inSlotName, Object inSlotValue) {
+		AISlot slot = getSlot(inSlotName);
+		if (slot != null)
+			slot.removeSlotValue(inSlotValue);
+	}
 
-// ----------------------------------------------------------------------
-public
-Object getSlotValue( String inSlotName ) {
- Iterator iter = getSlotValues( inSlotName );
- if ( iter != null && iter.hasNext() == true )
-  return iter.next();
- return null;
-}
+	public void setDemonProc(int inType, String inSlotName,
+			AIDemonProc inDemonProc) {
+		AISlot slot = getSlot(inSlotName);
+		if (slot == null) {
+			slot = new AISlot();
+			mSlots.put(inSlotName, slot);
+		}
+		slot.setDemonProc(inType, inDemonProc);
+	}
 
-public
-Iterator getSlotValues( String inSlotName ) {
- AISlot slot = getSlot( inSlotName );
- if ( slot == null )
-  return null;
- return slot.getSlotValues();
-}
+	// ------------------------------------------------------------------
+	// utils
+	// ------------------------------------------------------------------
 
-public
-void setSlotValue( String inSlotName, Object inSlotValue ) {
- AISlot slot = getSlot( inSlotName );
- if ( slot == null ) {
-  slot = new AISlot();
-  mSlots.put( inSlotName, slot );
- }
- slot.setSlotValue( inSlotValue );
-}
+	/*
+	 * getSuperSlotName スーパーフレームを格納しているスロットの名前を返す．
+	 */
+	String getSuperSlotName() {
+		if (isInstance() == true)
+			return "is-a";
+		return "ako";
+	}
 
-public
-void addSlotValue( String inSlotName, Object inSlotValue ) {
- AISlot slot = getSlot( inSlotName );
- if ( slot == null ) {
-  slot = new AISlot();
-  mSlots.put( inSlotName, slot );
- }
- slot.addSlotValue( inSlotValue );
-}
+	/*
+	 * getSlot スロット名が inSlotName であるスロットを返す．
+	 */
+	AISlot getSlot(String inSlotName) {
+		return (AISlot) mSlots.get(inSlotName);
+	}
 
-public
-void removeSlotValue( String inSlotName, Object inSlotValue ) {
- AISlot slot = getSlot( inSlotName );
- if ( slot != null )
-  slot.removeSlotValue( inSlotValue );
-}
+	/*
+	 * getFirst inEnum 中の最初のオブジェクトを返す
+	 */
+	public static Object getFirst(Iterator inEnum) {
+		if (inEnum != null && inEnum.hasNext() == true)
+			return inEnum.next();
+		return null;
+	}
 
-public
-void setDemonProc(
- int inType,
- String inSlotName,
- AIDemonProc inDemonProc )
-{
- AISlot slot = getSlot( inSlotName );
- if ( slot == null ) {
-  slot = new AISlot();
-  mSlots.put( inSlotName, slot );
- }
- slot.setDemonProc( inType, inDemonProc );
-}
-
-
-// ------------------------------------------------------------------
-// utils
-// ------------------------------------------------------------------
-
-/*
- * getSuperSlotName
- *  スーパーフレームを格納しているスロットの名前を返す．
- */
-String getSuperSlotName() {
- if ( isInstance() == true )
-  return "is-a";
- return "ako";
-}
-
-/*
- * getSlot
- *  スロット名が inSlotName であるスロットを返す．
- */
-AISlot getSlot( String inSlotName ) {
- return (AISlot) mSlots.get( inSlotName );
-}
-
-
-/*
- * getFirst
- *  inEnum 中の最初のオブジェクトを返す
- */
-public static
-Object getFirst( Iterator inEnum ) {
- if ( inEnum != null && inEnum.hasNext() == true )
-  return inEnum.next();
- return null;
-}
-
-
-/*
- * makeEnum
- *
- */
-public static
-Iterator makeEnum( Object inObj ) {
- ArrayList list = new ArrayList();
- list.add( inObj );
- return list.iterator();
-}
+	/*
+	 * makeEnum
+	 */
+	public static Iterator makeEnum(Object inObj) {
+		ArrayList list = new ArrayList();
+		list.add(inObj);
+		return list.iterator();
+	}
 
 } // end of class definition
