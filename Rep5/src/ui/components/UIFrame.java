@@ -6,18 +6,15 @@ import java.awt.Graphics;
 public class UIFrame extends MapComponent {
 	
 	public UIFrame() {
-		setSize(200, 200);
+		setSize(100, 100);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+		System.out.println("paintComponent(): "+this);
 		g.setColor(Color.red);
 		g.fillRect(0, 0, getWidth(), getHeight());
-
-		g.setColor(Color.blue);
-		g.drawString("Hello Java2D", 0, 0);
 	}
 	
 	

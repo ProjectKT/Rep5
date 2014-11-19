@@ -1,6 +1,7 @@
 package ui.components;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
@@ -30,7 +31,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) (pos.getX() - panel.getLeft());
+			return (int) ((pos.getX() + (getWidth()/2) - panel.getCenter().getX()) / panel.getZoom());
 		}
 		return super.getX();
 	}
@@ -38,9 +39,25 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) (pos.getY() - panel.getTop());
+			return (int) ((pos.getY() + (getHeight()/2) - panel.getCenter().getY()) / panel.getZoom());
 		}
 		return super.getY();
+	}
+	
+	@Override
+	public int getWidth() {
+		if (panel != null) {
+			return (int) (super.getWidth() / panel.getZoom());
+		}
+		return super.getWidth();
+	}
+	
+	@Override
+	public int getHeight() {
+		if (panel != null) {
+			return (int) (super.getHeight() / panel.getZoom());
+		}
+		return super.getHeight();
 	}
 	
 	@Override
@@ -50,6 +67,13 @@ public class MapComponent extends JComponent {
 		return s;
 	}
 	
+	public Point2D getPos() {
+		return pos;
+	}
+	
+	public void setPos(Point2D pos) {
+		this.pos = pos;
+	}
 	
 	
 }

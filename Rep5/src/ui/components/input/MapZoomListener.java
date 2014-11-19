@@ -32,7 +32,7 @@ public class MapZoomListener extends MouseAdapter {
 //		
 //		Dimension oldMapSize = panel.getTileFactory().getMapSize(panel.getZoom());
 //
-//		panel.setZoom(panel.getZoom() + (double)e.getWheelRotation() * zoomCoeff);
+		panel.setZoom(panel.getZoom() + (double)e.getWheelRotation() * zoomCoeff);
 //		
 //		Dimension mapSize = panel.getTileFactory().getMapSize(panel.getZoom());
 //
@@ -47,6 +47,7 @@ public class MapZoomListener extends MouseAdapter {
 		double y = center.getY();
 
 		panel.setCenter(new Point2D.Double(x, y));
+		panel.repaint();
 	}
 	
 	
