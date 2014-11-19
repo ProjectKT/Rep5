@@ -15,6 +15,7 @@ public class MapPanel extends JPanel implements DesignMode {
 	private Point2D center = new Point2D.Double(0, 0);
 	
 	public MapPanel(MapLayout layoutManager) {
+		layoutManager.setMapPanel(this);
 		setLayout(layoutManager);
 	}
 	

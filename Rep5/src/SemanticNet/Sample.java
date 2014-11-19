@@ -37,13 +37,5 @@ public class Sample {
 
 		sn.printLinks();
 		sn.printNodes();
-
-		SemanticUI gui = new SemanticUI();
-
-		for (Node node : sn.nodes) {
-			gui.addNode(node);
-		}
-		
-		gui.setVisible(true);
 	}
 }

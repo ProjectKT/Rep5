@@ -1,6 +1,8 @@
 package ui.components;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.util.HashMap;
 
 import SemanticNet.Link;
@@ -10,12 +12,9 @@ public class SemanticNetLayout extends MapLayout {
 	
 	private HashMap<Node,UINode> nodeMap = new HashMap<Node,UINode>();
 	
-	public SemanticNetLayout(MapPanel mapPanel) {
-		super(mapPanel);
-	}
-
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
+		System.out.println("addLayoutComponent");
 		if (comp instanceof UINode) {
 			nodeMap.put(((UINode) comp).getNode(), (UINode) comp);
 			layoutUINode(name, (UINode) comp);
@@ -26,9 +25,22 @@ public class SemanticNetLayout extends MapLayout {
 	
 	@Override
 	public void removeLayoutComponent(Component comp) {
+		System.out.println("removeLayoutComponent");
 		if (comp instanceof UINode) {
 			nodeMap.remove(((UINode) comp).getNode());
 		}
+	}
+	
+	@Override
+	public Dimension preferredLayoutSize(Container parent) {
+		System.out.println("preferredLayoutSize");
+		return super.preferredLayoutSize(parent);
+	}
+
+	@Override
+	public void layoutContainer(Container parent) {
+		System.out.println("layoutContainer");
+		super.layoutContainer(parent);
 	}
 
 	/**

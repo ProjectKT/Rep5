@@ -19,7 +19,7 @@ public class AIFrameUI extends JFrame {
 		setTitle("AIFrameUI");
 		setVisible(true);
 
-		mapPanel = new MapPanel(new AIFrameLayout(mapPanel));
+		mapPanel = new MapPanel(new AIFrameLayout());
 		MapDragListener dl = new MapDragListener(mapPanel);
 		mapPanel.addMouseListener(dl);
 		mapPanel.addMouseMotionListener(dl);

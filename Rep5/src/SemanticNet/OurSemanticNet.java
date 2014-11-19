@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ui.SemanticUI;
+
 public class OurSemanticNet extends SemanticNet {
 	//各グループメンバーのデータセット
 	private static final String[] FILES = {
@@ -56,12 +58,5 @@ public class OurSemanticNet extends SemanticNet {
 				in.close();
 			}
 		}
-	}
-	
-	public static void main(String[] args){
-		OurSemanticNet osn = new OurSemanticNet();
-
-		osn.printLinks();
-		osn.printNodes();
 	}
 }
