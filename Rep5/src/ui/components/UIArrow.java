@@ -1,27 +1,35 @@
 package ui.components;
 
 import java.awt.Graphics;
+import java.awt.geom.Point2D;
 
 import SemanticNet.Link;
 
 public class UIArrow extends MapComponent {
 
-	private Link link;
+	private Point2D from;
+	private Point2D to;
 	
 	/**
 	 * SemanticNet のリンクを受け取って初期化するコンストラクタ
 	 * @param link
 	 */
-	public UIArrow(Link link) {
-		this.link = link;
+	public UIArrow(Point2D from, Point2D to) {
+		this.from = from;
+		this.to = to;
 	}
 
-	/**
-	 * SemanticNet のリンクを返す
-	 * @return
-	 */
-	public Link getLink() {
-		return link;
+	public Point2D getFrom() {
+		return from;
+	}
+	public void setFrom(Point2D from) {
+		this.from = from;
+	}
+	public Point2D getTo() {
+		return to;
+	}
+	public void setTo(Point2D to) {
+		this.to = to;
 	}
 
 	/**
@@ -34,7 +42,6 @@ public class UIArrow extends MapComponent {
 		
 		// TODO ここに描画する部分を書く
 	}
-	
 	
 
 }

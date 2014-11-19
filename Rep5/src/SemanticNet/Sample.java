@@ -43,6 +43,9 @@ public class Sample {
 		for (Node node : sn.nodes) {
 			gui.addNode(node);
 		}
+		for (Link link : sn.links) {
+			gui.addLink(link);
+		}
 		
 		gui.setVisible(true);
 	}
