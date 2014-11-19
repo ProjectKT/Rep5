@@ -3,6 +3,8 @@ package ui.components;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import SemanticNet.Link;
@@ -72,6 +74,50 @@ public class SemanticNetLayout extends MapLayout {
 			comp.setCenter(getMapPanel().getCenter());
 		} else {
 			// センターノード以外のノード
+			
+			// ノードから繋がっているリンクを列挙する
+			ArrayList<Link> depLinks = node.getDepartFromMeLinks();
+			for (Link link : depLinks) {
+				UINode head = getMapPanel().nodeMap.get(link.getHead());
+				
+				// リンク先が MapPanel に入っていたら
+				if (head != null) {
+					ArrayList<Link> links = getConnectedLinks(head.getNode());
+					int size = links.size();
+					int index = links.indexOf(link);
+					if (0 <= index) {
+						double theta = 360 / (double)size * (double)index;
+						double r = 100 + (double) index * 50;
+						double dx = r*Math.cos(Math.toRadians(theta));
+						double dy = r*Math.sin(Math.toRadians(theta));
+						Point2D base = head.getCenter();
+						comp.setCenter(base.getX() + dx, base.getY() + dy);
+						break;
+					}
+				}
+			}
+			
+			// ノードに繋がっているリンクを列挙する
+			ArrayList<Link> arrLinks = node.getArriveAtMeLinks();
+			for (Link link : arrLinks) {
+				UINode tail = getMapPanel().nodeMap.get(link.getTail());
+				
+				// リンク元が MapPanel に入っていたら
+				if (tail != null) {
+					ArrayList<Link> links = getConnectedLinks(tail.getNode());
+					int size = links.size();
+					int index = links.indexOf(link);
+					if (0 <= index) {
+						double theta = 360 / (double)size * (double)index;
+						double r = 100 + (double) index * 50;
+						double dx = r*Math.cos(Math.toRadians(theta));
+						double dy = r*Math.sin(Math.toRadians(theta));
+						Point2D base = tail.getCenter();
+						comp.setCenter(base.getX() + dx, base.getY() + dy);
+						break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -89,4 +135,14 @@ public class SemanticNetLayout extends MapLayout {
 		
 	}
 
+	/**
+	 * 繋がってる全部のリンクを返す
+	 * @param node
+	 * @return
+	 */
+	private ArrayList<Link> getConnectedLinks(Node node) {
+		ArrayList<Link> links = new ArrayList<Link>(node.getDepartFromMeLinks());
+		links.addAll(node.getArriveAtMeLinks());
+		return links;
+	}
 }
