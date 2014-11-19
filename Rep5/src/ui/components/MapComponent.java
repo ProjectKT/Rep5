@@ -35,11 +35,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-<<<<<<< HEAD
 			return (int) (panel.getViewportWidth()/2.0 + (center.getX() - panel.getCenter().getX() - width/2.0) / panel.getZoom());
-=======
-			return (int) (panel.getViewportWidth()/2.0 + (center.getX() - panel.getCenter().getX()) / panel.getZoom());
->>>>>>> branch 'implSemanticUI' of https://github.com/ProjectKT/Rep5.git
 		}
 		return super.getX();
 	}
@@ -47,11 +43,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-<<<<<<< HEAD
 			return (int) (panel.getViewportHeight()/2.0 + (center.getY() - panel.getCenter().getY() - height/2.0) / panel.getZoom());
-=======
-			return (int) (panel.getViewportHeight()/2.0 + (center.getY() - panel.getCenter().getY()) / panel.getZoom());
->>>>>>> branch 'implSemanticUI' of https://github.com/ProjectKT/Rep5.git
 		}
 		return super.getY();
 	}
