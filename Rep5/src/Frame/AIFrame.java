@@ -20,8 +20,8 @@ abstract class AIFrame {
 	//改変部
 	/*
 	 * 自分に対してリンクを持っているフレームおよびそのスロット名を保持するハッシュマップ
-	 * キーがスロット名
-	 * バリュがリンクしているフレーム名
+	 * キーがリンクしているフレーム名
+	 * バリュがスロット名
 	 */
 	private Map<String, String> leankers = new HashMap<String, String>();
 
@@ -388,7 +388,7 @@ abstract class AIFrame {
 	 */
 	public void put_new_leanker(String slotName,String frameName){
 		System.out.println(slotName+frameName);
-		leankers.put(slotName, frameName);
+		leankers.put(frameName, slotName);
 	}
 	
 	//改変部
