@@ -47,21 +47,39 @@ public class UIArrow extends MapComponent {
 		
 		// TODO ここに描画する部分を書く
 		g.setColor(Color.red);
-		final double fx = from.getX();
-		final double fy = from.getY();
-		final double tx = to.getX();
-		final double ty = to.getY();
-		if (fx < tx) {
-			if (fy < ty) {
-				g.drawLine(0, 0, getWidth()+1, getHeight()+1);
-			} else {
-				g.drawLine(0, getHeight()-1, getWidth()+1, 0);
-			}
+		final int width = getWidth();
+		final int height = getHeight();
+		if (width <= 1 || height <= 1) {
+			g.fillRect(0, 0, width, height);
 		} else {
-			if (fy < ty) {
-				g.drawLine(getWidth()-1, 0, 0, getHeight()+1);
+			final double fx = from.getX();
+			final double fy = from.getY();
+			final double tx = to.getX();
+			final double ty = to.getY();
+			if (fx < tx) {
+				if (fy < ty) {
+					// +-+
+					// |\| to bottom right
+					// +-+
+					g.drawLine(0, 0, width, height);
+				} else {
+					// +-+
+					// |/| to top right
+					// +-+
+					g.drawLine(0, height, width, 0);
+				}
 			} else {
-				g.drawLine(getWidth()-1, getHeight()-1, 0, 0);
+				if (fy < ty) {
+					// +-+
+					// |/| to bottom left
+					// +-+
+					g.drawLine(width, 0, 0, height);
+				} else {
+					// +-+
+					// |\| to top left
+					// +-+
+					g.drawLine(width, height, 0, 0);
+				}
 			}
 		}
 	}
