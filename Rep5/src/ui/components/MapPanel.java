@@ -1,6 +1,5 @@
 package ui.components;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -8,12 +7,16 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.beans.DesignMode;
 
-import javax.swing.JPanel;
+import javax.swing.JViewport;
 
-public class MapPanel extends JPanel implements DesignMode {
+public class MapPanel extends JViewport implements DesignMode {
 	
 	private double zoom = 1.0f;
 	private Point2D center = new Point2D.Double(0, 0);
+	
+	public MapPanel() {
+		setLayout(new MapLayout());
+	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {

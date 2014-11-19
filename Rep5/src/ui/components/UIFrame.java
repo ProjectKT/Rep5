@@ -14,10 +14,10 @@ public class UIFrame extends MapComponent {
 		super.paintComponent(g);
 		
 		g.setColor(Color.red);
-		g.fillRect(40, 20, 200, 120);
+		g.fillRect(0, 0, getWidth(), getHeight());
 
 		g.setColor(Color.blue);
-		g.drawString("Hello Java2D", 10, 50);
+		g.drawString("Hello Java2D", 0, 0);
 	}
 	
 	
