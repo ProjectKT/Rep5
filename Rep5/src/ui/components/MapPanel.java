@@ -14,8 +14,8 @@ public class MapPanel extends JPanel implements DesignMode {
 	private double zoom = 1.0f;
 	private Point2D center = new Point2D.Double(0, 0);
 	
-	public MapPanel() {
-		setLayout(new MapLayout(this));
+	public MapPanel(MapLayout layoutManager) {
+		setLayout(layoutManager);
 	}
 	
 	@Override

@@ -4,22 +4,22 @@ import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 
+import ui.components.AIFrameLayout;
 import ui.components.MapPanel;
-import ui.components.SemanticNetLayout;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
 
-public class SemanticUI extends JFrame {
+public class AIFrameUI extends JFrame {
 	
 	private MapPanel mapPanel;
 
-	public SemanticUI() throws HeadlessException {
+	public AIFrameUI() throws HeadlessException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, 300, 200);
-		setTitle("SemanticUI");
+		setTitle("AIFrameUI");
 		setVisible(true);
 
-		mapPanel = new MapPanel(new SemanticNetLayout(mapPanel));
+		mapPanel = new MapPanel(new AIFrameLayout(mapPanel));
 		MapDragListener dl = new MapDragListener(mapPanel);
 		mapPanel.addMouseListener(dl);
 		mapPanel.addMouseMotionListener(dl);
@@ -30,6 +30,6 @@ public class SemanticUI extends JFrame {
 
 	
 	public static void main(String[] args) {
-		new SemanticUI().setVisible(true);
+		new AIFrameUI().setVisible(true);
 	}
 }
