@@ -1,7 +1,6 @@
 package ui.components;
 
-import java.awt.Container;
-import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
@@ -75,5 +74,14 @@ public class MapComponent extends JComponent {
 		this.pos = pos;
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 * <br />
+	 * サブクラスはこのメソッドをオーバーライドして独自のUIコンポーネントを描画する
+	 */
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// Sub classes must override this method to paint itself.
+	}
 }

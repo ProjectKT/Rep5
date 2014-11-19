@@ -1,7 +1,7 @@
 package SemanticNet;
 import java.util.*;
 
-class Node {
+public class Node {
 	String name;
 
 	// 自分から出ていくリンク
