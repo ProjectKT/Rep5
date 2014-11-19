@@ -10,13 +10,28 @@ import SemanticNet.Node;
 
 public class SemanticNetLayout extends MapLayout {
 	
-	private HashMap<Node,UINode> nodeMap = new HashMap<Node,UINode>();
+	@Override
+	void setMapPanel(MapPanel mapPanel) {
+		if (!(mapPanel instanceof SemanticNetPanel)) {
+			throw new ClassCastException("mapPanel must be "+SemanticNetPanel.class.getSimpleName());
+		}
+		super.setMapPanel(mapPanel);
+	}
 	
+	/**
+	 * この LayoutManager が取り付けられている先の SemanticNetPanel を返すメソッド
+	 */
+	@Override
+	protected SemanticNetPanel getMapPanel() {
+		return (SemanticNetPanel) super.getMapPanel();
+	}
+
+
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
 		System.out.println("addLayoutComponent");
 		if (comp instanceof UINode) {
-			nodeMap.put(((UINode) comp).getNode(), (UINode) comp);
+			getMapPanel().nodeMap.put(((UINode) comp).getNode(), (UINode) comp);
 			layoutUINode(name, (UINode) comp);
 		} else if (comp instanceof UILink) {
 			layoutUILink(name, (UILink) comp);
@@ -27,7 +42,7 @@ public class SemanticNetLayout extends MapLayout {
 	public void removeLayoutComponent(Component comp) {
 		System.out.println("removeLayoutComponent");
 		if (comp instanceof UINode) {
-			nodeMap.remove(((UINode) comp).getNode());
+			getMapPanel().nodeMap.remove(((UINode) comp).getNode());
 		}
 	}
 	
@@ -64,6 +79,9 @@ public class SemanticNetLayout extends MapLayout {
 		Link link = comp.getLink();
 		
 		// TODO ここにレイアウトするコードを書く
+		Node head = link.getHead();
+		Node tail = link.getTail();
+		
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import ui.components.MapPanel;
 import ui.components.SemanticNetLayout;
+import ui.components.SemanticNetPanel;
 import ui.components.UINode;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
@@ -17,8 +18,7 @@ import SemanticNet.SemanticNet;
 public class SemanticUI extends JFrame {
 	
 	// --- ビューのメンバ ---
-	private MapPanel mapPanel;
-	protected UINode centerNode;
+	private SemanticNetPanel mapPanel;
 	
 	// --- ロジックのメンバ ---
 	private SemanticNet semanticNet;
@@ -45,7 +45,7 @@ public class SemanticUI extends JFrame {
 	 * MapPanel を初期化する
 	 */
 	private void setupMapPanel() {
-		mapPanel = new MapPanel(new SemanticNetLayout());
+		mapPanel = new SemanticNetPanel();
 		MapDragListener dl = new MapDragListener(mapPanel);
 		mapPanel.addMouseListener(dl);
 		mapPanel.addMouseMotionListener(dl);
