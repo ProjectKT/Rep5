@@ -20,20 +20,8 @@ public class UIArrow extends MapComponent {
 		this.to = to;
 		double width = Math.max(1, Math.abs(from.getX()-to.getX()));
 		double height = Math.max(1, Math.abs(from.getY()-to.getY()));
-		setSize((int) width, (int) height);
-		if (from.getX() < to.getX()) {
-			if (from.getY() < to.getY()) {
-				setCenter(from.getX()+width/2, from.getY()+height/2);
-			} else {
-				setCenter(from.getX()+width/2, from.getY()-height/2);
-			}
-		} else {
-			if (from.getY() < to.getY()) {
-				setCenter(from.getX()-width/2, from.getY()+height/2);
-			} else {
-				setCenter(from.getX()-width/2, from.getY()-height/2);
-			}
-		}
+		setSize(width, height);
+		setCenter((from.getX()+to.getX())/2.0, (from.getY()+to.getY())/2.0);
 	}
 
 	public Point2D getFrom() {
@@ -59,17 +47,21 @@ public class UIArrow extends MapComponent {
 		
 		// TODO ここに描画する部分を書く
 		g.setColor(Color.red);
-		if (from.getX() < to.getX()) {
-			if (from.getY() < to.getY()) {
-				g.drawLine(0, 0, getWidth(), getHeight());
+		final double fx = from.getX();
+		final double fy = from.getY();
+		final double tx = to.getX();
+		final double ty = to.getY();
+		if (fx < tx) {
+			if (fy < ty) {
+				g.drawLine(0, 0, getWidth()+1, getHeight()+1);
 			} else {
-				g.drawLine(0, getHeight(), getWidth(), 0);
+				g.drawLine(0, getHeight()-1, getWidth()+1, 0);
 			}
 		} else {
-			if (from.getY() < to.getY()) {
-				g.drawLine(getWidth(), 0, 0, getHeight());
+			if (fy < ty) {
+				g.drawLine(getWidth()-1, 0, 0, getHeight()+1);
 			} else {
-				g.drawLine(getWidth(), getHeight(), 0, 0);
+				g.drawLine(getWidth()-1, getHeight()-1, 0, 0);
 			}
 		}
 	}
