@@ -27,6 +27,9 @@ public class SemanticNetPanel extends MapPanel {
 			if (uiNode != null) {
 				return uiNode;
 			}
+			if (centerNode == null) {
+				centerNode = (UINode) comp;
+			}
 		}
 		return super.add(comp);
 	}

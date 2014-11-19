@@ -69,9 +69,11 @@ public class MapComponent extends JComponent {
 	public Point2D getCenter() {
 		return center;
 	}
-	
-	public void setCenter(Point2D pos) {
-		this.center = pos;
+	public void setCenter(Point2D center) {
+		this.center.setLocation(center);
+	}
+	public void setCenter(double x, double y) {
+		center.setLocation(x, y);
 	}
 	
 	/**

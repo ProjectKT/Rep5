@@ -67,7 +67,12 @@ public class SemanticNetLayout extends MapLayout {
 		Node node = comp.getNode();
 		
 		// TODO ここにレイアウトするコードを書く
-		
+		if (comp == getMapPanel().centerNode) {
+			// センターノードならセンターに描く
+			comp.setCenter(getMapPanel().getCenter());
+		} else {
+			// センターノード以外のノード
+		}
 	}
 	
 	/**
