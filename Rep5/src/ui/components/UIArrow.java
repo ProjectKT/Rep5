@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
@@ -41,6 +42,8 @@ public class UIArrow extends MapComponent {
 		super.paintComponent(g);
 		
 		// TODO ここに描画する部分を書く
+		g.setColor(Color.red);
+		g.drawLine((int) from.getX(), (int) from.getY(), (int) to.getX(), (int) to.getY());
 	}
 	
 
