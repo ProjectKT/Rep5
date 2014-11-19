@@ -5,10 +5,14 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 
-import javax.swing.ViewportLayout;
-
 
 public class MapLayout implements LayoutManager {
+	
+	private MapPanel panel;
+	
+	public MapLayout(MapPanel mapPanel) {
+		panel = mapPanel;
+	}
 
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
