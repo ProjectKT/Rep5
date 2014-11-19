@@ -27,7 +27,8 @@ public class SemanticNet_ver_KT {
 				"Semantic088.txt",
 				"Semantic109.txt",
 				"Semantic110.txt",
-				"Semantic113.txt",};
+				"Semantic113.txt",
+				"nagoya_instances.txt"};
 				
 		BufferedReader in;
 		Pattern p = Pattern.compile("(.*) (.*) (.*)");

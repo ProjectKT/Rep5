@@ -244,5 +244,22 @@ public class AIFrameSystem {
 			System.out.println(err);
 		}
 	}
+	
+	//改変部
+	/*
+	 * 指定されたフレーム名のAIフレームを返す
+	 */
+	AIFrame get_Frame(String frameName){
+		return mFrames.get(frameName);
+	}
+	
+	//改変部
+	/*
+	 * frameName1のleankersに新しくframeName2がSlotNameで接続していることを登録する
+	 */
+	void writeliankers(String frameName1,String frameName2,String slotName){
+		if(mFrames.containsValue(frameName1))
+		get_Frame(frameName1).put_new_leanker(slotName,frameName2);
+	}
 
 } // end of class definition

@@ -138,6 +138,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					final String[] slotValues = e.getValue();
 					for (String slotValue : slotValues) {
 						writeSlotValue(inName, slotName, slotValue);
+						writeliankers(slotValue,inName,slotName);
 					}
 				}
 				
