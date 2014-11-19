@@ -1,13 +1,16 @@
 package ui;
 
+import java.awt.Component;
 import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 
 import ui.components.MapPanel;
 import ui.components.SemanticNetLayout;
+import ui.components.UINode;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
+import SemanticNet.Node;
 
 public class SemanticUI extends JFrame {
 	
@@ -26,6 +29,10 @@ public class SemanticUI extends JFrame {
 		MapZoomListener zl = new MapZoomListener(mapPanel);
 		mapPanel.addMouseWheelListener(zl);
 		getContentPane().add(mapPanel);
+	}
+	
+	public void addNode(Node node) {
+		mapPanel.add(new UINode(node));
 	}
 
 	

@@ -2,6 +2,9 @@ package ui.components;
 
 import java.awt.Component;
 
+import SemanticNet.Link;
+import SemanticNet.Node;
+
 public class SemanticNetLayout extends MapLayout {
 
 	public SemanticNetLayout(MapPanel mapPanel) {
@@ -20,19 +23,24 @@ public class SemanticNetLayout extends MapLayout {
 	/**
 	 * UINode をレイアウトする
 	 * @param name
-	 * @param node
+	 * @param comp
 	 */
-	private void layoutUINode(String name, UINode node) {
+	private void layoutUINode(String name, UINode comp) {
+		Node node = comp.getNode();
+		
+		// TODO ここにレイアウトするコードを書く
 		
 	}
 	
 	/**
 	 * UIArrow をレイアウトする
 	 * @param name
-	 * @param arrow
+	 * @param comp
 	 */
-	private void layoutUIArrow(String name, UIArrow arrow) {
+	private void layoutUIArrow(String name, UIArrow comp) {
+		Link link = comp.getLink();
 		
+		// TODO ここにレイアウトするコードを書く
 	}
 
 }
