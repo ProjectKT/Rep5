@@ -246,7 +246,7 @@ public class AIFrameSystem {
 	}
 	
 	//改変部
-	/*
+	/**
 	 * 指定されたフレーム名のAIフレームを返す
 	 */
 	AIFrame get_Frame(String frameName){
@@ -254,12 +254,16 @@ public class AIFrameSystem {
 	}
 	
 	//改変部
-	/*
+	/**
 	 * frameName1のleankersに新しくframeName2がSlotNameで接続していることを登録する
 	 */
-	void writeliankers(String frameName1,String frameName2,String slotName){
-		if(mFrames.containsValue(frameName1))
+	void writeleankers(String frameName1,String frameName2,String slotName){
+		if(mFrames.containsKey(frameName1)){
+			if(slotName.equals("is-a")||slotName.equals("Ako")){
+				System.out.println(frameName1+frameName2+slotName);
+			}
 		get_Frame(frameName1).put_new_leanker(slotName,frameName2);
+		}
 	}
 
 } // end of class definition

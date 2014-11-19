@@ -118,6 +118,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					} else {
 						for (String inSuperClass : parseData.superClasses) {
 							createClassFrame(inSuperClass, inName);
+							writeleankers(inSuperClass,inName,"Ako");
 						}
 					}
 				} else {
@@ -127,6 +128,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					} else {
 						for (String inSuperName : parseData.superNames) {
 							createInstanceFrame(inSuperName, inName);
+							writeleankers(inSuperName,inName,"is-a");
 						}
 					}
 				}
@@ -138,7 +140,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					final String[] slotValues = e.getValue();
 					for (String slotValue : slotValues) {
 						writeSlotValue(inName, slotName, slotValue);
-						writeliankers(slotValue,inName,slotName);
+						writeleankers(slotValue,inName,slotName);
 					}
 				}
 				

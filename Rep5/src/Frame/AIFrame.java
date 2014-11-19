@@ -357,7 +357,7 @@ abstract class AIFrame {
 	}
 
 	//改変部
-	/*
+	/**
 	 * フレームのスロット数を返す
 	 */
 	public int get_Slot_size(){
@@ -365,7 +365,7 @@ abstract class AIFrame {
 	}
 	
 	//改変部
-	/*
+	/**
 	 * フレームの指定された位置のスロット名を返す
 	 */
 	public String get_Slot_name(int n){
@@ -383,16 +383,16 @@ abstract class AIFrame {
 	}
 	
 	//改変部
-	/*
+	/**
 	 * leankersに新しいリンク情報を追加する
 	 */
 	public void put_new_leanker(String slotName,String frameName){
-		System.out.println(slotName+frameName);
+		//System.out.println(slotName+frameName);
 		leankers.put(frameName, slotName);
 	}
 	
 	//改変部
-	/*
+	/**
 	 * leankersの数を返す
 	 */
 	public int get_leankers_size(){
@@ -400,10 +400,10 @@ abstract class AIFrame {
 	}
 	
 	//改変部
-	/*
+	/**
 	 * フレームの指定された位置のleankersのキーを返す
 	 */
-	public String get_leankers_Slot_name(int n){
+	public String get_leankers_Slot_key(int n){
 		int count=0;
 		for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
 		    Map.Entry entry = (Map.Entry)it.next();
@@ -411,6 +411,24 @@ abstract class AIFrame {
 		    Object value = entry.getValue();
 		    if(count == n){
 		    	return (String)key;
+		    }
+		    	count++;
+		}
+		return null;
+	}
+	
+	//改変部
+	/**
+	 * フレームの指定された位置のleankersのバリュを返す
+	 */
+	public String get_leankers_Slot_value(int n){
+		int count=0;
+		for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
+		    Map.Entry entry = (Map.Entry)it.next();
+		    Object key = entry.getKey();
+		    Object value = entry.getValue();
+		    if(count == n){
+		    	return (String)value;
 		    }
 		    	count++;
 		}
