@@ -92,6 +92,7 @@ public class SemanticNetLayout extends MapLayout {
 						double dy = r*Math.sin(Math.toRadians(theta));
 						Point2D base = head.getCenter();
 						comp.setCenter(base.getX() + dx, base.getY() + dy);
+<<<<<<< HEAD
 						
 						getMapPanel().add(new UILink(link, comp, head));
 						break;
@@ -118,6 +119,30 @@ public class SemanticNetLayout extends MapLayout {
 						comp.setCenter(base.getX() + dx, base.getY() + dy);
 						
 						getMapPanel().add(new UILink(link, tail, comp));
+=======
+						break;
+					}
+				}
+			}
+			
+			// ノードに繋がっているリンクを列挙する
+			ArrayList<Link> arrLinks = node.getArriveAtMeLinks();
+			for (Link link : arrLinks) {
+				UINode tail = getMapPanel().nodeMap.get(link.getTail());
+				
+				// リンク元が MapPanel に入っていたら
+				if (tail != null) {
+					ArrayList<Link> links = getConnectedLinks(tail.getNode());
+					int size = links.size();
+					int index = links.indexOf(link);
+					if (0 <= index) {
+						double theta = 360 / (double)size * (double)index;
+						double r = 100 + (double) index * 50;
+						double dx = r*Math.cos(Math.toRadians(theta));
+						double dy = r*Math.sin(Math.toRadians(theta));
+						Point2D base = tail.getCenter();
+						comp.setCenter(base.getX() + dx, base.getY() + dy);
+>>>>>>> branch 'implSemanticUI' of https://github.com/ProjectKT/Rep5
 						break;
 					}
 				}
