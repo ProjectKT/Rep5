@@ -44,6 +44,12 @@ public class MapPanel extends JPanel implements DesignMode {
 	}
 
 	@Override
+	public Component add(Component comp) {
+		// LayoutManager.addLayoutComponent を呼ぶ為に constraint を付ける
+		return super.add("map_content", comp);
+	}
+
+	@Override
 	protected void addImpl(Component comp, Object constraints, int index) {
 		if (comp instanceof MapComponent) {
 			((MapComponent) comp).setMapPanel(this);
@@ -86,6 +92,8 @@ public class MapPanel extends JPanel implements DesignMode {
 //		final int viewportHeight = getHeight() - insets.top - insets.bottom;
 //		return (center.getY() - viewportHeight / 2);
 //	}
+	
+	
 	
 	/**
 	 * ビューポートの範囲を返す
