@@ -30,7 +30,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) ((center.getX() - (getWidth()/2) - panel.getCenter().getX()) / panel.getZoom());
+			return (int) (panel.getViewportWidth()/2.0 + (center.getX() - panel.getCenter().getX()) / panel.getZoom());
 		}
 		return super.getX();
 	}
@@ -38,7 +38,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) ((center.getY() - (getHeight()/2) - panel.getCenter().getY()) / panel.getZoom());
+			return (int) (panel.getViewportHeight()/2.0 + (center.getY() - panel.getCenter().getY()) / panel.getZoom());
 		}
 		return super.getY();
 	}

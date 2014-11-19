@@ -4,10 +4,14 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.geom.Point2D;
 import java.beans.DesignMode;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 
 public class MapPanel extends JPanel implements DesignMode {
 	
@@ -33,14 +37,6 @@ public class MapPanel extends JPanel implements DesignMode {
 
 		String s = "center=("+center.getX()+","+center.getY()+"), zoom="+zoom;
 		g.drawString(s, 0, 10);
-	}
-	
-	
-	
-	@Override
-	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paint(g);
 	}
 
 	@Override
@@ -82,18 +78,6 @@ public class MapPanel extends JPanel implements DesignMode {
 		this.center = center;
 	}
 	
-//	protected double getLeft() {
-//		final Insets insets = getInsets();
-//		final int viewportWidth = getWidth() - insets.left - insets.right;
-//		return (center.getX() - viewportWidth / 2);
-//	}
-//	protected double getTop() {
-//		final Insets insets = getInsets();
-//		final int viewportHeight = getHeight() - insets.top - insets.bottom;
-//		return (center.getY() - viewportHeight / 2);
-//	}
-	
-	
 	
 	/**
 	 * ビューポートの範囲を返す
@@ -112,6 +96,16 @@ public class MapPanel extends JPanel implements DesignMode {
 		double viewportY = (center.getY() - viewportHeight / 2);
 		return new Rectangle((int) viewportX, (int) viewportY, viewportWidth, viewportHeight);
 	}
+	
+	protected int getViewportWidth() {
+		Insets insets = getInsets();
+		return (getWidth() - insets.left - insets.right);
+	}
+	
+	protected int getViewportHeight() {
+		Insets insets = getInsets();
+		return (getHeight() - insets.top - insets.bottom);
+	}
 
 	@Override
 	protected String paramString() {
@@ -119,7 +113,5 @@ public class MapPanel extends JPanel implements DesignMode {
 		s += ",center="+center;
 		return s;
 	}
-
-	
 	
 }
