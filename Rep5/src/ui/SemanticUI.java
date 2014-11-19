@@ -6,8 +6,12 @@ import javax.swing.JFrame;
 
 import ui.components.MapPanel;
 import ui.components.SemanticNetLayout;
+import ui.components.UILink;
+import ui.components.UINode;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
+import SemanticNet.Link;
+import SemanticNet.Node;
 
 public class SemanticUI extends JFrame {
 	
@@ -17,8 +21,16 @@ public class SemanticUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, 300, 200);
 		setTitle("SemanticUI");
+		
+		setupMapPanel();
+		
 		setVisible(true);
-
+	}
+	
+	/**
+	 * MapPanel を設定する
+	 */
+	private void setupMapPanel() {
 		mapPanel = new MapPanel(new SemanticNetLayout(mapPanel));
 		MapDragListener dl = new MapDragListener(mapPanel);
 		mapPanel.addMouseListener(dl);
@@ -27,9 +39,16 @@ public class SemanticUI extends JFrame {
 		mapPanel.addMouseWheelListener(zl);
 		getContentPane().add(mapPanel);
 	}
+	
+	public void addNode(Node node) {
+		mapPanel.add(new UINode(node));
+	}
 
+	public void addLink(Link link) {
+		mapPanel.add(new UILink(link));
+	}
 	
 	public static void main(String[] args) {
-		new SemanticUI().setVisible(true);
+		new SemanticUI();
 	}
 }

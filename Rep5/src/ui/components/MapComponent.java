@@ -9,8 +9,8 @@ public class MapComponent extends JComponent {
 
 	// マップビュー
 	private MapPanel panel;
-	// ワールド座標系での位置
-	private Point2D pos;
+	// ワールド座標系での中心の位置
+	private Point2D center;
 	
 	public MapComponent() {
 		this(new Point2D.Double(0, 0));
@@ -20,7 +20,7 @@ public class MapComponent extends JComponent {
 	}
 	public MapComponent(Point2D pos) {
 		super();
-		this.pos = pos;
+		this.center = pos;
 	}
 	
 	protected void setMapPanel(MapPanel mapPanel) {
@@ -30,7 +30,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) ((pos.getX() + (getWidth()/2) - panel.getCenter().getX()) / panel.getZoom());
+			return (int) ((center.getX() - (getWidth()/2) - panel.getCenter().getX()) / panel.getZoom());
 		}
 		return super.getX();
 	}
@@ -38,7 +38,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) ((pos.getY() + (getHeight()/2) - panel.getCenter().getY()) / panel.getZoom());
+			return (int) ((center.getY() - (getHeight()/2) - panel.getCenter().getY()) / panel.getZoom());
 		}
 		return super.getY();
 	}
@@ -62,16 +62,16 @@ public class MapComponent extends JComponent {
 	@Override
 	protected String paramString() {
 		String s = super.paramString();
-		s += ",pos="+pos+",getX()="+getX()+",getY()="+getY();
+		s += ",center="+center+",getX()="+getX()+",getY()="+getY();
 		return s;
 	}
 	
-	public Point2D getPos() {
-		return pos;
+	public Point2D getCenter() {
+		return center;
 	}
 	
-	public void setPos(Point2D pos) {
-		this.pos = pos;
+	public void setCenter(Point2D pos) {
+		this.center = pos;
 	}
 	
 	/**
