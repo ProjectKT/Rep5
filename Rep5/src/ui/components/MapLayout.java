@@ -10,7 +10,8 @@ public abstract class MapLayout implements LayoutManager {
 	
 	private MapPanel panel;
 	
-	public MapLayout() {
+	protected MapPanel getMapPanel() {
+		return panel;
 	}
 	
 	void setMapPanel(MapPanel mapPanel) {

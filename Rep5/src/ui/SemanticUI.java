@@ -18,6 +18,7 @@ public class SemanticUI extends JFrame {
 	
 	// --- ビューのメンバ ---
 	private MapPanel mapPanel;
+	protected UINode centerNode;
 	
 	// --- ロジックのメンバ ---
 	private SemanticNet semanticNet;
