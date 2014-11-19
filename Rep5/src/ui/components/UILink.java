@@ -12,8 +12,8 @@ public class UILink extends UIArrow {
 
 	private Link link;
 	
-	public UILink(Link link) {
-		super(new Point2D.Double(0,0), new Point2D.Double(0,0));
+	public UILink(Link link, UINode from, UINode to) {
+		super((Point2D) from.getCenter().clone(), (Point2D) to.getCenter().clone());
 		this.link = link;
 	}
 	
