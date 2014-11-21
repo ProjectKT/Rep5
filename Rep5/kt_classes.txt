@@ -1,5 +1,5 @@
 人間 is-a Class
-人間 誕生日 xsd:date
+人間  xsd:date
 人間 身長 xsd:nonNegativeInteger
 人間 体重 xsd:nonNegativeInteger
 人間 親 xsd:string[2]

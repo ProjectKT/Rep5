@@ -1,5 +1,9 @@
 package Frame;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 public class FrameQASystem {
 	static AIFrameSystem fs = new OurFrameSystem();
 	public static void main(String[] args) {
@@ -8,11 +12,19 @@ public class FrameQASystem {
 		 if(f != null){
 		for(int i = 0; i<f.get_Slot_size();i++){
 			String fn = f.get_Slot_key(i);
-			if(fn == "is-a"){
+			if(fn.equals("is-a")){
 				AIFrame x = (AIFrame)fs.readSlotValue(args[0], f.get_Slot_key(i));
 				System.out.println(args[0]+"の"+fn+"は"+x.get_name()+"です。");
 			}else{
-			System.out.println(args[0]+"の"+fn+"は"+fs.readSlotValue(args[0], f.get_Slot_key(i))+"です。");
+				if(fn.equals("親")){
+					ArrayList list = f.getmVals(fn);
+					for(int j = 0; j <list.size();j++){
+						System.out.println(args[0]+"の"+fn+"は"+list.get(j)+"です。");
+					}
+			
+				}else{
+					System.out.println(args[0]+"の"+fn+"は"+fs.readSlotValue(args[0], f.get_Slot_key(i))+"です。");
+				}
 			}
 		}
 		 

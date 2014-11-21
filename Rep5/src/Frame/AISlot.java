@@ -23,7 +23,11 @@ class AISlot {
 	AISlot() {
 		mDemons = new AIDemonProc[DEMON_PROCS];
 	}
-
+	
+	ArrayList getmVals(){
+		return mVals;
+	}
+	
 	//
 	Iterator getSlotValues() {
 		return mVals.iterator();

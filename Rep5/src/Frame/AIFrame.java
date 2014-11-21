@@ -51,13 +51,6 @@ abstract class AIFrame {
 		evalWhenConstructedProc(inFrameSystem, this);
 	}
 
-	//改変部
-	/*
-	 * 外部でAIFrameを使う時用のコンストラクタ
-	 */
-	AIFrame(){
-		
-	}
 			
 	/*
 	 * setWhenConstructedProc when-constructed proc を登録
@@ -355,6 +348,14 @@ abstract class AIFrame {
 		list.add(inObj);
 		return list.iterator();
 	}
+	
+	//改変部
+	/**
+	 * 指定された名前のスロットがすでにあるか返す
+	 */
+	public boolean slot_check(String slotName){
+		return mSlots.containsKey(slotName);
+	}
 
 	//改変部
 	/**
@@ -441,5 +442,9 @@ abstract class AIFrame {
 	 */
 	public String get_name(){
 		return mName;
+	}
+	
+	public ArrayList getmVals(String slotName){
+		return mSlots.get(slotName).getmVals();
 	}
 } // end of class definition

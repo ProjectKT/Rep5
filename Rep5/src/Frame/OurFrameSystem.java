@@ -11,13 +11,15 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import util.ArrayUtils;
 
 public class OurFrameSystem extends AIFrameSystem {
 	private static final String[] CLASS_FRAME_FILES = {"dbpedia_classes.txt", "kt_classes.txt"};
-	private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
-	
+	//private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
+	private static final String[] INSTANCE_FRAME_FILES = {"kt_instances.txt"};
 	public OurFrameSystem() {
 		// 初期フレームを読み込む
 		setupFrames();
@@ -104,6 +106,7 @@ public class OurFrameSystem extends AIFrameSystem {
 		
 		private void addFrames(boolean treatAsClass) {
 			Iterator<String> it = parseMap.keySet().iterator();
+			Pattern p = Pattern.compile("xsd:(.*)");
 			while (it.hasNext()) {
 				String inName = it.next();
 				ParseData parseData = parseMap.get(inName);
@@ -139,7 +142,13 @@ public class OurFrameSystem extends AIFrameSystem {
 					final String slotName = e.getKey();
 					final String[] slotValues = e.getValue();
 					for (String slotValue : slotValues) {
+					
+						if(get_Frame(inName).slot_check(slotName)){
+							System.out.println(slotValue);
+							get_Frame(inName).addSlotValue(slotName, slotValue);
+						}else{
 						writeSlotValue(inName, slotName, slotValue);
+						}
 						writeleankers(slotValue,inName,slotName);
 					}
 				}
