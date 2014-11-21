@@ -11,6 +11,12 @@ import SemanticNet.Node;
 public class UINode extends MapComponent {
 	private Node node;
 	
+	
+	//変更 ky 11/21
+	public double tFromC;  //centerとの角度
+	
+	
+	
 	/**
 	 * SemanticNet のノードを受け取って初期化するコンストラクタ
 	 * @param node
@@ -29,6 +35,17 @@ public class UINode extends MapComponent {
 		return node;
 	}
 
+	//変更 ky 11/21
+	public double getTheta(){
+		return tFromC;
+	}
+	
+	//変更 ky 11/21
+	public void putTheta(double theta){
+		this.tFromC = theta;
+	}
+	
+	
 	/**
 	 * {@inheritDoc}
 	 * ノードを描画する

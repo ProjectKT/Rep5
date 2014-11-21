@@ -75,10 +75,30 @@ public class SemanticNetLayout extends MapLayout {
 		} else {
 			// センターノード以外のノード
 			
+			//変更 ky
+			//
+			//
+			
+			
+			
 			// ノードから繋がっているリンクを列挙する
 			ArrayList<Link> depLinks = node.getDepartFromMeLinks();
+			
+			
 			for (Link link : depLinks) {
 				UINode head = getMapPanel().nodeMap.get(link.getHead());
+				
+				//
+				//ヘッドノードから出ているリンク先の、すでに配置されているノードを返す
+				// 
+				
+				//
+				//上で求めたノードからヘッドノードの配置を決める(もしくはUINODEにあるthetaを利用)
+				//
+				
+				//
+				//  ヘッドノードと他のノードの配置の仕方を別にする
+				//　UINodeのtFromCを利用して、　センターとは反対側に新しいノードを作るようにしたい
 				
 				// リンク先が MapPanel に入っていたら
 				if (head != null) {
@@ -87,17 +107,25 @@ public class SemanticNetLayout extends MapLayout {
 					int index = links.indexOf(link);
 					if (0 <= index) {
 						double theta = 360 / (double)size * (double)index;
-						double r = 100 + (double) index * 50;
+						double r = 200 + (double) index * 60;
 						double dx = r*Math.cos(Math.toRadians(theta));
 						double dy = r*Math.sin(Math.toRadians(theta));
 						Point2D base = head.getCenter();
 						comp.setCenter(base.getX() + dx, base.getY() + dy);
 						
-						getMapPanel().add(new UILink(link, comp, head));
-						break;
+						if(link.getInheritance() == false){
+							getMapPanel().add(new UILink(link, comp, head));
+						}
+						//break;
 					}
 				}
+				
+				
+				
 			}
+			
+			
+			
 			
 			// ノードに繋がっているリンクを列挙する
 			ArrayList<Link> arrLinks = node.getArriveAtMeLinks();
@@ -111,14 +139,14 @@ public class SemanticNetLayout extends MapLayout {
 					int index = links.indexOf(link);
 					if (0 <= index) {
 						double theta = 360 / (double)size * (double)index;
-						double r = 100 + (double) index * 50;
+						double r = 200 + (double) index * 60;
 						double dx = r*Math.cos(Math.toRadians(theta));
 						double dy = r*Math.sin(Math.toRadians(theta));
 						Point2D base = tail.getCenter();
 						comp.setCenter(base.getX() + dx, base.getY() + dy);
 						
 						getMapPanel().add(new UILink(link, tail, comp));
-						break;
+						//break;
 					}
 				}
 			}

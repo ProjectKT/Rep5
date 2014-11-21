@@ -14,6 +14,7 @@ import ui.components.input.MapZoomListener;
 import SemanticNet.Node;
 import SemanticNet.OurSemanticNet;
 import SemanticNet.SemanticNet;
+import SemanticNet.Link;
 
 public class SemanticUI extends JFrame {
 	
@@ -58,10 +59,33 @@ public class SemanticUI extends JFrame {
 	 * SemanticNet 内のノードを addNode
 	 */
 	private void setupNodes() {
-		ArrayList<Node> nodes = semanticNet.getNodes();
-		for (Node node : nodes) {
+		ArrayList<Node> nodes = semanticNet.getHeadNodes();
+		Node centerNode = semanticNet.getMostLink();
+		nodes.remove(centerNode);
+		nodes.add(0,centerNode);
+		
+		for(;;){
+			Node node = nodes.get(0);
+			nodes.remove(0);
+			
+			if(node.getDepartFromMeLinks().size() > 0){
+				ArrayList<Link> link = node.getDepartFromMeLinks();
+				for(Link linkedNode:link){
+					nodes.add(0,linkedNode.getHead());
+				}
+			}
+			
 			addNode(node);
+			
+			if(nodes.size() == 0)
+				break;
 		}
+		
+
+		//  ノードセットの方針:リスト（OPENリスト)の先頭から展開していく
+		//	リンクが入ってない（ヘッドノード)をOPENリストに、その中で一番リンクが出ているノードを初めに展開する。
+		//	出てきたリンクをOPENリストの先頭に入れ、以上を繰り返す
+		//
 	}
 	
 	/**

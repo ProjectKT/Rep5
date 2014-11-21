@@ -1,4 +1,5 @@
 package SemanticNet;
+
 import java.util.*;
 
 public class Node {
@@ -46,6 +47,9 @@ public class Node {
 		
 		return(count);
 	}
+	
+
+	
 	
 	public void addArriveAtMeLinks(Link theLink) {
 		arriveAtMeLinks.add(theLink);
