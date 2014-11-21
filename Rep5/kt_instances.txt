@@ -1,7 +1,13 @@
 Kiyo is-a 男
-Kiyo 誕生日 1993.5.24
+Kiyo 誕生日 19930524
 Kiyo 身長 xsd:nonNegativeInteger
 Kiyo 体重 xsd:nonNegativeInteger
 Kiyo 親 xsd:string
 Kiyo 眼鏡 true
 Kiyo is-a KiyoZoku
+
+Shun is-a 男
+Shun 誕生日 19930706
+
+Kiyo 子 Kotori
+Kiyo 子 Rin
