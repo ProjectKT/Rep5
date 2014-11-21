@@ -16,15 +16,10 @@ public class FrameQASystem {
 				AIFrame x = (AIFrame)fs.readSlotValue(args[0], f.get_Slot_key(i));
 				System.out.println(args[0]+"の"+fn+"は"+x.get_name()+"です。");
 			}else{
-				if(fn.equals("親")){
 					ArrayList list = f.getmVals(fn);
 					for(int j = 0; j <list.size();j++){
 						System.out.println(args[0]+"の"+fn+"は"+list.get(j)+"です。");
 					}
-			
-				}else{
-					System.out.println(args[0]+"の"+fn+"は"+fs.readSlotValue(args[0], f.get_Slot_key(i))+"です。");
-				}
 			}
 		}
 		 
@@ -32,6 +27,7 @@ public class FrameQASystem {
 			System.out.println(f.get_leankers_Slot_key(i)+"が"+f.get_leankers_Slot_value(i)+"で接続しています。");
 		}
 		 }
+		 System.out.println(fs.readSlotValue("Kiyootouto", "兄", false));
 		}
 	}
 }

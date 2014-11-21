@@ -1,8 +1,16 @@
+Kiyotaro is-a 男
+
+Kiyomi is-a 女
+
 Kiyo is-a 男
-Kiyo 誕生日 1993.5.24
+Kiyo 誕生日 19930524
 Kiyo 身長 xsd:nonNegativeInteger
 Kiyo 体重 xsd:nonNegativeInteger
 Kiyo 親 Kiyotaro
 Kiyo 親 Kiyomi
 Kiyo 眼鏡 true
-Kiyo is-a KiyoZoku
+
+Kiyootouto is-a 男
+Kiyootouto 誕生日 19920109
+Kiyootouto 親 Kiyotaro
+Kiyootouto 親 Kiyomi

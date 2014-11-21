@@ -23,6 +23,7 @@ public class OurFrameSystem extends AIFrameSystem {
 	public OurFrameSystem() {
 		// 初期フレームを読み込む
 		setupFrames();
+		setupDemon();
 	}
 	
 	/**
@@ -178,7 +179,13 @@ public class OurFrameSystem extends AIFrameSystem {
 			}
 		}
 	}
-	
+
+	/**
+	 * 家族親戚を求めるDemonを追加
+	 */
+	private void setupDemon(){
+		setWhenRequestedProc("人間", "兄", new AIDemonProc_OldBrother());
+	}
 	
 	public static void main(String[] args) {
 		OurFrameSystem ofs = new OurFrameSystem();

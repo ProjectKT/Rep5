@@ -437,6 +437,23 @@ abstract class AIFrame {
 	}
 	
 	//改変部
+		/**
+		 * フレームの指定された位置のleankersの特定のスロット名のスロット値を返す
+		 */
+		public ArrayList<String> get_leankers_Slot_names(String slotName){
+			ArrayList<String> list = new ArrayList<String>();
+			for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
+			    Map.Entry entry = (Map.Entry)it.next();
+			    String key = (String) entry.getKey();
+			    String value = (String) entry.getValue();
+			    if(value.equals(slotName)){
+			    	list.add(key);
+			    }
+			}
+			return list;
+		}
+	
+	//改変部
 	/**
 	 * 名前を返す
 	 */
