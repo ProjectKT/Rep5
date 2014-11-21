@@ -8,13 +8,22 @@ package Frame;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 abstract class AIFrame {
 
 	private boolean mIsInstance;
 	private String mName;
-	private HashMap<String, AISlot> mSlots = new HashMap<String, AISlot>();
+	private Map<String, AISlot> mSlots = new HashMap<String, AISlot>();
 	private AIWhenConstructedProc mWhenConstructedProc = null;
+	
+	//改変部
+	/*
+	 * 自分に対してリンクを持っているフレームおよびそのスロット名を保持するハッシュマップ
+	 * キーがリンクしているフレーム名
+	 * バリュがスロット名
+	 */
+	private Map<String, String> leankers = new HashMap<String, String>();
 
 	/*
 	 * AIFrame コンストラクタ
@@ -42,6 +51,14 @@ abstract class AIFrame {
 		evalWhenConstructedProc(inFrameSystem, this);
 	}
 
+	//改変部
+	/*
+	 * 外部でAIFrameを使う時用のコンストラクタ
+	 */
+	AIFrame(){
+		
+	}
+			
 	/*
 	 * setWhenConstructedProc when-constructed proc を登録
 	 */
@@ -319,6 +336,8 @@ abstract class AIFrame {
 		return (AISlot) mSlots.get(inSlotName);
 	}
 
+
+	
 	/*
 	 * getFirst inEnum 中の最初のオブジェクトを返す
 	 */
@@ -337,4 +356,82 @@ abstract class AIFrame {
 		return list.iterator();
 	}
 
+	//改変部
+	/**
+	 * フレームのスロット数を返す
+	 */
+	public int get_Slot_size(){
+		return mSlots.size();
+	}
+	
+	//改変部
+	/**
+	 * フレームの指定された位置のスロット名を返す
+	 */
+	public String get_Slot_name(int n){
+		int count=0;
+		for (Iterator it = mSlots.entrySet().iterator(); it.hasNext();) {
+		    Map.Entry entry = (Map.Entry)it.next();
+		    Object key = entry.getKey();
+		    Object value = entry.getValue();
+		    if(count == n){
+		    	return (String)key;
+		    }
+		    	count++;
+		}
+		return null;
+	}
+	
+	//改変部
+	/**
+	 * leankersに新しいリンク情報を追加する
+	 */
+	public void put_new_leanker(String slotName,String frameName){
+		//System.out.println(slotName+frameName);
+		leankers.put(frameName, slotName);
+	}
+	
+	//改変部
+	/**
+	 * leankersの数を返す
+	 */
+	public int get_leankers_size(){
+		return leankers.size();
+	}
+	
+	//改変部
+	/**
+	 * フレームの指定された位置のleankersのキーを返す
+	 */
+	public String get_leankers_Slot_key(int n){
+		int count=0;
+		for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
+		    Map.Entry entry = (Map.Entry)it.next();
+		    Object key = entry.getKey();
+		    Object value = entry.getValue();
+		    if(count == n){
+		    	return (String)key;
+		    }
+		    	count++;
+		}
+		return null;
+	}
+	
+	//改変部
+	/**
+	 * フレームの指定された位置のleankersのバリュを返す
+	 */
+	public String get_leankers_Slot_value(int n){
+		int count=0;
+		for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
+		    Map.Entry entry = (Map.Entry)it.next();
+		    Object key = entry.getKey();
+		    Object value = entry.getValue();
+		    if(count == n){
+		    	return (String)value;
+		    }
+		    	count++;
+		}
+		return null;
+	}
 } // end of class definition

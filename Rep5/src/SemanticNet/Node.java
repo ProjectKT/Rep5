@@ -1,7 +1,7 @@
 package SemanticNet;
 import java.util.*;
 
-class Node {
+public class Node {
 	String name;
 
 	// 自分から出ていくリンク
@@ -34,6 +34,19 @@ class Node {
 		return departFromMeLinks;
 	}
 
+	//追加 kiyo 11/19 15:38
+	public int getInheritance(ArrayList<Link> links){
+
+		int count = 0;
+		for(Link link : links){
+			if(link.inheritance){
+				count++;
+			}
+		}
+		
+		return(count);
+	}
+	
 	public void addArriveAtMeLinks(Link theLink) {
 		arriveAtMeLinks.add(theLink);
 	}

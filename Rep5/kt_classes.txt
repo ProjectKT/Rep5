@@ -1,0 +1,3 @@
+Human is-a Class
+KiyoZoku is-a Class
+KiyoZoku ako Human
