@@ -368,7 +368,7 @@ abstract class AIFrame {
 	/**
 	 * フレームの指定された位置のスロット名を返す
 	 */
-	public String get_Slot_name(int n){
+	public String get_Slot_key(int n){
 		int count=0;
 		for (Iterator it = mSlots.entrySet().iterator(); it.hasNext();) {
 		    Map.Entry entry = (Map.Entry)it.next();
@@ -381,7 +381,7 @@ abstract class AIFrame {
 		}
 		return null;
 	}
-	
+
 	//改変部
 	/**
 	 * leankersに新しいリンク情報を追加する
@@ -433,5 +433,13 @@ abstract class AIFrame {
 		    	count++;
 		}
 		return null;
+	}
+	
+	//改変部
+	/**
+	 * 名前を返す
+	 */
+	public String get_name(){
+		return mName;
 	}
 } // end of class definition

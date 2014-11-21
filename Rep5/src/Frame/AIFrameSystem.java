@@ -250,7 +250,11 @@ public class AIFrameSystem {
 	 * 指定されたフレーム名のAIフレームを返す
 	 */
 	AIFrame get_Frame(String frameName){
+		if(mFrames.containsKey(frameName)){
 		return mFrames.get(frameName);
+		}else{
+			return null;
+		}
 	}
 	
 	//改変部
@@ -259,11 +263,9 @@ public class AIFrameSystem {
 	 */
 	void writeleankers(String frameName1,String frameName2,String slotName){
 		if(mFrames.containsKey(frameName1)){
-			if(slotName.equals("is-a")||slotName.equals("Ako")){
-				System.out.println(frameName1+frameName2+slotName);
-			}
 		get_Frame(frameName1).put_new_leanker(slotName,frameName2);
 		}
 	}
+	
 
 } // end of class definition

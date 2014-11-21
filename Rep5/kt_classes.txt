@@ -1,3 +1,17 @@
-Human is-a Class
+人間 is-a Class
+人間 誕生日 xsd:date
+人間 身長 xsd:nonNegativeInteger
+人間 体重 xsd:nonNegativeInteger
+人間 親 xsd:string[2]
+人間 眼鏡 false
+人間 子 xsd:string[]
+人間 趣味 xsd:string[]
+
+男 is-a Class
+男 ako 人間
+
+女 is-a Class
+女 ako 人間
+
 KiyoZoku is-a Class
 KiyoZoku ako Human
