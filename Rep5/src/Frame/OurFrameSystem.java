@@ -73,6 +73,9 @@ public class OurFrameSystem extends AIFrameSystem {
 			
 			// フレームを作成して追加
 			addFrames(treatAsClass);
+			
+			//フレームにスロットを追加
+			addSlot();
 		}
 		
 		private void parseFile(File file) throws IOException {
@@ -91,6 +94,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					final String slotName = st.nextToken();
 					final String slotValue = st.nextToken();
 					
+					
 					ParseData parseData = parseMap.get(inName);
 					if (parseData == null) {
 						parseData = new ParseData();
@@ -107,7 +111,7 @@ public class OurFrameSystem extends AIFrameSystem {
 		
 		private void addFrames(boolean treatAsClass) {
 			Iterator<String> it = parseMap.keySet().iterator();
-			Pattern p = Pattern.compile("xsd:(.*)");
+			//Pattern p = Pattern.compile("xsd:(.*)");
 			while (it.hasNext()) {
 				String inName = it.next();
 				ParseData parseData = parseMap.get(inName);
@@ -137,11 +141,46 @@ public class OurFrameSystem extends AIFrameSystem {
 					}
 				}
 				
+				/**
 				// スロットに値を入れる
 				Set<Entry<String,String[]>> entrySet = parseData.slotValues.entrySet();
 				for (Entry<String,String[]> e : entrySet) {
 					final String slotName = e.getKey();
 					final String[] slotValues = e.getValue();
+
+					for (String slotValue : slotValues) {
+					
+						if(get_Frame(inName).slot_check(slotName)){
+							get_Frame(inName).addSlotValue(slotName, slotValue);
+						}else{
+						writeSlotValue(inName, slotName, slotValue);
+						}
+						System.out.println(slotValue+inName+slotName);
+						writeleankers(slotValue,inName,slotName);
+					}
+				}
+				
+				
+				it.remove();
+				*/
+			}
+		}
+		
+		
+		private void addSlot() {
+			Iterator<String> it = parseMap.keySet().iterator();
+			
+			while (it.hasNext()) {
+				String inName = it.next();
+				System.out.println(inName);
+				ParseData parseData = parseMap.get(inName);
+				
+				// スロットに値を入れる
+				Set<Entry<String,String[]>> entrySet = parseData.slotValues.entrySet();
+				for (Entry<String,String[]> e : entrySet) {
+					final String slotName = e.getKey();
+					final String[] slotValues = e.getValue();
+
 					for (String slotValue : slotValues) {
 					
 						if(get_Frame(inName).slot_check(slotName)){
@@ -155,9 +194,9 @@ public class OurFrameSystem extends AIFrameSystem {
 				}
 				
 				it.remove();
+				
 			}
 		}
-		
 		/**
 		 *  パース途中のデータを保持しておくためのクラス
 		 */
