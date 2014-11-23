@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-public class FrameQASystem {
+public class FrameQASystem_prototype1 {
 	static AIFrameSystem fs = new OurFrameSystem();
 	public static void main(String[] args) {
 		if(args.length>0){

@@ -446,7 +446,7 @@ abstract class AIFrame {
 			    Map.Entry entry = (Map.Entry)it.next();
 			    String key = (String) entry.getKey();
 			    String value = (String) entry.getValue();
-			    System.out.println("key:"+key+"value"+value);
+			    //System.out.println("key:"+key+"value"+value);
 			    if(value.equals(slotName)){
 			    	list.add(key);
 			    }

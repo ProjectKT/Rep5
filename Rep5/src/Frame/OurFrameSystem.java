@@ -172,7 +172,7 @@ public class OurFrameSystem extends AIFrameSystem {
 			
 			while (it.hasNext()) {
 				String inName = it.next();
-				System.out.println(inName);
+				
 				ParseData parseData = parseMap.get(inName);
 				
 				// スロットに値を入れる
@@ -188,7 +188,6 @@ public class OurFrameSystem extends AIFrameSystem {
 						}else{
 						writeSlotValue(inName, slotName, slotValue);
 						}
-						System.out.println(slotValue+inName+slotName);
 						writeleankers(slotValue,inName,slotName);
 					}
 				}
