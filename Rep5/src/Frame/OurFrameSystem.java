@@ -100,7 +100,13 @@ public class OurFrameSystem extends AIFrameSystem {
 						parseData = new ParseData();
 						parseMap.put(inName, parseData);
 					}
+					
+					//変更
+					if(slotName.equalsIgnoreCase("is-a") && slotValue.equalsIgnoreCase("Class")){
+						createClassFrame(inName);
+					}else{
 					parseData.add(slotName, slotValue);
+				}
 				}
 			} finally {
 				if (reader != null) {
@@ -111,7 +117,7 @@ public class OurFrameSystem extends AIFrameSystem {
 		
 		private void addFrames(boolean treatAsClass) {
 			Iterator<String> it = parseMap.keySet().iterator();
-			//Pattern p = Pattern.compile("xsd:(.*)");
+			
 			while (it.hasNext()) {
 				String inName = it.next();
 				ParseData parseData = parseMap.get(inName);
@@ -141,28 +147,6 @@ public class OurFrameSystem extends AIFrameSystem {
 					}
 				}
 				
-				/**
-				// スロットに値を入れる
-				Set<Entry<String,String[]>> entrySet = parseData.slotValues.entrySet();
-				for (Entry<String,String[]> e : entrySet) {
-					final String slotName = e.getKey();
-					final String[] slotValues = e.getValue();
-
-					for (String slotValue : slotValues) {
-					
-						if(get_Frame(inName).slot_check(slotName)){
-							get_Frame(inName).addSlotValue(slotName, slotValue);
-						}else{
-						writeSlotValue(inName, slotName, slotValue);
-						}
-						System.out.println(slotValue+inName+slotName);
-						writeleankers(slotValue,inName,slotName);
-					}
-				}
-				
-				
-				it.remove();
-				*/
 			}
 		}
 		
@@ -207,7 +191,7 @@ public class OurFrameSystem extends AIFrameSystem {
 			void add(String key, final String value) {
 				if (key.equalsIgnoreCase("is-a")) {
 					superNames = ArrayUtils.concat(superNames, value);
-				} else if (key.equalsIgnoreCase("ako")) {
+				} else if (key.equalsIgnoreCase("Ako")) {
 					superClasses = ArrayUtils.concat(superClasses, value);
 				} else {
 					String[] values = slotValues.get(key);
@@ -222,7 +206,7 @@ public class OurFrameSystem extends AIFrameSystem {
 	 * 家族親戚を求めるDemonを追加
 	 */
 	private void setupDemon(){
-		setWhenRequestedProc("男", "兄", new AIDemonProc_OldBrother());
+		setWhenRequestedProc("人間", "兄", new AIDemonProc_OldBrother());
 	}
 	
 	public static void main(String[] args) {

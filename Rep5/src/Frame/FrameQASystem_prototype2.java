@@ -167,7 +167,7 @@ public class FrameQASystem_prototype2 {
 	//フレームの指定されたスロットを表示
 	public void PrintSlot(String slotName,String inName){
 		AIFrame f =fs.get_Frame(inName);
-		if(slotName.equals("is-a")){
+		if(slotName.equals("is-a") || slotName.equals("Ako")){
 			AIFrame x = (AIFrame)fs.readSlotValue(inName, slotName);
 			System.out.println(inName+"は"+x.get_name()+"のインスタンスです。");
 		}else{

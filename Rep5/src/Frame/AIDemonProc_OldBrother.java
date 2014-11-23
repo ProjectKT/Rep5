@@ -14,8 +14,7 @@ public class AIDemonProc_OldBrother extends AIDemonProc {
 		ArrayList<String> list = papaframe.get_leankers_Slot_names("親");
 		for(int i=0;i<list.size();){
 			AIFrame frame = inFrameSystem.get_Frame(list.get(i));
-			AIFrame x = (AIFrame)inFrameSystem.readSlotValue(list.get(i),"is-a");
-			if(Integer.parseInt((String)frame.readSlotValue(inFrameSystem, "誕生日", false))<data1 && x.get_name().equals("男")){
+			if(Integer.parseInt((String)frame.readSlotValue(inFrameSystem, "誕生日", false))<data1 && frame.readSlotValue(inFrameSystem, "性別", false).equals("男")){
 				i++;
 			}else{
 				list.remove(i);
