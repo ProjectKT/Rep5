@@ -15,13 +15,37 @@ public class FrameQASystem_prototype2 {
 	}
 	
 	FrameQASystem_prototype2(){
+		CallMain();
+	}
+	
+	public void CallMain(){
+		boolean flag = false;
+		String buf;
+		do{
 		MainSystem();
+		
+		do{
+			System.out.println("続けて質問しますか？(y or n)");
+		InputStreamReader isr = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(isr);
+        try{
+                buf = br.readLine();
+        }catch(Exception e){
+                buf = "";
+        }
+		}while(!(buf.equals("y") || buf.equals("n")));
+		if(buf.equals("y")){
+			flag = true;
+		}else{
+			flag = false;
+		}
+		}while(flag);
 	}
 	
 	public void MainSystem(){
 	String buf;
 		
-		Pattern p = Pattern.compile(".*？");
+		Pattern p = Pattern.compile(".*(？|\\?)");
 		Matcher m;
 		
 		//？で終わる入力を受ける
@@ -38,7 +62,7 @@ public class FrameQASystem_prototype2 {
          m = p.matcher(buf);
 		}while(!m.find());
 		
-		Pattern p2 = Pattern.compile("(.*) (.*)？");
+		Pattern p2 = Pattern.compile("(.*) (.*)(？|\\?)");
 		Matcher m2 = p2.matcher(buf);
 		
 		if(m2.find()){
@@ -47,7 +71,7 @@ public class FrameQASystem_prototype2 {
 		}else{
 			//?xは？の場合
 			
-			Pattern p3 = Pattern.compile("(.*)？");
+			Pattern p3 = Pattern.compile("(.*)(？|\\?)");
 			Matcher m3 = p3.matcher(buf);
 			if(m3.find()){
 			if(PrintAllSlot(m3.group(1))){
