@@ -389,7 +389,7 @@ abstract class AIFrame {
 	 */
 	public void put_new_leanker(String slotName,String frameName){
 		//System.out.println(slotName+frameName);
-		leankers.put(frameName, slotName);
+		leankers.put(frameName,slotName);
 	}
 	
 	//改変部
@@ -446,6 +446,7 @@ abstract class AIFrame {
 			    Map.Entry entry = (Map.Entry)it.next();
 			    String key = (String) entry.getKey();
 			    String value = (String) entry.getValue();
+			    System.out.println("key:"+key+"value"+value);
 			    if(value.equals(slotName)){
 			    	list.add(key);
 			    }

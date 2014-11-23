@@ -145,11 +145,11 @@ public class OurFrameSystem extends AIFrameSystem {
 					for (String slotValue : slotValues) {
 					
 						if(get_Frame(inName).slot_check(slotName)){
-							System.out.println(slotValue);
 							get_Frame(inName).addSlotValue(slotName, slotValue);
 						}else{
 						writeSlotValue(inName, slotName, slotValue);
 						}
+						System.out.println(slotValue+inName+slotName);
 						writeleankers(slotValue,inName,slotName);
 					}
 				}
@@ -184,7 +184,7 @@ public class OurFrameSystem extends AIFrameSystem {
 	 * 家族親戚を求めるDemonを追加
 	 */
 	private void setupDemon(){
-		setWhenRequestedProc("人間", "兄", new AIDemonProc_OldBrother());
+		setWhenRequestedProc("男", "兄", new AIDemonProc_OldBrother());
 	}
 	
 	public static void main(String[] args) {

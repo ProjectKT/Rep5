@@ -23,11 +23,12 @@ public class FrameQASystem {
 			}
 		}
 		 
+		System.out.println(f.get_leankers_size());
 		for(int i = 0; i<f.get_leankers_size();i++){
 			System.out.println(f.get_leankers_Slot_key(i)+"が"+f.get_leankers_Slot_value(i)+"で接続しています。");
 		}
 		 }
-		 System.out.println(fs.readSlotValue("Kiyootouto", "兄", false));
+		 System.out.println(fs.readSlotValue("Kiyojiro", "兄", false));
 		}
 	}
 }
