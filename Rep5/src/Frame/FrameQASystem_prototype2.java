@@ -71,6 +71,10 @@ public class FrameQASystem_prototype2 {
 				AIFrame f =fs.get_Frame((String) list.get(i));
 				System.out.print(list.get(i)+"の"+s2+"は");
 				ArrayList list2 = new ArrayList<String>() ;
+				if(fs.readSlotValue((String) list.get(i),s2,false)==null){
+					System.out.println("見つかりませんでした");
+					return null;
+				}
 				if(fs.readSlotValue((String) list.get(i),s2,false).getClass().getName().equals("java.lang.String")){
 					if(s2.equals("is-a")){
 						AIFrame x = (AIFrame)fs.readSlotValue((String) list.get(i), s2);
@@ -90,12 +94,16 @@ public class FrameQASystem_prototype2 {
 					}
 				}
 			}
+			System.out.println();
 			return relist;
 		}else{
 			System.out.print(s1+"の"+s2+"は");
 			ArrayList<String> list = new ArrayList<String>();
 			AIFrame f =fs.get_Frame(s1);
-			
+			if(fs.readSlotValue(s1, s2, false)==null){
+				System.out.println("見つかりませんでした");
+				return null;
+			}
 			if(fs.readSlotValue(s1, s2, false).getClass().getName().equals("java.lang.String")){
 
 				if(s2.equals("is-a")){
@@ -114,6 +122,7 @@ public class FrameQASystem_prototype2 {
 						System.out.print(list.get(i)+"、");
 					}
 				}
+				System.out.println();
 			return list;
 		}
 	}
