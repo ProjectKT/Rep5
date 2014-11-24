@@ -15,5 +15,6 @@ Kiyootouto 親 Kiyomi
 佐藤清隆 親 Kiyomi
 Kiyotaro is-a 人間
 Kiyotaro 性別 男
+Kiyotaro 誕生日 19500714
 Kiyomi is-a 人間
 Kiyomi 性別 女

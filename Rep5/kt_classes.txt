@@ -3,7 +3,6 @@
 人間 体重 xsd:nonNegativeInteger
 人間 親 xsd:string[2]
 人間 眼鏡 false
-人間 子 xsd:string[]
 人間 趣味 xsd:string[]
 人間 性別 xsd:string
 KiyoZoku is-a Class
