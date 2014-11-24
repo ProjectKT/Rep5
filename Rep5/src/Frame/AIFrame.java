@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-abstract class AIFrame {
+public abstract class AIFrame {
 
 	private boolean mIsInstance;
 	private String mName;
