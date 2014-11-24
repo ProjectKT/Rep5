@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -321,13 +322,13 @@ public class SemanticNetLayout extends MapLayout {
 
 				try {
 					Thread.sleep(SLEEP);
-					SwingUtilities.invokeLater(new Runnable() {
+					SwingUtilities.invokeAndWait(new Runnable() {
 						@Override
 						public void run() {
 							getMapPanel().repaint();
 						}
 					});
-				} catch (InterruptedException e1) {
+				} catch (InterruptedException | InvocationTargetException e1) {
 					e1.printStackTrace();
 					break;
 				}
