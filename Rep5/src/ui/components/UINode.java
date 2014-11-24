@@ -24,7 +24,7 @@ public class UINode extends MapComponent {
 	public UINode(Node node) {
 		this.node = node;
 		int len = node.getName().length();
-		setSize(len*10.0, 50.0);
+		setSize(len*8.0, 20.0);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class UINode extends MapComponent {
 		g.setColor(Color.green);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
-		g.drawString(node.getName(), 0, (getHeight()/2)-10);
+		g.drawString(node.getName(), 0, 0);
 	}
 	
 	

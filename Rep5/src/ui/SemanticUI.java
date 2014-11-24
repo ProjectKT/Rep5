@@ -73,7 +73,7 @@ public class SemanticUI extends JFrame {
 			public void run() {
 				for(;;){
 					try {
-						Thread.sleep(200);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
