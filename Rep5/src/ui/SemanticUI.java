@@ -1,9 +1,11 @@
 package ui;
 
 import java.awt.HeadlessException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import ui.components.MapPanel;
 import ui.components.SemanticNetLayout;
@@ -14,6 +16,7 @@ import ui.components.input.MapZoomListener;
 import SemanticNet.Node;
 import SemanticNet.OurSemanticNet;
 import SemanticNet.SemanticNet;
+import SemanticNet.Link;
 
 public class SemanticUI extends JFrame {
 	
@@ -34,7 +37,7 @@ public class SemanticUI extends JFrame {
 	 */
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(10, 10, 300, 200);
+		setBounds(10, 10, 800, 600);
 		setTitle("SemanticUI");
 		
 		setupMapPanel();
@@ -58,10 +61,57 @@ public class SemanticUI extends JFrame {
 	 * SemanticNet 内のノードを addNode
 	 */
 	private void setupNodes() {
-		ArrayList<Node> nodes = semanticNet.getNodes();
-		for (Node node : nodes) {
-			addNode(node);
-		}
+		ArrayList<Node> nodes = new ArrayList<Node>(semanticNet.getHeadNodes());
+		Node centerNode = semanticNet.getMostLink();
+		nodes.remove(centerNode);
+		nodes.add(0,centerNode);
+		
+		final ArrayList<Node> fnodes = nodes;
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for(;;){
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					final Node node = fnodes.get(0);
+					fnodes.remove(0);
+					
+					if(node.getDepartFromMeLinks().size() > 0){
+						ArrayList<Link> link = node.getDepartFromMeLinks();
+						for(Link linkedNode:link){
+							fnodes.add(0,linkedNode.getHead());
+						}
+					}
+					
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+							@Override
+							public void run() {
+								System.out.println("adding node");
+								addNode(node);
+							}
+						});
+					} catch (InvocationTargetException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if(fnodes.size() == 0)
+						break;
+				}
+			}
+		}).start();
+		
+
+		//  ノードセットの方針:リスト（OPENリスト)の先頭から展開していく
+		//	リンクが入ってない（ヘッドノード)をOPENリストに、その中で一番リンクが出ているノードを初めに展開する。
+		//	出てきたリンクをOPENリストの先頭に入れ、以上を繰り返す
+		//
 	}
 	
 	/**

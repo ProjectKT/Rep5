@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
@@ -11,6 +12,10 @@ public class MapComponent extends JComponent {
 	private MapPanel panel;
 	// ワールド座標系での中心の位置
 	private Point2D center;
+	// 幅
+	private double width;
+	// 高さ
+	private double height;
 	
 	public MapComponent() {
 		this(new Point2D.Double(0, 0));
@@ -30,7 +35,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) ((center.getX() - (getWidth()/2) - panel.getCenter().getX()) / panel.getZoom());
+			return (int) (panel.getViewportWidth()/2.0 + (center.getX() - panel.getCenter().getX() - width/2.0) / panel.getZoom());
 		}
 		return super.getX();
 	}
@@ -38,7 +43,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) ((center.getY() - (getHeight()/2) - panel.getCenter().getY()) / panel.getZoom());
+			return (int) (panel.getViewportHeight()/2.0 + (center.getY() - panel.getCenter().getY() - height/2.0) / panel.getZoom());
 		}
 		return super.getY();
 	}
@@ -46,17 +51,17 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getWidth() {
 		if (panel != null) {
-			return (int) (super.getWidth() / panel.getZoom());
+			return (int) (width / panel.getZoom());
 		}
-		return super.getWidth();
+		return (int) width;
 	}
 	
 	@Override
 	public int getHeight() {
 		if (panel != null) {
-			return (int) (super.getHeight() / panel.getZoom());
+			return (int) (height / panel.getZoom());
 		}
-		return super.getHeight();
+		return (int) height;
 	}
 	
 	@Override
@@ -74,6 +79,35 @@ public class MapComponent extends JComponent {
 	}
 	public void setCenter(double x, double y) {
 		center.setLocation(x, y);
+	}
+	
+	/**
+	 * double 値を設定する setSize(double,double) を使ってください
+	 */
+	@Override @Deprecated
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		super.setSize(width, height);
+	}
+	/**
+	 * double 値を設定する setSize(double,double) を使ってください
+	 */
+	@Override
+	public void setSize(Dimension d) {
+		this.width = d.getWidth();
+		this.height = d.getHeight();
+		super.setSize(d);
+	}
+	/**
+	 * 幅と高さを設定する
+	 * @param width
+	 * @param height
+	 */
+	public void setSize(double width, double height) {
+		this.width = width;
+		this.height = height;
+		super.setSize((int) width, (int) height);
 	}
 	
 	/**

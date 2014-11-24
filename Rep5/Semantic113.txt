@@ -1,2 +1,12 @@
 Masayuki is-a NIT-student
 Masayuki hobby movie
+Masayuki hobby android
+Masayuki favoriteArtist LinkinPark
+
+LinkinPark is-a Artist
+Chester-Bennington belongs-to LinkinPark
+Rob-Bourdon belongs-to LinkinPark
+Brad-Delson belongs-to LinkinPark
+Dave-Farrell belongs-to LinkinPark
+Joe-Hahn belongs-to LinkinPark
+Mike-Shinoda belongs-to LinkinPark 
