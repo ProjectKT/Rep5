@@ -11,6 +11,9 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
+import javax.swing.SwingUtilities;
+import javax.swing.event.SwingPropertyChangeSupport;
+
 import SemanticNet.Link;
 import SemanticNet.Node;
 
@@ -233,37 +236,41 @@ public class SemanticNetLayout extends MapLayout {
 		@Override
 		public void run() {
 			final double E_THRESHOlD = 1.0;
-			final double CONST = 200;
+			final double CONST = 1000;
 			final double CONST_SPRING = 0.06;
-			final double CONST_ATTENUATION = 0.85;
-			final double DELTA = 0.01;
-			final long SLEEP = (long) (DELTA*100);
+//			final double CONST_ATTENUATION = 0.85;
+			final double DELTA = 1;
+			final long SLEEP = (long) (10);
 			
 			// 運動エネルギーの合計
-			double e = 0;
-			Iterator<UINode> it1, it2;
+			double e = 1;
 			
 			do {
+				final double attenuation = Math.min(0.5, 1.0/e);
+//				System.out.println("att="+attenuation);
+				
 				// 運動エネルギーの合計 := 0 // すべての粒子について、運動エネルギーの合計を計算する。
 				e = 0;
 		
 				synchronized(mLock) {
-					for (it1 = velocityMap.keySet().iterator(); it1.hasNext();) {
-						UINode n1 = it1.next();
+					Set<UINode> uiNodeSet = velocityMap.keySet();
+					final double originFactor = uiNodeSet.size() * 0.01;
+					for (UINode n1 : uiNodeSet) {
+						// ノードの位置とノードにつながっているリンクを取得
 						Point2D p1 = n1.getCenter();
-//						System.out.println("n1="+n1.hashCode()+" p1="+p1);
+						ArrayList<Link> links = getConnectedLinks(n1.getNode());
+						double w = 1.0;
 						
 						// 力 := (0, 0) // この粒子について作用するすべての力の合成を計算する。
 						double fx = 0;
 						double fy = 0;
 	
-						for (it2 = velocityMap.keySet().iterator(); it2.hasNext();) {
-							UINode n2 = it2.next();
+						// 他のノードとの反発
+						for (UINode n2 : uiNodeSet) {
 							if (n1 == n2) {
 								continue;
 							}
 							Point2D p2 = n2.getCenter();
-//							System.out.println("  n2="+n2.hashCode()+" p2="+p2);
 							
 							// 距離の二乗
 							final double sqD = p1.distanceSq(p2);
@@ -273,10 +280,7 @@ public class SemanticNetLayout extends MapLayout {
 							fy += CONST * (p1.getY()-p2.getY()) / sqD;
 						}
 	
-						// ノード n1.getNode() につながっているリンクを取得
-						ArrayList<Link> links = getConnectedLinks(n1.getNode());
-						double w = 1.0;
-						
+						// つながっているノードと近づく力
 						for (Link link : links) {
 							final UINode head = getUINode(link.getHead());
 							final UINode tail = getUINode(link.getTail());
@@ -292,12 +296,16 @@ public class SemanticNetLayout extends MapLayout {
 							
 							w *= 1.1;
 						}
+						
+						// 原点 (0,0) に戻す力
+						fx -= originFactor * p1.getX();
+						fy -= originFactor * p1.getY();
 	
 						// 内部摩擦が無ければ粒子は停止しないので、振動の減衰を計算する。
 						// ノード１の速度 := (ノード1の速度 +　微小時間 * 力 / ノード1の質量) * 減衰定数
 						Velocity v1 = velocityMap.get(n1);
-						v1.vx += (DELTA * fx / w) * CONST_ATTENUATION;
-						v1.vy += (DELTA * fy / w) * CONST_ATTENUATION;
+						v1.vx = (v1.vx + DELTA * fx / w) * attenuation;
+						v1.vy = (v1.vy + DELTA * fy / w) * attenuation;
 						
 						// ノード１の位置 := ノード1の位置 + 微小時間 * ノード1の速度
 						n1.setCenter(
@@ -308,14 +316,17 @@ public class SemanticNetLayout extends MapLayout {
 						// 運動エネルギーの合計 := 運動エネルギーの合計 + ノード1の質量 * ノード1の速度 ^ 2
 						e = e + w * (v1.vx*v1.vx + v1.vy*v1.vy);
 					}
-					System.out.println("e = "+e);
+//					System.out.println("e = "+e);
 				}
 
 				try {
-					System.out.println("sleep");
 					Thread.sleep(SLEEP);
-					System.out.println("slept");
-					getMapPanel().repaint();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							getMapPanel().repaint();
+						}
+					});
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 					break;

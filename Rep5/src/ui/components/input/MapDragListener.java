@@ -35,10 +35,10 @@ public class MapDragListener extends MouseInputAdapter {
 		Point current = evt.getPoint();
 		double x = panel.getCenter().getX();
 		double y = panel.getCenter().getY();
-
+		final double zoom = panel.getZoom();
 		if (prev != null) {
-			x += prev.x - current.x;
-			y += prev.y - current.y;
+			x += (prev.x - current.x) * zoom;
+			y += (prev.y - current.y) * zoom;
 		}
 
 //		if (!panel.isNegativeYAllowed()) {
