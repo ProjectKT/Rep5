@@ -1,6 +1,10 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import SemanticNet.Link;
@@ -11,7 +15,7 @@ public class SemanticNetPanel extends MapPanel {
 	// SemanticNet のノードと UINode との対応
 	protected HashMap<Node,UINode> nodeMap = new HashMap<Node,UINode>();
 	// SemanticNet のノードと UINode との対応
-	protected HashMap<Link,UILink> linkMap = new HashMap<Link,UILink>();
+	protected ArrayList<Link> links = new ArrayList<Link>();
 	// 現在のパネル中心の UINode
 	protected UINode centerNode;
 	
@@ -34,15 +38,29 @@ public class SemanticNetPanel extends MapPanel {
 			if (centerNode == null) {
 				centerNode = (UINode) comp;
 			}
-		} else if (comp instanceof UILink) {
-			UILink uiLink = linkMap.get(((UILink) comp).getLink());
-			if (uiLink != null) {
-				return uiLink;
-			}
-			linkMap.put(((UILink) comp).getLink(), (UILink) comp);
 		}
 		return super.add(comp);
 	}
-
 	
+	public void addLink(Link link) {
+		if (!links.contains(link)) {
+			links.add(link);
+		}
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		// Link は別途ここで描画する
+		g.setColor(Color.red);
+		for (Link link : links) {
+			UINode head = nodeMap.get(link.getHead());
+			UINode tail = nodeMap.get(link.getTail());
+			if (head != null && tail != null) {
+				g.drawLine(head.getX(), head.getY(), tail.getX(), tail.getY());
+			}
+		}
+	}
+
 }
