@@ -2,6 +2,7 @@ package Frame;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,12 +94,14 @@ public class FrameQASystem_prototype2 {
 			
 			for(int i=0;i<list.size();i++){
 				AIFrame f =fs.get_Frame((String) list.get(i));
+				if(f==null){
+					System.out.println(list.get(i)+"というフレームは存在しません");
+				}else{
 				System.out.print(list.get(i)+"の"+s2+"は");
 				ArrayList list2 = new ArrayList<String>() ;
 				if(fs.readSlotValue((String) list.get(i),s2,false)==null){
 					System.out.println("見つかりませんでした");
-					return null;
-				}
+				}else{
 				if(fs.readSlotValue((String) list.get(i),s2,false).getClass().getName().equals("java.lang.String")){
 					if(s2.equals("is-a")){
 						AIFrame x = (AIFrame)fs.readSlotValue((String) list.get(i), s2);
@@ -118,16 +121,20 @@ public class FrameQASystem_prototype2 {
 					}
 				}
 			}
+			}
+			}
 			System.out.println();
-			return relist;
+			return relist=(ArrayList<java.lang.String>) unique(relist);
 		}else{
 			System.out.print(s1+"の"+s2+"は");
 			ArrayList<String> list = new ArrayList<String>();
 			AIFrame f =fs.get_Frame(s1);
+			if(f==null){
+				System.out.println(s1+"というフレームは存在しません");
+			}else{
 			if(fs.readSlotValue(s1, s2, false)==null){
 				System.out.println("見つかりませんでした");
-				return null;
-			}
+			}else{
 			if(fs.readSlotValue(s1, s2, false).getClass().getName().equals("java.lang.String")){
 
 				if(s2.equals("is-a")){
@@ -146,8 +153,10 @@ public class FrameQASystem_prototype2 {
 						System.out.print(list.get(i)+"、");
 					}
 				}
+			}
+			}
 				System.out.println();
-			return list;
+			return list=(ArrayList<java.lang.String>) unique(list);
 		}
 	}
 	
@@ -185,4 +194,16 @@ public class FrameQASystem_prototype2 {
 			System.out.println(f.get_leankers_Slot_key(i)+"が"+f.get_leankers_Slot_value(i)+"で接続しています。");
 		}
 	}
+	
+	public static <String> List<String> unique(List<String> arg0) {
+		List<String> ret = new ArrayList<String>();
+		for (int i = 0; i < arg0.size(); i++) {
+			String x = arg0.get(i);
+		if (!ret.contains(x)) {
+		ret.add(x);
+		}
+		}
+		return ret;
+		}
+
 }

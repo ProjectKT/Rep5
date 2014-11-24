@@ -18,8 +18,8 @@ import util.ArrayUtils;
 
 public class OurFrameSystem extends AIFrameSystem {
 	private static final String[] CLASS_FRAME_FILES = {"dbpedia_classes.txt", "kt_classes.txt"};
-	//private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
-	private static final String[] INSTANCE_FRAME_FILES = {"kt_instances.txt"};
+	private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
+	//private static final String[] INSTANCE_FRAME_FILES = {"kt_instances.txt"};
 	public OurFrameSystem() {
 		// 初期フレームを読み込む
 		setupFrames();
@@ -137,7 +137,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					}
 				} else {
 					if (parseData.superNames == null) {
-						System.out.println("Found no \"is-a\" slot value for "+inName+", ignoring this frame.");
+						//System.out.println("Found no \"is-a\" slot value for "+inName+", ignoring this frame.");
 						continue;
 					} else {
 						for (String inSuperName : parseData.superNames) {
@@ -158,6 +158,11 @@ public class OurFrameSystem extends AIFrameSystem {
 				String inName = it.next();
 				
 				ParseData parseData = parseMap.get(inName);
+				
+				if (parseData.superNames == null) {
+					//System.out.println("Found no \"is-a\" slot value for "+inName+", ignoring this frame.");
+					continue;
+				}
 				
 				// スロットに値を入れる
 				Set<Entry<String,String[]>> entrySet = parseData.slotValues.entrySet();
