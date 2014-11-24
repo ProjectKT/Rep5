@@ -58,7 +58,7 @@ public class SemanticNetPanel extends MapPanel {
 			UINode head = nodeMap.get(link.getHead());
 			UINode tail = nodeMap.get(link.getTail());
 			if (head != null && tail != null) {
-				g.drawLine(head.getX() + head.getWidth()/2, head.getY() + head.getWidth()/2, tail.getX() + tail.getWidth()/2, tail.getY() + tail.getHeight()/2);
+				g.drawLine(head.getX() + head.getWidth()/2, head.getY() + head.getHeight()/2, tail.getX() + tail.getWidth()/2, tail.getY() + tail.getHeight()/2);
 			}
 		}
 	}
