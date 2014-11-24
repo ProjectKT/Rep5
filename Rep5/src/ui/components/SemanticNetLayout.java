@@ -254,7 +254,7 @@ public class SemanticNetLayout extends MapLayout {
 		
 				synchronized(mLock) {
 					Set<UINode> uiNodeSet = velocityMap.keySet();
-					final double originFactor = uiNodeSet.size() * 0.01;
+					final double originFactor = uiNodeSet.size() * 0.001;
 					for (UINode n1 : uiNodeSet) {
 						// ノードの位置とノードにつながっているリンクを取得
 						Point2D p1 = n1.getCenter();
