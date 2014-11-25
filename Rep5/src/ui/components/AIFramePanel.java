@@ -26,7 +26,7 @@ public class AIFramePanel extends MapPanel {
 			if (uiFrame != null) {
 				return uiFrame;
 			}
-			frameMap.put(uiFrame.getFrame(), uiFrame);
+			frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
 			if (centerFrame == null) {
 				centerFrame = (UIFrame) comp;
 			}

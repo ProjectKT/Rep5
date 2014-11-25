@@ -61,10 +61,10 @@ public class AIFrameUI extends JFrame {
 	}
 	
 	/**
-	 * SemanticNet 内のノードを addNode
+	 * AIFrameSystem 内のフレームを addFrame
 	 */
 	private void setupFrames() {
-		ArrayList<AIFrame> frames = AIFrameSystem.getFrames();
+		ArrayList<AIFrame> frames = aIFramesystem.getFrames();
 		for (AIFrame frame : frames) {
 			addFrame(frame);
 		}

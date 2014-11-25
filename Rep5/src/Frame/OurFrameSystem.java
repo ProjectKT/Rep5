@@ -17,9 +17,10 @@ import java.util.regex.Pattern;
 import util.ArrayUtils;
 
 public class OurFrameSystem extends AIFrameSystem {
-	private static final String[] CLASS_FRAME_FILES = {"dbpedia_classes.txt", "kt_classes.txt"};
-	private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
-	//private static final String[] INSTANCE_FRAME_FILES = {"kt_instances.txt"};
+	//private static final String[] CLASS_FRAME_FILES = {"dbpedia_classes.txt", "kt_classes.txt"};
+	private static final String[] CLASS_FRAME_FILES = {"kt_classes.txt"};
+	//private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
+	private static final String[] INSTANCE_FRAME_FILES = {"kt_instances.txt"};
 	public OurFrameSystem() {
 		// 初期フレームを読み込む
 		setupFrames();
