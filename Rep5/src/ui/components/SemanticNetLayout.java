@@ -6,14 +6,11 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
-import javax.swing.event.SwingPropertyChangeSupport;
 
 import SemanticNet.Link;
 import SemanticNet.Node;
@@ -29,11 +26,11 @@ public class SemanticNetLayout extends MapLayout {
 	private Object mLock = new Object();
 	private Random random = new Random();
 	// 各ノードの速度ベクトルとの対応
-	private HashMap<UINode,LayoutParams> paramMap = new HashMap<UINode,LayoutParams>();
+	private HashMap<UINode,LayoutParam> paramMap = new HashMap<UINode,LayoutParam>();
 	// レイアウトスレッド
 	private Thread nodeLayoutThread;
 	// 運動エネルギーの合計
-	private double e = 1;
+	private double e = 0;
 	
 	@Override
 	void setMapPanel(MapPanel mapPanel) {
@@ -43,7 +40,7 @@ public class SemanticNetLayout extends MapLayout {
 		super.setMapPanel(mapPanel);
 		
 		if (nodeLayoutThread == null) {
-			nodeLayoutThread = new Thread(layoutNodes);
+			nodeLayoutThread = new Thread(layoutRunnable);
 			nodeLayoutThread.start();
 		}
 	}
@@ -63,8 +60,6 @@ public class SemanticNetLayout extends MapLayout {
 		if (comp instanceof UINode) {
 			getMapPanel().nodeMap.put(((UINode) comp).getNode(), (UINode) comp);
 			layoutUINode(name, (UINode) comp);
-		} else if (comp instanceof UILink) {
-			layoutUILink(name, (UILink) comp);
 		}
 	}
 	
@@ -82,110 +77,27 @@ public class SemanticNetLayout extends MapLayout {
 		return super.preferredLayoutSize(parent);
 	}
 
+	/**
+	 * コンテナをレイアウトする
+	 * コンテナ (MapPanel) の大きさが変えられたとか
+	 */
 	@Override
 	public void layoutContainer(Container parent) {
 		System.out.println("layoutContainer");
 		super.layoutContainer(parent);
 	}
 
-//	/**
-//	 * UINode をレイアウトする
-//	 * @param name
-//	 * @param comp
-//	 */
-//	private void layoutUINode(String name, UINode comp) {
-//		Node node = comp.getNode();
-//		
-//		// TODO ここにレイアウトするコードを書く
-//		if (comp == getMapPanel().centerNode) {
-//			// センターノードならセンターに描く
-//			comp.setCenter(getMapPanel().getCenter());
-//		} else {
-//			// センターノード以外のノード
-//			
-//			//変更 ky
-//			//
-//			//
-//			
-//			
-//			
-//			// ノードから繋がっているリンクを列挙する
-//			ArrayList<Link> depLinks = node.getDepartFromMeLinks();
-//			
-//			
-//			for (Link link : depLinks) {
-//				UINode head = getMapPanel().nodeMap.get(link.getHead());
-//				
-//				//
-//				//ヘッドノードから出ているリンク先の、すでに配置されているノードを返す
-//				// 
-//				
-//				//
-//				//上で求めたノードからヘッドノードの配置を決める(もしくはUINODEにあるthetaを利用)
-//				//
-//				
-//				//
-//				//  ヘッドノードと他のノードの配置の仕方を別にする
-//				//　UINodeのtFromCを利用して、　センターとは反対側に新しいノードを作るようにしたい
-//				
-//				// リンク先が MapPanel に入っていたら
-//				if (head != null) {
-//					ArrayList<Link> links = getConnectedLinks(head.getNode());
-//					int size = links.size();
-//					int index = links.indexOf(link);
-//					if (0 <= index) {
-//						double theta = 360 / (double)size * (double)index;
-//						double r = 200 + (double) index * 60;
-//						double dx = r*Math.cos(Math.toRadians(theta));
-//						double dy = r*Math.sin(Math.toRadians(theta));
-//						Point2D base = head.getCenter();
-//						comp.setCenter(base.getX() + dx, base.getY() + dy);
-//						
-//						if(link.getInheritance() == false){
-//							getMapPanel().add(new UILink(link, comp, head));
-//						}
-//						//break;
-//					}
-//				}
-//				
-//				
-//				
-//			}
-//			
-//			
-//			
-//			
-//			// ノードに繋がっているリンクを列挙する
-//			ArrayList<Link> arrLinks = node.getArriveAtMeLinks();
-//			for (Link link : arrLinks) {
-//				UINode tail = getMapPanel().nodeMap.get(link.getTail());
-//				
-//				// リンク元が MapPanel に入っていたら
-//				if (tail != null) {
-//					ArrayList<Link> links = getConnectedLinks(tail.getNode());
-//					int size = links.size();
-//					int index = links.indexOf(link);
-//					if (0 <= index) {
-//						double theta = 360 / (double)size * (double)index;
-//						double r = 200 + (double) index * 60;
-//						double dx = r*Math.cos(Math.toRadians(theta));
-//						double dy = r*Math.sin(Math.toRadians(theta));
-//						Point2D base = tail.getCenter();
-//						comp.setCenter(base.getX() + dx, base.getY() + dy);
-//						
-//						getMapPanel().add(new UILink(link, tail, comp));
-//						//break;
-//					}
-//				}
-//			}
-//		}
-//	}
+	/**
+	 * UINode をレイアウトする
+	 * @param name
+	 * @param comp
+	 */
 	private void layoutUINode(String name, UINode comp) {
 		System.out.println("layoutUINode "+comp.getNode());
 
 		synchronized(mLock) {
-			// 速度ベクトルを作って map に追加
-			paramMap.put(comp, new LayoutParams());
+			// LayoutParams を作って map に追加
+			paramMap.put(comp, new LayoutParam());
 			// この時点で今までに MapPanel に追加された UINode はすべて velocityMap に入っている
 
 			// ノードの位置を、(乱数, 乱数) にする。 // 2 つのノードがまったく同じ位置におかれないようにする。
@@ -200,21 +112,6 @@ public class SemanticNetLayout extends MapLayout {
 				getMapPanel().addLink(link);
 			}
 		}
-	}
-	
-	
-	/**
-	 * UIArrow をレイアウトする
-	 * @param name
-	 * @param comp
-	 */
-	private void layoutUILink(String name, UILink comp) {
-		Link link = comp.getLink();
-		
-		// TODO ここにレイアウトするコードを書く
-		Node head = link.getHead();
-		Node tail = link.getTail();
-		
 	}
 
 	/**
@@ -238,37 +135,16 @@ public class SemanticNetLayout extends MapLayout {
 	}
 	
 	/**
-	 * ここ参照
-	 * @see http://blog.ivank.net/force-based-graph-drawing-in-as3.html
+	 * 別スレッドで UINode の位置を更新するための Runnable
 	 */
-	private Runnable layoutNodes = new Runnable() {
+	private Runnable layoutRunnable = new Runnable() {
 		@Override
 		public void run() {
 			final long SLEEP = (long) (10);
 			
-			Thread repaintThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						while (true) {
-							SwingUtilities.invokeAndWait(new Runnable() {
-								@Override
-								public void run() {
-									getMapPanel().repaint();
-								}
-							});
-						}
-					} catch (InvocationTargetException | InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-//			repaintThread.start();
-			
 			try {
 				for (;;) {
-					updateVelocities();
+					updateUINodes();
 					Thread.sleep(SLEEP);
 					SwingUtilities.invokeAndWait(new Runnable() {
 						@Override
@@ -281,20 +157,18 @@ public class SemanticNetLayout extends MapLayout {
 				e.printStackTrace();
 			}
 			
-			try {
-				repaintThread.interrupt();
-				repaintThread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
 			synchronized(mLock) {
 				nodeLayoutThread = null;
 			}
 		}
 	};
 	
-	private void updateVelocities() {
+	/**
+	 * UINode の位置を更新する
+	 * ここ参照
+	 * @see http://blog.ivank.net/force-based-graph-drawing-in-as3.html
+	 */
+	private void updateUINodes() {
 		final double attenuation = Math.min(CONST_MIN_ATTENUATION, 1.0/e);
 		
 		synchronized(mLock) {
@@ -305,7 +179,7 @@ public class SemanticNetLayout extends MapLayout {
 			e = 0;
 			
 			for (UINode n1 : uiNodeSet) {
-				LayoutParams lp1 = paramMap.get(n1);
+				LayoutParam lp1 = paramMap.get(n1);
 				
 				// ノードの位置とノードにつながっているリンクを取得
 				Point2D p1 = n1.getCenter();
@@ -321,7 +195,7 @@ public class SemanticNetLayout extends MapLayout {
 					if (n1 == n2) {
 						continue;
 					}
-					Point2D p2 = n2.getCenter();
+					final Point2D p2 = n2.getCenter();
 					
 					// 距離の二乗
 					final double sqD = p1.distanceSq(p2);
@@ -366,7 +240,7 @@ public class SemanticNetLayout extends MapLayout {
 			}
 			
 			for (UINode node : uiNodeSet) {
-				LayoutParams lp = paramMap.get(node);
+				LayoutParam lp = paramMap.get(node);
 				
 				// ノード１の位置 := ノード1の位置 + 微小時間 * ノード1の速度
 				node.setCenter(lp.x, lp.y);
@@ -374,13 +248,13 @@ public class SemanticNetLayout extends MapLayout {
 		}
 	}
 	
-	private class LayoutParams {
+	private class LayoutParam {
 		double x;
 		double y;
 		double vx;
 		double vy;
 		
-		public LayoutParams() {
+		public LayoutParam() {
 			this.x = this.y = this.vx = this.vy = 0;
 		}
 	}

@@ -14,7 +14,7 @@ public class SemanticNetPanel extends MapPanel {
 
 	// SemanticNet のノードと UINode との対応
 	protected HashMap<Node,UINode> nodeMap = new HashMap<Node,UINode>();
-	// SemanticNet のノードと UINode との対応
+	// ノード間のリンク
 	protected ArrayList<Link> links = new ArrayList<Link>();
 	// 現在のパネル中心の UINode
 	protected UINode centerNode;
@@ -53,14 +53,24 @@ public class SemanticNetPanel extends MapPanel {
 		super.paintComponent(g);
 		
 		// Link は別途ここで描画する
+		drawLinks(g);
+	}
+
+	/**
+	 * UINode 間のリンクを描画する
+	 */
+	private void drawLinks(Graphics g) {
 		g.setColor(Color.red);
 		for (Link link : links) {
 			UINode head = nodeMap.get(link.getHead());
 			UINode tail = nodeMap.get(link.getTail());
 			if (head != null && tail != null) {
-				g.drawLine(head.getX() + head.getWidth()/2, head.getY() + head.getHeight()/2, tail.getX() + tail.getWidth()/2, tail.getY() + tail.getHeight()/2);
+				g.drawLine(head.getX() + head.getWidth()/2,
+							head.getY() + head.getHeight()/2,
+							tail.getX() + tail.getWidth()/2,
+							tail.getY() + tail.getHeight()/2);
 			}
 		}
 	}
-
+	
 }

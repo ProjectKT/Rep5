@@ -64,10 +64,17 @@ public class AIFrameUI extends JFrame {
 	 * AIFrameSystem 内のフレームを addFrame
 	 */
 	private void setupFrames() {
+<<<<<<< HEAD
 		ArrayList<AIFrame> frames = aIFramesystem.getFrames();
 		for (AIFrame frame : frames) {
 			addFrame(frame);
 		}
+=======
+//		ArrayList<AIFrame> frames = AIFrameSystem.getFrames();
+//		for (AIFrame frame : frames) {
+//			addFrame(frame);
+//		}
+>>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
 	}
 	
 	/**
