@@ -30,8 +30,6 @@ public class AIFrameLayout extends MapLayout {
 		if (comp instanceof UINode) {
 			getMapPanel().frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
 			layoutUIFrame(name, (UIFrame) comp);
-		} else if (comp instanceof UILink) {
-			layoutUILink(name, (UILink) comp);
 		}
 
 	}
@@ -73,17 +71,17 @@ public class AIFrameLayout extends MapLayout {
 		}
 	}
 	
-	/**
-	 * UIArrow をレイアウトする
-	 * @param name
-	 * @param comp
-	 */
-	private void layoutUILink(String name, UILink comp) {
-		Link link = comp.getLink();
-		
-		// TODO ここにレイアウトするコードを書く
-		Node head = link.getHead();
-		Node tail = link.getTail();
-		
-	}
+//	/**
+//	 * UIArrow をレイアウトする
+//	 * @param name
+//	 * @param comp
+//	 */
+//	private void layoutUILink(String name, UILink comp) {
+//		Link link = comp.getLink();
+//		
+//		// TODO ここにレイアウトするコードを書く
+//		Node head = link.getHead();
+//		Node tail = link.getTail();
+//		
+//	}
 }
