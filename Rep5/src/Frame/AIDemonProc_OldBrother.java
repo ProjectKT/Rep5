@@ -63,6 +63,39 @@ public class AIDemonProc_OldBrother extends AIDemonProc {
 								relist.add(klist.get(j));
 							}
 						}
+						//ここから追加(109)
+						else if (Integer.parseInt((String) frame.readSlotValue(
+								inFrameSystem, "誕生日", false)) > data1
+								&& frame.readSlotValue(inFrameSystem, "性別",
+										false).equals("男")) {
+											
+							// 親は基本二人なので二回目以降のループ時すでに前のループで登録されてないか調べる
+							if (!relist.contains(klist.get(j))) {
+								// 初めての名前なら弟としてリストに入れる
+								relist.add(klist.get(j));
+							}				
+						}　else if (Integer.parseInt((String) frame.readSlotValue(
+								inFrameSystem, "誕生日", false)) < data1
+								&& frame.readSlotValue(inFrameSystem, "性別",
+										false).equals("女")) {
+											
+							// 親は基本二人なので二回目以降のループ時すでに前のループで登録されてないか調べる
+							if (!relist.contains(klist.get(j))) {
+								// 初めての名前なら姉としてリストに入れる
+								relist.add(klist.get(j));
+							}								
+						} else if (Integer.parseInt((String) frame.readSlotValue(
+								inFrameSystem, "誕生日", false)) > data1
+								&& frame.readSlotValue(inFrameSystem, "性別",
+										false).equals("女")) {
+							
+							// 親は基本二人なので二回目以降のループ時すでに前のループで登録されてないか調べる
+							if (!relist.contains(klist.get(j))) {
+								// 初めての名前なら妹としてリストに入れる
+								relist.add(klist.get(j));
+							}								
+						}
+						//ここまで追加(109)
 					}
 				}
 			}
