@@ -57,15 +57,11 @@ public class AIFrameLayout extends MapLayout {
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
 		System.out.println("addLayoutComponent");
-		if (comp instanceof UINode) {
+		if (comp instanceof UIFrame) {
 			getMapPanel().frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
 			layoutUIFrame(name, (UIFrame) comp);
 
-		} else if (comp instanceof UISlot) {
-			layoutUISlot(name, (UISlot) comp);
-
-		}
-
+		} 
 	}
 
 	@Override
@@ -112,20 +108,7 @@ public class AIFrameLayout extends MapLayout {
 	
 	
 
-	/**
-	 * UIArrow をレイアウトする
-	 * @param name
-	 * @param comp
-	 */
-	private void layoutUISlot(String name, UISlot comp) {
-		AISlot slot = comp.getSlot();
-		
-		// TODO ここにレイアウトするコードを書く
-		AIFrame head = slot.getHead();
-		AIFrame tail = slot.getTail();
-		
-	}
-
+	
 	/**
 	 * 繋がってる全部のリンクを返す
 	 * @param node

@@ -5,17 +5,13 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import Frame.*;
-import SemanticNet.Node;
-import ui.components.AIFrameLayout;
 import ui.components.AIFramePanel;
-import ui.components.MapPanel;
-import ui.components.SemanticNetPanel;
 import ui.components.UIFrame;
-import ui.components.UINode;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
-import Frame.*;
+import Frame.AIFrame;
+import Frame.AIFrameSystem;
+import Frame.OurFrameSystem;
 
 public class AIFrameUI extends JFrame {
 	
@@ -28,11 +24,6 @@ public class AIFrameUI extends JFrame {
 	public AIFrameUI(AIFrameSystem aIFramesystem) throws HeadlessException {
 		this.aIFramesystem = aIFramesystem;
 		initialize();
-		setVisible(true);
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(10, 10, 300, 200);
-		setTitle("AIFrameUI");
 		setVisible(true);
 	}
 
@@ -64,17 +55,11 @@ public class AIFrameUI extends JFrame {
 	 * AIFrameSystem 内のフレームを addFrame
 	 */
 	private void setupFrames() {
-<<<<<<< HEAD
 		ArrayList<AIFrame> frames = aIFramesystem.getFrames();
 		for (AIFrame frame : frames) {
 			addFrame(frame);
 		}
-=======
-//		ArrayList<AIFrame> frames = AIFrameSystem.getFrames();
-//		for (AIFrame frame : frames) {
-//			addFrame(frame);
-//		}
->>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
+
 	}
 	
 	/**
@@ -87,6 +72,7 @@ public class AIFrameUI extends JFrame {
 	
 	public static void main(String[] args) {
 		OurFrameSystem ofs = new OurFrameSystem();
+		
 		
 		AIFrameUI gui = new AIFrameUI(ofs);
 		gui.setVisible(true);
