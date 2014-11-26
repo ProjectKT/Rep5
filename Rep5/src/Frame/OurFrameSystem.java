@@ -2,7 +2,6 @@ package Frame;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -11,8 +10,6 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import util.ArrayUtils;
 
@@ -213,6 +210,9 @@ public class OurFrameSystem extends AIFrameSystem {
 	 */
 	private void setupDemon(){
 		setWhenRequestedProc("人間", "兄", new AIDemonProc_OldBrother());
+		setWhenRequestedProc("人間", "弟", new AIDemonProc_YoungBrother());
+		setWhenRequestedProc("人間", "姉", new AIDemonProc_OldSister());
+		setWhenRequestedProc("人間", "妹", new AIDemonProc_YoungSister());
 	}
 	
 	public static void main(String[] args) {

@@ -6,16 +6,14 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
-import javax.swing.event.SwingPropertyChangeSupport;
 
-import Frame.*;
+import Frame.AIFrame;
+import Frame.AISlot;
 
 public class AIFrameLayout extends MapLayout {
 
@@ -62,11 +60,10 @@ public class AIFrameLayout extends MapLayout {
 		if (comp instanceof UINode) {
 			getMapPanel().frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
 			layoutUIFrame(name, (UIFrame) comp);
-<<<<<<< HEAD
+
 		} else if (comp instanceof UISlot) {
 			layoutUISlot(name, (UISlot) comp);
-=======
->>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
+
 		}
 
 	}
@@ -114,7 +111,7 @@ public class AIFrameLayout extends MapLayout {
 	}
 	
 	
-<<<<<<< HEAD
+
 	/**
 	 * UIArrow をレイアウトする
 	 * @param name
@@ -298,19 +295,5 @@ public class AIFrameLayout extends MapLayout {
 	}
 	
 
-=======
-//	/**
-//	 * UIArrow をレイアウトする
-//	 * @param name
-//	 * @param comp
-//	 */
-//	private void layoutUILink(String name, UILink comp) {
-//		Link link = comp.getLink();
-//		
-//		// TODO ここにレイアウトするコードを書く
-//		Node head = link.getHead();
-//		Node tail = link.getTail();
-//		
-//	}
->>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
+
 }
