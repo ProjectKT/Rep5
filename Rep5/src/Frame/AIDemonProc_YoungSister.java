@@ -3,7 +3,7 @@ package Frame;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class AIDemonProc_OldBrother extends AIDemonProc {
+public class AIDemonProc_ YoungSister extends AIDemonProc {
 
 	public Object eval(AIFrameSystem inFrameSystem, AIFrame inFrame,
 			String inSlotName, Iterator inSlotValues, Object inOpts) {
