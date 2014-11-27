@@ -3,7 +3,7 @@ package Frame;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class AIDemonProc_Uncle extends AIDemonProc {
+public class AIDemonProc_Aunt extends AIDemonProc {
 	public Object eval(AIFrameSystem inFrameSystem, AIFrame inFrame,
 			String inSlotName, Iterator inSlotValues, Object inOpts) {
 
@@ -49,8 +49,8 @@ public class AIDemonProc_Uncle extends AIDemonProc {
 
 							// 兄弟の名前から兄弟のフレームをとってくる
 							AIFrame frame = inFrameSystem.get_Frame(klist.get(k));
-						//自分の親でない、かつ、男なら叔父
-							if(!klist.get(k).equals(olist.get(i)) && frame.readSlotValue(inFrameSystem, "性別",false).equals("男")){
+						//自分の親でない、かつ、女なら叔母
+							if(!klist.get(k).equals(olist.get(i)) && frame.readSlotValue(inFrameSystem, "性別",false).equals("女")){
 							
 							// 親は基本二人なので二回目以降のループ時すでに前のループで登録されてないか調べる
 							if (!relist.contains(klist.get(k)))
