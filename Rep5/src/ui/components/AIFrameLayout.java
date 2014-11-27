@@ -100,7 +100,9 @@ public class AIFrameLayout extends MapLayout {
 		AIFrame aiFrame = comp.getFrame();
 		for(int i = 0; i < aiFrame.get_Slot_size(); i++){
 		//ArrayList<AISlot> connectedSlots = getConnectedSlots(comp.getFrame());
-			if(aiFrame.get_Slot_key(i) == "is"
+			if((aiFrame.get_Slot_key(i) == "is-a")||(aiFrame.get_Slot_key(i) == "ako")){
+				AIFrame opposite = aiFrame.
+			}
 		for (AISlot slot : connectedSlots) {
 			if(comp.getFrame().)
 			AIFrame opposite = (comp.getFrame() == slot.getTail()) ? slot.getTail() : slot.getHead();
