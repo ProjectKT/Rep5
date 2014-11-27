@@ -84,6 +84,7 @@ public class AIFrameLayout extends MapLayout {
 		super.layoutContainer(parent);
 	}
 	
+	
 	private void layoutUIFrame(String name, UIFrame comp) {
 		System.out.println("layoutUIFrame "+comp.getFrame());
 
@@ -96,8 +97,12 @@ public class AIFrameLayout extends MapLayout {
 			comp.setCenter(random.nextDouble() * 100, random.nextDouble() * 100);
 		}
 		
-		ArrayList<AISlot> connectedSlots = getConnectedSlots(comp.getFrame());
+		AIFrame aiFrame = comp.getFrame();
+		for(int i = 0; i < aiFrame.get_Slot_size(); i++){
+		//ArrayList<AISlot> connectedSlots = getConnectedSlots(comp.getFrame());
+			if(aiFrame.get_Slot_key(i) == "is"
 		for (AISlot slot : connectedSlots) {
+			if(comp.getFrame().)
 			AIFrame opposite = (comp.getFrame() == slot.getTail()) ? slot.getTail() : slot.getHead();
 			UIFrame uiFrame = getUIFrame(opposite);
 			if (uiFrame != null) {
@@ -114,11 +119,13 @@ public class AIFrameLayout extends MapLayout {
 	 * @param node
 	 * @return
 	 */
+	/*
 	private ArrayList<AISlot> getConnectedSlots(AIFrame frame) {
 		ArrayList<AISlot> slots = new ArrayList<AISlot>(frame.getDepartFromMeSlots());
 		slots.addAll(frame.getArriveAtMeSlots());
 		return slots;
 	}
+	*/
 	
 	/**
 	 * Node に対応する UINode を返す

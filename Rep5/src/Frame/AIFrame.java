@@ -465,4 +465,11 @@ public abstract class AIFrame {
 	public ArrayList getmVals(String slotName){
 		return mSlots.get(slotName).getmVals();
 	}
+	
+	public ArrayList getDepartFromMeSlots(){
+		
+	}
+	
+	
+	
 } // end of class definition
