@@ -171,7 +171,9 @@ public class OurFrameSystem extends AIFrameSystem {
 					final String[] slotValues = e.getValue();
 
 					for (String slotValue : slotValues) {
-					
+						if(slotName.equals("is-a") || slotName.equals("ako")){
+							get_Frame(inName).add_super(slotValue);
+						}
 						if(get_Frame(inName).slot_check(slotName)){
 							get_Frame(inName).addSlotValue(slotName, slotValue);
 						}else{
