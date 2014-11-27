@@ -176,6 +176,42 @@ public class SemanticNet {
 		return nodes;
 	}
 
+	//add ky
+	public ArrayList<Node> getHeadNodes() {
+
+		ArrayList<Node> headNodes = new ArrayList<Node>();
+		for(int i = 0;i <nodes.size(); i++){
+			if(nodes.get(i).getArriveAtMeLinks().size() == 0){
+				headNodes.add(nodes.get(i));
+			}
+		}
+		
+		return(headNodes);
+	}
+	
+	public Node getMostLink(){
+		
+		ArrayList<Node> headNodes = this.getHeadNodes();
+		
+		
+		Node most;
+		int link;
+		if(headNodes.size() == 1)
+			return(headNodes.get(0));
+		else{
+			most = headNodes.get(0);
+			link = most.getDepartFromMeLinks().size();
+			for(int i = 1;i <headNodes.size();i++){
+				if(link < headNodes.get(i).getDepartFromMeLinks().size()){
+					most = headNodes.get(i);
+					link = most.getDepartFromMeLinks().size();
+				}
+			}
+		}
+		
+		return(most);
+	}
+	
 	public HashMap<String, Node> getNodesNameTable() {
 		return nodesNameTable;
 	}

@@ -9,7 +9,7 @@ package Frame;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-class AISlot {
+public class AISlot {
 
 	public final static int WHEN_REQUESTED = 0;
 	public final static int WHEN_READ = WHEN_REQUESTED + 1;
@@ -23,7 +23,11 @@ class AISlot {
 	AISlot() {
 		mDemons = new AIDemonProc[DEMON_PROCS];
 	}
-
+	
+	ArrayList getmVals(){
+		return mVals;
+	}
+	
 	//
 	Iterator getSlotValues() {
 		return mVals.iterator();

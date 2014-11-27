@@ -40,6 +40,11 @@ public class Link {
 		inheritance = value;
 	}
 
+	//追加  ky
+	public boolean getInheritance(){
+		return this.inheritance;
+	}
+	
 	public Node getTail() {
 		return tail;
 	}

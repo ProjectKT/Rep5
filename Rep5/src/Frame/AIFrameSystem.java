@@ -5,7 +5,12 @@ package Frame;
  フレームシステム
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import SemanticNet.Node;
 
 public class AIFrameSystem {
 
@@ -267,5 +272,19 @@ public class AIFrameSystem {
 		}
 	}
 	
-
+	//改変部
+	/**
+	 * guiデ使うためにAIFrameを返す
+	 * @return
+	 */
+	public ArrayList<AIFrame> getFrames(){
+		ArrayList<AIFrame> list = new ArrayList<AIFrame>();
+		for (Iterator it = mFrames.entrySet().iterator(); it.hasNext();) {
+		    Map.Entry entry = (Map.Entry)it.next();
+		    AIFrame value = (AIFrame) entry.getValue();
+		    	list.add(value);
+		    
+		}
+		return list;
+	}
 } // end of class definition

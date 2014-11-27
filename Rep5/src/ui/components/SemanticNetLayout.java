@@ -3,12 +3,34 @@ package ui.components;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.geom.Point2D;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Set;
+
+import javax.swing.SwingUtilities;
 
 import SemanticNet.Link;
 import SemanticNet.Node;
 
 public class SemanticNetLayout extends MapLayout {
+
+	private static final double E_THRESHOlD = 1.0;
+	private static final double CONST = 1000;
+	private static final double CONST_SPRING = 0.06;
+	private static final double CONST_MIN_ATTENUATION = 0.85;
+	private static final double DELTA = 1;
+
+	private Object mLock = new Object();
+	private Random random = new Random();
+	// 各ノードの速度ベクトルとの対応
+	private HashMap<UINode,LayoutParam> paramMap = new HashMap<UINode,LayoutParam>();
+	// レイアウトスレッド
+	private Thread nodeLayoutThread;
+	// 運動エネルギーの合計
+	private double e = 0;
 	
 	@Override
 	void setMapPanel(MapPanel mapPanel) {
@@ -16,6 +38,11 @@ public class SemanticNetLayout extends MapLayout {
 			throw new ClassCastException("mapPanel must be "+SemanticNetPanel.class.getSimpleName());
 		}
 		super.setMapPanel(mapPanel);
+		
+		if (nodeLayoutThread == null) {
+			nodeLayoutThread = new Thread(layoutRunnable);
+			nodeLayoutThread.start();
+		}
 	}
 	
 	/**
@@ -33,8 +60,6 @@ public class SemanticNetLayout extends MapLayout {
 		if (comp instanceof UINode) {
 			getMapPanel().nodeMap.put(((UINode) comp).getNode(), (UINode) comp);
 			layoutUINode(name, (UINode) comp);
-		} else if (comp instanceof UILink) {
-			layoutUILink(name, (UILink) comp);
 		}
 	}
 	
@@ -52,6 +77,10 @@ public class SemanticNetLayout extends MapLayout {
 		return super.preferredLayoutSize(parent);
 	}
 
+	/**
+	 * コンテナをレイアウトする
+	 * コンテナ (MapPanel) の大きさが変えられたとか
+	 */
 	@Override
 	public void layoutContainer(Container parent) {
 		System.out.println("layoutContainer");
@@ -64,29 +93,169 @@ public class SemanticNetLayout extends MapLayout {
 	 * @param comp
 	 */
 	private void layoutUINode(String name, UINode comp) {
-		Node node = comp.getNode();
-		
-		// TODO ここにレイアウトするコードを書く
-		if (comp == getMapPanel().centerNode) {
-			// センターノードならセンターに描く
-			comp.setCenter(getMapPanel().getCenter());
-		} else {
-			// センターノード以外のノード
+		System.out.println("layoutUINode "+comp.getNode());
+
+		synchronized(mLock) {
+			// LayoutParams を作って map に追加
+			paramMap.put(comp, new LayoutParam());
+			// この時点で今までに MapPanel に追加された UINode はすべて velocityMap に入っている
+
+			// ノードの位置を、(乱数, 乱数) にする。 // 2 つのノードがまったく同じ位置におかれないようにする。
+			comp.setCenter(random.nextDouble() * 100, random.nextDouble() * 100);
 		}
+		
+		ArrayList<Link> connectedLinks = getConnectedLinks(comp.getNode());
+		for (Link link : connectedLinks) {
+			Node opposite = (comp.getNode() == link.getTail()) ? link.getTail() : link.getHead();
+			UINode uiNode = getUINode(opposite);
+			if (uiNode != null) {
+				getMapPanel().addLink(link);
+			}
+		}
+	}
+
+	/**
+	 * 繋がってる全部のリンクを返す
+	 * @param node
+	 * @return
+	 */
+	private ArrayList<Link> getConnectedLinks(Node node) {
+		ArrayList<Link> links = new ArrayList<Link>(node.getDepartFromMeLinks());
+		links.addAll(node.getArriveAtMeLinks());
+		return links;
 	}
 	
 	/**
-	 * UIArrow をレイアウトする
-	 * @param name
-	 * @param comp
+	 * Node に対応する UINode を返す
+	 * @param node
+	 * @return まだ MapPanel に追加されていない場合は null
 	 */
-	private void layoutUILink(String name, UILink comp) {
-		Link link = comp.getLink();
-		
-		// TODO ここにレイアウトするコードを書く
-		Node head = link.getHead();
-		Node tail = link.getTail();
-		
+	private UINode getUINode(Node node) {
+		return getMapPanel().nodeMap.get(node);
 	}
+	
+	/**
+	 * 別スレッドで UINode の位置を更新するための Runnable
+	 */
+	private Runnable layoutRunnable = new Runnable() {
+		@Override
+		public void run() {
+			final long SLEEP = (long) (10);
+			
+			try {
+				for (;;) {
+					updateUINodes();
+					Thread.sleep(SLEEP);
+					SwingUtilities.invokeAndWait(new Runnable() {
+						@Override
+						public void run() {
+							getMapPanel().repaint();
+						}
+					});
+				}
+			} catch (InterruptedException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			synchronized(mLock) {
+				nodeLayoutThread = null;
+			}
+		}
+	};
+	
+	/**
+	 * UINode の位置を更新する
+	 * ここ参照
+	 * @see http://blog.ivank.net/force-based-graph-drawing-in-as3.html
+	 */
+	private void updateUINodes() {
+		final double attenuation = Math.min(CONST_MIN_ATTENUATION, 1.0/e);
+		
+		synchronized(mLock) {
+			Set<UINode> uiNodeSet = paramMap.keySet();
+			// 原点に戻ろうとする力の係数
+			final double originFactor = uiNodeSet.size() * 0.001;
+			// 運動エネルギーの合計 := 0 // すべての粒子について、運動エネルギーの合計を計算する。
+			e = 0;
+			
+			for (UINode n1 : uiNodeSet) {
+				LayoutParam lp1 = paramMap.get(n1);
+				
+				// ノードの位置とノードにつながっているリンクを取得
+				Point2D p1 = n1.getCenter();
+				ArrayList<Link> links = getConnectedLinks(n1.getNode());
+				double w = 1.0;
+				
+				// 力 := (0, 0) // この粒子について作用するすべての力の合成を計算する。
+				double fx = 0;
+				double fy = 0;
 
+				// 他のノードとの反発
+				for (UINode n2 : uiNodeSet) {
+					if (n1 == n2) {
+						continue;
+					}
+					final Point2D p2 = n2.getCenter();
+					
+					// 距離の二乗
+					final double sqD = p1.distanceSq(p2);
+					
+					// 力 := 力 + 定数 / 距離（ノード1, ノード2) ^ 2  // クーロン力
+					fx += CONST * (p1.getX()-p2.getX()) / sqD;
+					fy += CONST * (p1.getY()-p2.getY()) / sqD;
+				}
+
+				// つながっているノードと近づく力
+				for (Link link : links) {
+					final UINode head = getUINode(link.getHead());
+					final UINode tail = getUINode(link.getTail());
+					if (head == null || tail == null) {
+						continue;
+					}
+					final UINode n2 = (n1 == tail) ? head : tail;
+					final Point2D p2 = n2.getCenter();
+					
+					// 力 := 力 + バネ定数 * (距離 (ノード1, ノード2) - バネの自然長)  // フックの法則による力
+					fx += CONST_SPRING * (p2.getX() - p1.getX());
+					fy += CONST_SPRING * (p2.getY() - p1.getY());
+					
+					w *= 1.1;
+				}
+				
+				// 原点 (0,0) に戻す力
+				fx -= originFactor * p1.getX();
+				fy -= originFactor * p1.getY();
+
+				// 内部摩擦が無ければ粒子は停止しないので、振動の減衰を計算する。
+				// ノード１の速度 := (ノード1の速度 +　微小時間 * 力 / ノード1の質量) * 減衰定数
+				lp1.vx = (lp1.vx + DELTA * fx / w) * attenuation;
+				lp1.vy = (lp1.vy + DELTA * fy / w) * attenuation;
+				
+				
+				lp1.x = lp1.x + DELTA * lp1.vx;
+				lp1.y = lp1.y + DELTA * lp1.vy;
+				
+				// 運動エネルギーの合計 := 運動エネルギーの合計 + ノード1の質量 * ノード1の速度 ^ 2
+				e = e + w * (lp1.vx*lp1.vx + lp1.vy*lp1.vy);
+			}
+			
+			for (UINode node : uiNodeSet) {
+				LayoutParam lp = paramMap.get(node);
+				
+				// ノード１の位置 := ノード1の位置 + 微小時間 * ノード1の速度
+				node.setCenter(lp.x, lp.y);
+			}
+		}
+	}
+	
+	private class LayoutParam {
+		double x;
+		double y;
+		double vx;
+		double vy;
+		
+		public LayoutParam() {
+			this.x = this.y = this.vx = this.vy = 0;
+		}
+	}
 }

@@ -12,7 +12,7 @@ import ui.components.MapPanel;
 public class MapZoomListener extends MouseAdapter {
 	
 	private MapPanel panel;
-	private double zoomCoeff = 1.0;
+	private double zoomCoeff = 0.1;
 	
 	public MapZoomListener(MapPanel mapPanel) {
 		panel = mapPanel;

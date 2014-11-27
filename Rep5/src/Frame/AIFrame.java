@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-abstract class AIFrame {
+public abstract class AIFrame {
 
 	private boolean mIsInstance;
 	private String mName;
@@ -51,13 +51,6 @@ abstract class AIFrame {
 		evalWhenConstructedProc(inFrameSystem, this);
 	}
 
-	//改変部
-	/*
-	 * 外部でAIFrameを使う時用のコンストラクタ
-	 */
-	AIFrame(){
-		
-	}
 			
 	/*
 	 * setWhenConstructedProc when-constructed proc を登録
@@ -355,6 +348,14 @@ abstract class AIFrame {
 		list.add(inObj);
 		return list.iterator();
 	}
+	
+	//改変部
+	/**
+	 * 指定された名前のスロットがすでにあるか返す
+	 */
+	public boolean slot_check(String slotName){
+		return mSlots.containsKey(slotName);
+	}
 
 	//改変部
 	/**
@@ -388,7 +389,7 @@ abstract class AIFrame {
 	 */
 	public void put_new_leanker(String slotName,String frameName){
 		//System.out.println(slotName+frameName);
-		leankers.put(frameName, slotName);
+		leankers.put(frameName,slotName);
 	}
 	
 	//改変部
@@ -436,10 +437,32 @@ abstract class AIFrame {
 	}
 	
 	//改変部
+		/**
+		 * フレームの指定された位置のleankersの特定のスロット名のスロット値を返す
+		 */
+		public ArrayList<String> get_leankers_Slot_names(String slotName){
+			ArrayList<String> list = new ArrayList<String>();
+			for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
+			    Map.Entry entry = (Map.Entry)it.next();
+			    String key = (String) entry.getKey();
+			    String value = (String) entry.getValue();
+			    //System.out.println("key:"+key+"value"+value);
+			    if(value.equals(slotName)){
+			    	list.add(key);
+			    }
+			}
+			return list;
+		}
+	
+	//改変部
 	/**
 	 * 名前を返す
 	 */
 	public String get_name(){
 		return mName;
+	}
+	
+	public ArrayList getmVals(String slotName){
+		return mSlots.get(slotName).getmVals();
 	}
 } // end of class definition

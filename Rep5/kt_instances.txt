@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Kiyo is-a 男
 Kiyo 誕生日 19930524
 Kiyo 身長 xsd:nonNegativeInteger
@@ -11,3 +12,25 @@ Shun 誕生日 19930706
 
 Kiyo 子 Kotori
 Kiyo 子 Rin
+=======
+Kiyojiro is-a 人間
+Kiyojiro 性別 男
+Kiyojiro 誕生日 19970524
+Kiyojiro 親 Kiyotaro
+Kiyojiro 親 Kiyomi
+Kiyootouto is-a 人間
+Kiyootouto 性別 男
+Kiyootouto 誕生日 19940524
+Kiyootouto 親 Kiyotaro
+Kiyootouto 親 Kiyomi
+佐藤清隆 is-a 人間
+佐藤清隆 性別 男
+佐藤清隆 誕生日 19930524
+佐藤清隆 親 Kiyotaro
+佐藤清隆 親 Kiyomi
+Kiyotaro is-a 人間
+Kiyotaro 性別 男
+Kiyotaro 誕生日 19500714
+Kiyomi is-a 人間
+Kiyomi 性別 女
+>>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git

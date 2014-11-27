@@ -11,6 +11,12 @@ import SemanticNet.Node;
 public class UINode extends MapComponent {
 	private Node node;
 	
+	
+	//変更 ky 11/21
+	public double tFromC;  //centerとの角度
+	
+	
+	
 	/**
 	 * SemanticNet のノードを受け取って初期化するコンストラクタ
 	 * @param node
@@ -18,7 +24,7 @@ public class UINode extends MapComponent {
 	public UINode(Node node) {
 		this.node = node;
 		int len = node.getName().length();
-		setSize(len*10, 50);
+		setSize(len*10.0, 50.0);
 	}
 
 	/**
@@ -29,6 +35,17 @@ public class UINode extends MapComponent {
 		return node;
 	}
 
+	//変更 ky 11/21
+	public double getTheta(){
+		return tFromC;
+	}
+	
+	//変更 ky 11/21
+	public void putTheta(double theta){
+		this.tFromC = theta;
+	}
+	
+	
 	/**
 	 * {@inheritDoc}
 	 * ノードを描画する
@@ -38,10 +55,10 @@ public class UINode extends MapComponent {
 		super.paintComponent(g);
 		
 		// TODO ここに描画する部分を書く
-		g.setColor(Color.blue);
+		g.setColor(Color.green);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
-		g.drawString(node.getName(), 0, (getHeight()/2)-10);
+		g.drawString(node.getName(), 0, 20);
 	}
 	
 	

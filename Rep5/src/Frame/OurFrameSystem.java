@@ -11,17 +11,22 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import util.ArrayUtils;
 
 public class OurFrameSystem extends AIFrameSystem {
-	private static final String[] CLASS_FRAME_FILES = {"dbpedia_classes.txt", "kt_classes.txt"};
-	private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
-	
+	//private static final String[] CLASS_FRAME_FILES = {"dbpedia_classes.txt", "kt_classes.txt"};
+	private static final String[] CLASS_FRAME_FILES = {"kt_classes.txt"};
+	//private static final String[] INSTANCE_FRAME_FILES = {"nagoya_instances.txt", "kt_instances.txt"};
+	private static final String[] INSTANCE_FRAME_FILES = {"kt_instances.txt"};
 	public OurFrameSystem() {
 		// 初期フレームを読み込む
 		setupFrames();
-		
+
+		setupDemon();
+
 	}
 	
 	/**
@@ -71,6 +76,9 @@ public class OurFrameSystem extends AIFrameSystem {
 			
 			// フレームを作成して追加
 			addFrames(treatAsClass);
+			
+			//フレームにスロットを追加
+			addSlot();
 		}
 		
 		private void parseFile(File file) throws IOException {
@@ -89,12 +97,19 @@ public class OurFrameSystem extends AIFrameSystem {
 					final String slotName = st.nextToken();
 					final String slotValue = st.nextToken();
 					
+					
 					ParseData parseData = parseMap.get(inName);
 					if (parseData == null) {
 						parseData = new ParseData();
 						parseMap.put(inName, parseData);
 					}
+					
+					//変更
+					if(slotName.equalsIgnoreCase("is-a") && slotValue.equalsIgnoreCase("Class")){
+						createClassFrame(inName);
+					}else{
 					parseData.add(slotName, slotValue);
+				}
 				}
 			} finally {
 				if (reader != null) {
@@ -105,6 +120,7 @@ public class OurFrameSystem extends AIFrameSystem {
 		
 		private void addFrames(boolean treatAsClass) {
 			Iterator<String> it = parseMap.keySet().iterator();
+			
 			while (it.hasNext()) {
 				String inName = it.next();
 				ParseData parseData = parseMap.get(inName);
@@ -124,7 +140,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					}
 				} else {
 					if (parseData.superNames == null) {
-						System.out.println("Found no \"is-a\" slot value for "+inName+", ignoring this frame.");
+						//System.out.println("Found no \"is-a\" slot value for "+inName+", ignoring this frame.");
 						continue;
 					} else {
 						for (String inSuperName : parseData.superNames) {
@@ -134,21 +150,44 @@ public class OurFrameSystem extends AIFrameSystem {
 					}
 				}
 				
+			}
+		}
+		
+		
+		private void addSlot() {
+			Iterator<String> it = parseMap.keySet().iterator();
+			
+			while (it.hasNext()) {
+				String inName = it.next();
+				
+				ParseData parseData = parseMap.get(inName);
+				
+				if (parseData.superNames == null) {
+					//System.out.println("Found no \"is-a\" slot value for "+inName+", ignoring this frame.");
+					continue;
+				}
+				
 				// スロットに値を入れる
 				Set<Entry<String,String[]>> entrySet = parseData.slotValues.entrySet();
 				for (Entry<String,String[]> e : entrySet) {
 					final String slotName = e.getKey();
 					final String[] slotValues = e.getValue();
+
 					for (String slotValue : slotValues) {
+					
+						if(get_Frame(inName).slot_check(slotName)){
+							get_Frame(inName).addSlotValue(slotName, slotValue);
+						}else{
 						writeSlotValue(inName, slotName, slotValue);
+						}
 						writeleankers(slotValue,inName,slotName);
 					}
 				}
 				
 				it.remove();
+				
 			}
 		}
-		
 		/**
 		 *  パース途中のデータを保持しておくためのクラス
 		 */
@@ -160,7 +199,7 @@ public class OurFrameSystem extends AIFrameSystem {
 			void add(String key, final String value) {
 				if (key.equalsIgnoreCase("is-a")) {
 					superNames = ArrayUtils.concat(superNames, value);
-				} else if (key.equalsIgnoreCase("ako")) {
+				} else if (key.equalsIgnoreCase("Ako")) {
 					superClasses = ArrayUtils.concat(superClasses, value);
 				} else {
 					String[] values = slotValues.get(key);
@@ -170,7 +209,13 @@ public class OurFrameSystem extends AIFrameSystem {
 			}
 		}
 	}
-	
+
+	/**
+	 * 家族親戚を求めるDemonを追加
+	 */
+	private void setupDemon(){
+		setWhenRequestedProc("人間", "兄", new AIDemonProc_OldBrother());
+	}
 	
 	public static void main(String[] args) {
 		OurFrameSystem ofs = new OurFrameSystem();
