@@ -3,6 +3,9 @@ package ui.components;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,26 +25,33 @@ public class SemanticNetPanel extends MapPanel {
 	public SemanticNetPanel() {
 		super(new SemanticNetLayout());
 	}
-
+	
 	/**
-	 * コンポーネントを追加する
-	 * UINode であればすでに追加されていない場合のみ追加する
+	 * SemanticNet のノードを追加する
+	 * @param node
+	 * @return
 	 */
-	@Override
-	public Component add(Component comp) {
-		if (comp instanceof UINode) {
-			UINode uiNode = nodeMap.get(((UINode) comp).getNode());
-			if (uiNode != null) {
-				return uiNode;
-			}
-			nodeMap.put(((UINode) comp).getNode(), (UINode) comp);
-			if (centerNode == null) {
-				centerNode = (UINode) comp;
-			}
+	public UINode addNode(Node node) {
+		UINode uiNode = nodeMap.get(node);
+		if (uiNode != null) {
+			return uiNode;
 		}
-		return super.add(comp);
+		
+		uiNode = new UINode(node);
+		uiNode.addMouseListener(uiNodeMouseAdapter);
+		uiNode.addMouseMotionListener(uiNodeMouseAdapter);
+		nodeMap.put(node, uiNode);
+		if (centerNode == null) {
+			centerNode = uiNode;
+		}
+		
+		return (UINode) add(uiNode);
 	}
 	
+	/**
+	 * SemanticNet のリンクを追加する
+	 * @param link
+	 */
 	public void addLink(Link link) {
 		if (!links.contains(link)) {
 			links.add(link);
@@ -73,4 +83,48 @@ public class SemanticNetPanel extends MapPanel {
 		}
 	}
 	
+	/**
+	 * UINode 用のマウスアダプタ
+	 */
+	private MouseAdapter uiNodeMouseAdapter = new MouseAdapter() {
+		private Point prevPoint;
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				prevPoint = e.getPoint();
+				((UINode) e.getComponent()).isDragged = true;
+			}
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				((UINode) e.getComponent()).isDragged = false;
+			}
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				((UINode) e.getComponent()).color = Color.blue;
+			}
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				((UINode) e.getComponent()).color = Color.green;
+			}
+		}
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				final Point point = e.getPoint();
+				final double x = ((UINode) e.getComponent()).center.getX() + ((point.x - prevPoint.x) * zoom);
+				final double y = ((UINode) e.getComponent()).center.getY() + ((point.y - prevPoint.y) * zoom);
+				((UINode) e.getComponent()).setCenter(x,y);
+				prevPoint = point;
+			}
+		}
+	};
 }

@@ -24,7 +24,6 @@ public class SemanticUI extends JFrame {
 	
 	// --- ビューのメンバ ---
 	private SemanticNetPanel mapPanel;
-	private UINodeMouseListener uiNodeMouseListener = new UINodeMouseListener();
 	
 	// --- ロジックのメンバ ---
 	private SemanticNet semanticNet;
@@ -122,48 +121,9 @@ public class SemanticUI extends JFrame {
 	 * @param node
 	 */
 	public void addNode(Node node) {
-		UINode uiNode = new UINode(node);
-		uiNode.addMouseListener(uiNodeMouseListener);
-		uiNode.addMouseMotionListener(uiNodeMouseListener);
-		mapPanel.add(uiNode);
+		mapPanel.addNode(node);
 	}
-	
-	
-	
-	private class UINodeMouseListener extends MouseAdapter {
-		private Point pressedPos;
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-		@Override
-		public void mousePressed(MouseEvent e) {
-			pressedPos = e.getPoint();
-		}
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).setColor(Color.blue);
-			}
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).setColor(Color.green);
-			}
-		}
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			if (e.getComponent() instanceof UINode) {
-//				mapPanel.toRelativePosition(e.getPoint());
-//				final double x = e.getX() - 
-//				((UINode) e.getComponent()).setCenter(e.);
-				// TODO implement this
-			}
-		}
-	}
+
 	
 	public static void main(String[] args){
 		OurSemanticNet osn = new OurSemanticNet();

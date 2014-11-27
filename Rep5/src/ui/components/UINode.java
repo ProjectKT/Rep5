@@ -12,6 +12,7 @@ public class UINode extends MapComponent {
 	
 	Node node;
 	Color color = Color.green;
+	boolean isDragged = false;
 	
 	//変更 ky 11/21
 	public double tFromC;  //centerとの角度

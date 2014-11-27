@@ -21,7 +21,7 @@ public class SemanticNetLayout extends MapLayout {
 	private static final double CONST = 1000;
 	private static final double CONST_SPRING = 0.06;
 	private static final double CONST_MIN_ATTENUATION = 0.85;
-	private static final double DELTA = 1;
+	private static final double DELTA = 1.0;
 
 	private Object mLock = new Object();
 	private Random random = new Random();
@@ -219,7 +219,8 @@ public class SemanticNetLayout extends MapLayout {
 					fx += CONST_SPRING * (p2.getX() - p1.getX());
 					fy += CONST_SPRING * (p2.getY() - p1.getY());
 					
-					w *= 1.1;
+//					w *= 1.1;
+					w += 1.0;
 				}
 				
 				// 原点 (0,0) に戻す力
@@ -230,8 +231,8 @@ public class SemanticNetLayout extends MapLayout {
 				// ノード１の速度 := (ノード1の速度 +　微小時間 * 力 / ノード1の質量) * 減衰定数
 				lp1.vx = (lp1.vx + DELTA * fx / w) * attenuation;
 				lp1.vy = (lp1.vy + DELTA * fy / w) * attenuation;
-				
-				
+
+				// ノード１の位置 := ノード1の位置 + 微小時間 * ノード1の速度
 				lp1.x = lp1.x + DELTA * lp1.vx;
 				lp1.y = lp1.y + DELTA * lp1.vy;
 				
@@ -241,9 +242,12 @@ public class SemanticNetLayout extends MapLayout {
 			
 			for (UINode node : uiNodeSet) {
 				LayoutParam lp = paramMap.get(node);
-				
-				// ノード１の位置 := ノード1の位置 + 微小時間 * ノード1の速度
-				node.setCenter(lp.x, lp.y);
+				if (node.isDragged) {
+					lp.x = node.center.getX();
+					lp.y = node.center.getY();
+				} else {
+					node.setCenter(lp.x, lp.y);
+				}
 			}
 		}
 	}
