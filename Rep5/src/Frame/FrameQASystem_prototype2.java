@@ -64,7 +64,7 @@ public class FrameQASystem_prototype2 {
 			m = p.matcher(buf);
 		} while (!m.find());
 
-		Pattern p2 = Pattern.compile("(.*) (.*)(？|\\?)");
+		Pattern p2 = Pattern.compile("(.*)[\\s　](.*)(？|\\?)");
 		Matcher m2 = p2.matcher(buf);
 
 		if (m2.find()) {
@@ -87,7 +87,7 @@ public class FrameQASystem_prototype2 {
 	}
 
 	public ArrayList<String> Answer(String s1, String s2) {
-		Pattern p4 = Pattern.compile("(.*) (.*)");
+		Pattern p4 = Pattern.compile("(.*)[\\s　](.*)");
 		Matcher m4 = p4.matcher(s1);
 		if (m4.find()) {
 			ArrayList list = Answer(m4.group(1), m4.group(2));
