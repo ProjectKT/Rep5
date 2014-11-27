@@ -100,9 +100,19 @@ public class AIFrameLayout extends MapLayout {
 		AIFrame aiFrame = comp.getFrame();
 		for(int i = 0; i < aiFrame.get_Slot_size(); i++){
 		//ArrayList<AISlot> connectedSlots = getConnectedSlots(comp.getFrame());
+			
+			ArrayList<String> list;
+			//スロットの値をとってくる
 			if((aiFrame.get_Slot_key(i) == "is-a")||(aiFrame.get_Slot_key(i) == "ako")){
-				AIFrame opposite = aiFrame.
+				list = aiFrame.get_supers();
+			}else{
+				list = aiFrame.getmVals(aiFrame.get_Slot_key(i));
 			}
+			
+			for(int j=0;j<list.size();j++){
+				getUIFrame(list.get(j));
+			}
+			comp.getFrame
 		for (AISlot slot : connectedSlots) {
 			if(comp.getFrame().)
 			AIFrame opposite = (comp.getFrame() == slot.getTail()) ? slot.getTail() : slot.getHead();
