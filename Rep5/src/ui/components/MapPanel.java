@@ -4,14 +4,15 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.Window;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.beans.DesignMode;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
 
 public class MapPanel extends JPanel implements DesignMode {
 	
@@ -112,6 +113,32 @@ public class MapPanel extends JPanel implements DesignMode {
 		String s = super.paramString();
 		s += ",center="+center;
 		return s;
+	}
+	
+	
+	
+	@Override
+	protected void processMouseEvent(MouseEvent e) {
+		getMapComponentAt(e.getX(), e.getY()).dispatchEvent(e);
+		super.processMouseEvent(e);
+	}
+
+	@Override
+	protected void processMouseMotionEvent(MouseEvent e) {
+		getMapComponentAt(e.getX(), e.getY()).dispatchEvent(e);
+		super.processMouseMotionEvent(e);
+	}
+
+	@Override
+	protected void processMouseWheelEvent(MouseWheelEvent e) {
+		getMapComponentAt(e.getX(), e.getY()).dispatchEvent(e);
+		super.processMouseWheelEvent(e);
+	}
+
+	private MapComponent getMapComponentAt(int x, int y) {
+		x = (int)((double)()); // FIXME
+		y = (int)((double)());
+		return getComponentAt(x, y);
 	}
 	
 }
