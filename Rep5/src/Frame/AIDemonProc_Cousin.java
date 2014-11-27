@@ -36,7 +36,7 @@ public class AIDemonProc_Cousin  extends AIDemonProc {
 				} else {
 					
 					//祖父母の名前をとってくる
-					ArrayList<String> olist1 = inFrame.getmVals("親");
+					ArrayList<String> olist1 = parentframe.getmVals("親");
 					
 					//祖父母の数だけループ
 					for (int j = 0; j < olist1.size(); j++) {
@@ -54,19 +54,28 @@ public class AIDemonProc_Cousin  extends AIDemonProc {
 						//祖父母の子供の数(親の兄弟の数)だけループ
 						for (int k = 0; k < klist.size(); k++) {
 							
-							//親の兄弟の名前から親の兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(k));
+							//祖父母の子供の名前をとってくる
+							String name = (String) klist.get(k);
 							
-							//親の兄弟の逆リンクから親の兄弟の子供の名前をとってくる
-							//klist1は親の兄弟の子供(従兄弟)のリスト
-							ArrayList<String> klist1 = frame.get_leankers_Slot_names("親");
-							
-							//親の兄弟の子供の数(従兄弟の数)だけループ
-							for (int l = 0; l < klist1.size(); l++) {
+							//祖父母の子供で自分の親かどうかを判定
+							if (!parentname.equals(name)){
 								
-								//従兄弟の名前を従兄弟としてリストに入れる
-								relist.add(klist1.get(l));
-								AIFrame frame1 = inFrameSystem.get_Frame(klist1.get(l));
+								//親の兄弟の名前から親の兄弟のフレームをとってくる
+								AIFrame frame = inFrameSystem.get_Frame(klist.get(k));
+								
+								//親の兄弟の逆リンクから親の兄弟の子供の名前をとってくる
+								//klist1は親の兄弟の子供(従兄弟)のリスト
+								ArrayList<String> klist1 = frame.get_leankers_Slot_names("親");
+								
+								//親の兄弟の子供の数(従兄弟の数)だけループ
+								for (int l = 0; l < klist1.size(); l++) {
+									//既に追加されていたら追加しない
+									if (!relist.contains(klist1.get(l))) {
+										//従兄弟の名前を従兄弟としてリストに入れる
+										relist.add(klist1.get(l));
+										AIFrame frame1 = inFrameSystem.get_Frame(klist1.get(l));
+									}
+								}
 							}
 						}
 					}
