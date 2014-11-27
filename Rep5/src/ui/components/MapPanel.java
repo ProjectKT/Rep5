@@ -4,19 +4,21 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.Window;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
+import java.awt.peer.LightweightPeer;
 import java.beans.DesignMode;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
 
 public class MapPanel extends JPanel implements DesignMode {
 	
-	private double zoom = 1.0f;
-	private Point2D center = new Point2D.Double(0, 0);
+	double zoom = 1.0f;
+	Point2D center = new Point2D.Double(0, 0);
 	
 	public MapPanel(MapLayout layoutManager) {
 		layoutManager.setMapPanel(this);
@@ -92,9 +94,9 @@ public class MapPanel extends JPanel implements DesignMode {
 		// calculate the "visible" viewport area in pixels
 		int viewportWidth = getWidth() - insets.left - insets.right;
 		int viewportHeight = getHeight() - insets.top - insets.bottom;
-		double viewportX = (center.getX() - viewportWidth / 2);
-		double viewportY = (center.getY() - viewportHeight / 2);
-		return new Rectangle((int) viewportX, (int) viewportY, viewportWidth, viewportHeight);
+		int viewportX = (int) (center.getX() - viewportWidth / 2);
+		int viewportY = (int) (center.getY() - viewportHeight / 2);
+		return new Rectangle(viewportX, viewportY, viewportWidth, viewportHeight);
 	}
 	
 	protected int getViewportWidth() {
@@ -112,6 +114,64 @@ public class MapPanel extends JPanel implements DesignMode {
 		String s = super.paramString();
 		s += ",center="+center;
 		return s;
+	}
+	
+	
+	
+//	@Override
+//	protected void processMouseEvent(MouseEvent e) {
+//		final MapComponent comp;
+//		if ((comp = getMapComponentAt(e.getX(), e.getY())) != null) {
+//			comp.dispatchEvent(e);
+//		}
+//		super.processMouseEvent(e);
+//	}
+//
+//	@Override
+//	protected void processMouseMotionEvent(MouseEvent e) {
+//		final MapComponent comp;
+//		if ((comp = getMapComponentAt(e.getX(), e.getY())) != null) {
+//			comp.dispatchEvent(e);
+//		}
+//		super.processMouseMotionEvent(e);
+//	}
+//
+//	@Override
+//	protected void processMouseWheelEvent(MouseWheelEvent e) {
+//		final MapComponent comp;
+//		if ((comp = getMapComponentAt(e.getX(), e.getY())) != null) {
+//			comp.dispatchEvent(e);
+//		}
+//		super.processMouseWheelEvent(e);
+//	}
+
+	private MapComponent getMapComponentAt(int x, int y) {
+		final double cx = center.getX();
+		final double cy = center.getY();
+		final double dx = (double) (x - getViewportWidth()/2);
+		final double dy = (double) (y - getViewportHeight()/2);
+		synchronized(getTreeLock()) {
+            // Two passes: see comment in sun.awt.SunGraphicsCallback
+			for (int i = 0; i < getComponentCount(); i++) {
+                Component comp = getComponent(i);
+                if (comp != null &&
+                    comp instanceof MapComponent) {
+                    if (((MapComponent) comp).contains(cx + (dx - ((MapComponent) comp).center.getX()) / zoom, cy + (dy - ((MapComponent) comp).center.getY()) / zoom)) {
+                        return (MapComponent) comp;
+                    }
+                }
+            }
+            for (int i = 0; i < getComponentCount(); i++) {
+                Component comp = getComponent(i);
+                if (comp != null &&
+                    comp instanceof MapComponent) {
+                    if (((MapComponent) comp).contains(cx + (dx - ((MapComponent) comp).center.getX()) / zoom, cy + (dy - ((MapComponent) comp).center.getY()) / zoom)) {
+                        return (MapComponent) comp;
+                    }
+                }
+            }
+		}
+		return null;
 	}
 	
 }

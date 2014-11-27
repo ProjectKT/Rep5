@@ -9,8 +9,9 @@ import SemanticNet.Node;
  * SemanticNet のノードを表すビュー
  */
 public class UINode extends MapComponent {
-	private Node node;
 	
+	Node node;
+	public Color color = Color.green;
 	
 	//変更 ky 11/21
 	public double tFromC;  //centerとの角度
@@ -55,7 +56,7 @@ public class UINode extends MapComponent {
 		super.paintComponent(g);
 		
 		// TODO ここに描画する部分を書く
-		g.setColor(Color.green);
+		g.setColor(color);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
 		g.drawString(node.getName(), 0, 20);
