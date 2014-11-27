@@ -2,8 +2,9 @@ package ui;
 
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -123,35 +124,43 @@ public class SemanticUI extends JFrame {
 	public void addNode(Node node) {
 		UINode uiNode = new UINode(node);
 		uiNode.addMouseListener(uiNodeMouseListener);
+		uiNode.addMouseMotionListener(uiNodeMouseListener);
 		mapPanel.add(uiNode);
 	}
 	
 	
 	
-	private class UINodeMouseListener implements MouseListener {
+	private class UINodeMouseListener extends MouseAdapter {
+		private Point pressedPos;
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+			pressedPos = e.getPoint();
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).color = Color.blue;
+				((UINode) e.getComponent()).setColor(Color.blue);
 			}
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
 			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).color = Color.green;
+				((UINode) e.getComponent()).setColor(Color.green);
+			}
+		}
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+//				mapPanel.toRelativePosition(e.getPoint());
+//				final double x = e.getX() - 
+//				((UINode) e.getComponent()).setCenter(e.);
+				// TODO implement this
 			}
 		}
 	}

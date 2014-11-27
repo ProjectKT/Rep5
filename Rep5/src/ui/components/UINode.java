@@ -11,7 +11,7 @@ import SemanticNet.Node;
 public class UINode extends MapComponent {
 	
 	Node node;
-	public Color color = Color.green;
+	Color color = Color.green;
 	
 	//変更 ky 11/21
 	public double tFromC;  //centerとの角度
@@ -45,6 +45,14 @@ public class UINode extends MapComponent {
 	public void putTheta(double theta){
 		this.tFromC = theta;
 	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
 	
 	
 	/**
@@ -61,6 +69,7 @@ public class UINode extends MapComponent {
 		g.setColor(Color.black);
 		g.drawString(node.getName(), 0, 20);
 	}
+
 	
 	
 }

@@ -213,19 +213,19 @@ public class OurFrameSystem extends AIFrameSystem {
 	 * 家族親戚を求めるDemonを追加
 	 */
 	private void setupDemon(){
-		setWhenRequestedProc("人間", "兄", new AIDemonProc_OldBrother());
-		setWhenRequestedProc("人間", "弟", new AIDemonProc_YoungBrother());
-		setWhenRequestedProc("人間", "姉", new AIDemonProc_OldSister());
-		setWhenRequestedProc("人間", "妹", new AIDemonProc_YoungSister());
-		setWhenRequestedProc("人間", "祖父", new AIDemonProc_Grandpa());
-		setWhenRequestedProc("人間", "祖母", new AIDemonProc_Grandma());
-		setWhenRequestedProc("人間", "息子", new AIDemonProc_Son());
-		setWhenRequestedProc("人間", "娘", new AIDemonProc_Daughter());
-		setWhenRequestedProc("人間", "叔父", new AIDemonProc_Uncle());
-		setWhenRequestedProc("人間", "伯父", new AIDemonProc_Uncle());
-		setWhenRequestedProc("人間", "叔母", new AIDemonProc_Aunt());
-		setWhenRequestedProc("人間", "伯母", new AIDemonProc_Aunt());
-		setWhenRequestedProc("人間", "従兄弟", new AIDemonProc_Cousin());
+		setWhenRequestedProc("人間", "兄", new AIDemonProcs.OldBrother());
+		setWhenRequestedProc("人間", "弟", new AIDemonProcs.YoungBrother());
+		setWhenRequestedProc("人間", "姉", new AIDemonProcs.OldSister());
+		setWhenRequestedProc("人間", "妹", new AIDemonProcs.YoungSister());
+		setWhenRequestedProc("人間", "祖父", new AIDemonProcs.Grandpa());
+		setWhenRequestedProc("人間", "祖母", new AIDemonProcs.Grandma());
+		setWhenRequestedProc("人間", "息子", new AIDemonProcs.Son());
+		setWhenRequestedProc("人間", "娘", new AIDemonProcs.Daughter());
+		setWhenRequestedProc("人間", "叔父", new AIDemonProcs.Uncle());
+		setWhenRequestedProc("人間", "伯父", new AIDemonProcs.Uncle());
+		setWhenRequestedProc("人間", "叔母", new AIDemonProcs.Aunt());
+		setWhenRequestedProc("人間", "伯母", new AIDemonProcs.Aunt());
+		setWhenRequestedProc("人間", "従兄弟", new AIDemonProcs.Cousin());
 	}
 	
 	public static void main(String[] args) {

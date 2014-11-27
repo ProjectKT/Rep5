@@ -80,6 +80,16 @@ public class MapPanel extends JPanel implements DesignMode {
 		this.center = center;
 	}
 	
+	public Point2D toRelativePosition(double ax, double ay) {
+		return toRelativePosition(new Point2D.Double(ax,ay));
+	}
+	
+	public Point2D toRelativePosition(Point2D p) {
+		final double rx = getViewportWidth()/2 + (p.getX() - center.getX()) / zoom;
+		final double ry = getViewportHeight()/2 + (p.getY() - center.getY()) / zoom;
+		p.setLocation(rx, ry);
+		return p;
+	}
 	
 	/**
 	 * ビューポートの範囲を返す
@@ -116,62 +126,5 @@ public class MapPanel extends JPanel implements DesignMode {
 		return s;
 	}
 	
-	
-	
-//	@Override
-//	protected void processMouseEvent(MouseEvent e) {
-//		final MapComponent comp;
-//		if ((comp = getMapComponentAt(e.getX(), e.getY())) != null) {
-//			comp.dispatchEvent(e);
-//		}
-//		super.processMouseEvent(e);
-//	}
-//
-//	@Override
-//	protected void processMouseMotionEvent(MouseEvent e) {
-//		final MapComponent comp;
-//		if ((comp = getMapComponentAt(e.getX(), e.getY())) != null) {
-//			comp.dispatchEvent(e);
-//		}
-//		super.processMouseMotionEvent(e);
-//	}
-//
-//	@Override
-//	protected void processMouseWheelEvent(MouseWheelEvent e) {
-//		final MapComponent comp;
-//		if ((comp = getMapComponentAt(e.getX(), e.getY())) != null) {
-//			comp.dispatchEvent(e);
-//		}
-//		super.processMouseWheelEvent(e);
-//	}
-
-	private MapComponent getMapComponentAt(int x, int y) {
-		final double cx = center.getX();
-		final double cy = center.getY();
-		final double dx = (double) (x - getViewportWidth()/2);
-		final double dy = (double) (y - getViewportHeight()/2);
-		synchronized(getTreeLock()) {
-            // Two passes: see comment in sun.awt.SunGraphicsCallback
-			for (int i = 0; i < getComponentCount(); i++) {
-                Component comp = getComponent(i);
-                if (comp != null &&
-                    comp instanceof MapComponent) {
-                    if (((MapComponent) comp).contains(cx + (dx - ((MapComponent) comp).center.getX()) / zoom, cy + (dy - ((MapComponent) comp).center.getY()) / zoom)) {
-                        return (MapComponent) comp;
-                    }
-                }
-            }
-            for (int i = 0; i < getComponentCount(); i++) {
-                Component comp = getComponent(i);
-                if (comp != null &&
-                    comp instanceof MapComponent) {
-                    if (((MapComponent) comp).contains(cx + (dx - ((MapComponent) comp).center.getX()) / zoom, cy + (dy - ((MapComponent) comp).center.getY()) / zoom)) {
-                        return (MapComponent) comp;
-                    }
-                }
-            }
-		}
-		return null;
-	}
 	
 }
