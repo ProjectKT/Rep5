@@ -21,7 +21,9 @@ public class OurFrameSystem extends AIFrameSystem {
 	public OurFrameSystem() {
 		// 初期フレームを読み込む
 		setupFrames();
+
 		setupDemon();
+
 	}
 	
 	/**
