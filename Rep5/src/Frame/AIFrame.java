@@ -16,6 +16,7 @@ public abstract class AIFrame {
 	private String mName;
 	private Map<String, AISlot> mSlots = new HashMap<String, AISlot>();
 	private AIWhenConstructedProc mWhenConstructedProc = null;
+	private ArrayList<String> supers = new ArrayList<String>();
 	
 	//改変部
 	/*
@@ -351,6 +352,18 @@ public abstract class AIFrame {
 	
 	//改変部
 	/**
+	 * is-a,akoのときスパークラスの名前を保存する
+	 * @param Name
+	 */
+	public void add_super(String Name){
+		supers.add(Name);
+	}
+	
+	public ArrayList<String> get_supers(){
+		return supers;
+	}
+	//改変部
+	/**
 	 * 指定された名前のスロットがすでにあるか返す
 	 */
 	public boolean slot_check(String slotName){
@@ -465,4 +478,12 @@ public abstract class AIFrame {
 	public ArrayList getmVals(String slotName){
 		return mSlots.get(slotName).getmVals();
 	}
+	/*
+	public ArrayList getDepartFromMeSlots(){
+		
+	}
+	
+	*/
+	
+	
 } // end of class definition
