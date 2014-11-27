@@ -101,7 +101,7 @@ public class SemanticNetLayout extends MapLayout {
 			// この時点で今までに MapPanel に追加された UINode はすべて velocityMap に入っている
 
 			// ノードの位置を、(乱数, 乱数) にする。 // 2 つのノードがまったく同じ位置におかれないようにする。
-			comp.setCenter(random.nextDouble() * 100, random.nextDouble() * 100);
+			comp.setCenter(random.nextDouble() * paramMap.size() * 100, random.nextDouble() * paramMap.size() * 100);
 		}
 		
 		ArrayList<Link> connectedLinks = getConnectedLinks(comp.getNode());

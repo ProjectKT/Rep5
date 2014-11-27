@@ -11,11 +11,11 @@ public class MapComponent extends JComponent {
 	// マップビュー
 	private MapPanel panel;
 	// ワールド座標系での中心の位置
-	private Point2D center;
+	Point2D center;
 	// 幅
-	private double width;
+	double width;
 	// 高さ
-	private double height;
+	double height;
 	
 	public MapComponent() {
 		this(new Point2D.Double(0, 0));
@@ -35,7 +35,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) (panel.getViewportWidth()/2.0 + (center.getX() - panel.getCenter().getX() - width/2.0) / panel.getZoom());
+			return (int) (panel.getViewportWidth()/2 + (center.getX() - panel.center.getX() - width/2.0) / panel.zoom);
 		}
 		return super.getX();
 	}
@@ -43,7 +43,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) (panel.getViewportHeight()/2.0 + (center.getY() - panel.getCenter().getY() - height/2.0) / panel.getZoom());
+			return (int) (panel.getViewportHeight()/2 + (center.getY() - panel.center.getY() - height/2.0) / panel.zoom);
 		}
 		return super.getY();
 	}
@@ -51,7 +51,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getWidth() {
 		if (panel != null) {
-			return (int) (width / panel.getZoom());
+			return (int) (width / panel.zoom);
 		}
 		return (int) width;
 	}
@@ -109,6 +109,20 @@ public class MapComponent extends JComponent {
 		this.height = height;
 		super.setSize((int) width, (int) height);
 	}
+
+	@Override
+	public boolean contains(int x, int y) {
+		if (panel == null) {
+			return super.contains(x, y);
+		}
+		double dx = panel.center.getX() + (x - panel.getViewportWidth()/2) * panel.zoom - center.getX();
+		double dy = panel.center.getY() + (y - panel.getViewportHeight()/2) * panel.zoom - center.getY();
+		return contains(dx, dy);
+	}
+	
+	public boolean contains(double x, double y) {
+		return (-width/2.0 <= x && x < width/2.0) && (-height/2.0 <= y && y < height/2.0);
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -120,4 +134,7 @@ public class MapComponent extends JComponent {
 		super.paintComponent(g);
 		// Sub classes must override this method to paint itself.
 	}
+	
+	
+	
 }

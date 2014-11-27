@@ -1,27 +1,29 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import ui.components.MapPanel;
-import ui.components.SemanticNetLayout;
 import ui.components.SemanticNetPanel;
 import ui.components.UINode;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
+import SemanticNet.Link;
 import SemanticNet.Node;
 import SemanticNet.OurSemanticNet;
 import SemanticNet.SemanticNet;
-import SemanticNet.Link;
 
 public class SemanticUI extends JFrame {
 	
 	// --- ビューのメンバ ---
 	private SemanticNetPanel mapPanel;
+	private UINodeMouseListener uiNodeMouseListener = new UINodeMouseListener();
 	
 	// --- ロジックのメンバ ---
 	private SemanticNet semanticNet;
@@ -119,9 +121,40 @@ public class SemanticUI extends JFrame {
 	 * @param node
 	 */
 	public void addNode(Node node) {
-		mapPanel.add(new UINode(node));
+		UINode uiNode = new UINode(node);
+		uiNode.addMouseListener(uiNodeMouseListener);
+		mapPanel.add(uiNode);
 	}
 	
+	
+	
+	private class UINodeMouseListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				((UINode) e.getComponent()).color = Color.blue;
+			}
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			if (e.getComponent() instanceof UINode) {
+				((UINode) e.getComponent()).color = Color.green;
+			}
+		}
+	}
 	
 	public static void main(String[] args){
 		OurSemanticNet osn = new OurSemanticNet();
