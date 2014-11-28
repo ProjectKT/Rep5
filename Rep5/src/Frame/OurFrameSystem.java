@@ -227,6 +227,8 @@ public class OurFrameSystem extends AIFrameSystem {
 		setWhenRequestedProc("人間", "伯母", new AIDemonProcs.Aunt());
 		setWhenRequestedProc("人間", "従兄弟", new AIDemonProcs.Cousin());
 		setWhenRequestedProc("人間", "孫", new AIDemonProcs.Grandchi());
+		setWhenRequestedProc("人間", "甥", new AIDemonProcs.Nephew());
+		setWhenRequestedProc("人間", "姪", new AIDemonProcs.Niece());
 	}
 	
 	public static void main(String[] args) {

@@ -723,5 +723,142 @@ public class AIDemonProcs {
 	}
 	
 	
+	/**
+	 * 甥を返すデモン
+	 */
+	public static class Nephew extends AIDemonProc {
+		public Object eval(AIFrameSystem inFrameSystem, AIFrame inFrame,
+				String inSlotName, Iterator inSlotValues, Object inOpts) {
+
+			// 条件を満たすものを入れるリスト
+			ArrayList<String> relist = new ArrayList<String>();
+
+				//自分の親が登録されているかチェック
+				if (!(inFrame.readSlotValue(inFrameSystem, "親", false) == null)){
+					
+					// 自分の親の名前をとってくる
+					ArrayList<String> olist = inFrame.getmVals("親");
+
+					// 親の数だけループ
+					for (int i = 0; i < olist.size(); i++) {
+
+						// 親の名前をとる
+						String parentname = (String) olist.get(i);
+
+						// 親の名前を元に親のフレームをとってくる
+						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						
+						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
+						// klistは兄弟の名前のリスト
+						ArrayList<String> klist = parentframe.get_leankers_Slot_names("親");
+						
+						
+						// 親の子供の数(兄弟の数)だけループ
+						for (int j = 0; j < klist.size(); j++) {
+							
+							// 兄弟の名前から兄弟のフレームをとってくる
+							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+								
+							//対象が自分の場合は除く
+							if(!(frame.equals(inFrame))){
+							// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
+							// neplistは兄弟の子供の名前のリスト
+							ArrayList<String> neplist = frame.get_leankers_Slot_names("親");
+								
+								// 親の兄弟の子供の数だけループ
+								for (int k = 0; k < neplist.size(); k++) {
+									// 兄弟の子供の名前から兄弟の子供のフレームをとってくる
+									AIFrame nepframe = inFrameSystem.get_Frame(neplist.get(k));	
+									
+									//性別スロットの値が男なら甥
+									if (nepframe.readSlotValue(inFrameSystem, "性別",false).equals("男")){ 
+										
+										//前のループで登録されてないか調べる
+										if (!relist.contains(neplist.get(k))) {
+											// 初めての名前なら甥としてリストに入れる
+											relist.add(neplist.get(k));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if(relist.size()==0)
+					relist.add("登録されていないため分からない");
+				// relistを返す
+				return AIFrame.makeEnum(new ArrayList<String>(relist));
+		}
+	}
+	
+	
+	/**
+	 * 姪を返すデモン
+	 */
+	public static class Niece extends AIDemonProc {
+		public Object eval(AIFrameSystem inFrameSystem, AIFrame inFrame,
+				String inSlotName, Iterator inSlotValues, Object inOpts) {
+
+			// 条件を満たすものを入れるリスト
+			ArrayList<String> relist = new ArrayList<String>();
+
+				//自分の親が登録されているかチェック
+				if (!(inFrame.readSlotValue(inFrameSystem, "親", false) == null)){
+					
+					// 自分の親の名前をとってくる
+					ArrayList<String> olist = inFrame.getmVals("親");
+
+					// 親の数だけループ
+					for (int i = 0; i < olist.size(); i++) {
+
+						// 親の名前をとる
+						String parentname = (String) olist.get(i);
+
+						// 親の名前を元に親のフレームをとってくる
+						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						
+						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
+						// klistは兄弟の名前のリスト
+						ArrayList<String> klist = parentframe.get_leankers_Slot_names("親");
+						
+						
+						// 親の子供の数(兄弟の数)だけループ
+						for (int j = 0; j < klist.size(); j++) {
+							
+							// 兄弟の名前から兄弟のフレームをとってくる
+							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+								
+							//対象が自分の場合は除く
+							if(!(frame.equals(inFrame))){
+							// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
+							// neplistは兄弟の子供の名前のリスト
+							ArrayList<String> neplist = frame.get_leankers_Slot_names("親");
+								
+								// 親の兄弟の子供の数だけループ
+								for (int k = 0; k < neplist.size(); k++) {
+									// 兄弟の子供の名前から兄弟の子供のフレームをとってくる
+									AIFrame nepframe = inFrameSystem.get_Frame(neplist.get(k));	
+									
+									//性別スロットの値が女なら姪
+									if (nepframe.readSlotValue(inFrameSystem, "性別",false).equals("女")){ 
+										
+										//前のループで登録されてないか調べる
+										if (!relist.contains(neplist.get(k))) {
+											// 初めての名前なら姪としてリストに入れる
+											relist.add(neplist.get(k));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if(relist.size()==0)
+					relist.add("登録されていないため分からない");
+				// relistを返す
+				return AIFrame.makeEnum(new ArrayList<String>(relist));
+		}
+	}
+	
 	
 }
