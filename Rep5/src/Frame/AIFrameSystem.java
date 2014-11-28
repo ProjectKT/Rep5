@@ -254,7 +254,7 @@ public class AIFrameSystem {
 	/**
 	 * 指定されたフレーム名のAIフレームを返す
 	 */
-	AIFrame get_Frame(String frameName){
+	public AIFrame get_Frame(String frameName){
 		if(mFrames.containsKey(frameName)){
 		return mFrames.get(frameName);
 		}else{

@@ -13,9 +13,9 @@ import SemanticNet.Link;
 
 public class UIFrame extends MapComponent {
 	private AIFrame frame;
-	//何世代上に移動したか
+	//あと何世代上に移動できるか
 	private int up;
-	//何世代下に移動したか
+	//あと何世代下に移動できるか
 	private int down;
 	
 	// AIFrame のAISlotと UISlot との対応
