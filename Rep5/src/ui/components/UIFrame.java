@@ -26,7 +26,7 @@ public class UIFrame extends MapComponent {
 		this.frame = frame;
 		int len = frame.get_name().length();
 		int hight = frame.get_Slot_size();
-		setSize(len*10, 50);
+		setSize(len*10, hight * 30);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.*;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
 
@@ -56,6 +57,7 @@ public class AIFrameUI extends JFrame {
 	 */
 	private void setupFrames() {
 		ArrayList<AIFrame> frames = aIFramesystem.getFrames();
+		HashMap<String,AIFrame> dic = aIFramesystem.getmFrames();
 		for (AIFrame frame : frames) {
 			addFrame(frame);
 		}
@@ -69,6 +71,18 @@ public class AIFrameUI extends JFrame {
 	public void addFrame(AIFrame aIFrame) {
 		mapPanel.add(new UIFrame(aIFrame));
 	}
+	
+	public ArrayList<AIFrame> getFirstGene(ArrayList<AIFrame> list){
+		ArrayList<AIFrame> result = new ArrayList<AIFrame>();
+		for(AIFrame frame: list){
+			if (frame.readSlotValue(this.aIFramesystem, "親", false) == null) {
+				result.add(frame);
+			}
+		}
+		
+		return(result);
+	}
+	
 	
 	public static void main(String[] args) {
 		OurFrameSystem ofs = new OurFrameSystem();

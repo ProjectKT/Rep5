@@ -287,4 +287,8 @@ public class AIFrameSystem {
 		}
 		return list;
 	}
+	
+	public HashMap<String,AIFrame> getmFrames(){
+		return this.mFrames;
+	}
 } // end of class definition

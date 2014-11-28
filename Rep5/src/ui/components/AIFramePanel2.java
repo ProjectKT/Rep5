@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 import Frame.*;
 
-public class AIFramePanel extends MapPanel {
+public class AIFramePanel2 extends MapPanel {
 	// AIFrameSystem のフレームと UIFrame との対応
 	protected HashMap<AIFrame,UIFrame> frameMap = new HashMap<AIFrame,UIFrame>();
 	// 現在のパネル中心の UINode
 	protected UIFrame centerFrame;
 	
-	public AIFramePanel() {
+	public AIFramePanel2() {
 		super(new AIFrameLayout2());
 	}
 
