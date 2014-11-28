@@ -21,7 +21,7 @@ public class AIDemonProcs {
 			//自分の親が登録されているかチェック
 			if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 				// 親が登録されていないことを返す
-				relist.add("親が登録されていないためわからない");
+				relist.add("登録されていないためわからない");
 			} else {
 				// 自分の親の名前をとってくる
 				ArrayList<String> olist = inFrame.getmVals("親");
@@ -37,7 +37,7 @@ public class AIDemonProcs {
 					
 					if (parentframe.readSlotValue(inFrameSystem, "親", false) == null) {
 						// 祖父母が登録されていないことを返す
-						relist.add("親が登録されていないためわからない");
+						relist.add("登録されていないためわからない");
 					} else {
 					//祖父母の名前をとってくる
 					 ArrayList<String> glist = parentframe.getmVals("親");
@@ -73,7 +73,7 @@ public class AIDemonProcs {
 			//自分の親が登録されているかチェック
 			if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 				// 親が登録されていないことを返す
-				relist.add("親が登録されていないためわからない");
+				relist.add("登録されていないためわからない");
 			} else {
 				// 自分の親の名前をとってくる
 				ArrayList<String> olist = inFrame.getmVals("親");
@@ -89,8 +89,9 @@ public class AIDemonProcs {
 					
 					if (parentframe.readSlotValue(inFrameSystem, "親", false) == null) {
 						// 祖父母が登録されていないことを返す
-						relist.add("親が登録されていないためわからない");
+						relist.add("登録されていないためわからない");
 					} else {
+					
 					//祖父母の名前をとってくる
 					 ArrayList<String> glist = parentframe.getmVals("親");
 						// 祖父母の数だけループ
@@ -135,7 +136,7 @@ public class AIDemonProcs {
 				//自分の親が登録されているかチェック
 				if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 					// 親が登録されていないことを返す
-					relist.add("親が登録されていないためわからない");
+					relist.add("登録されていないためわからない");
 				} else {
 					
 					// 自分の親の名前をとってくる
@@ -206,7 +207,7 @@ public class AIDemonProcs {
 				//自分の親が登録されているかチェック
 				if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 					// 親が登録されていないことを返す
-					relist.add("親が登録されていないためわからない");
+					relist.add("登録されていないためわからない");
 				} else {
 					
 					// 自分の親の名前をとってくる
@@ -341,7 +342,7 @@ public class AIDemonProcs {
 			//自分の親が登録されているかチェック
 			if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 				// 親が登録されていないことを返す
-				relist.add("親が登録されていないためわからない");
+				relist.add("登録されていないためわからない");
 			} else {
 				// 自分の親の名前をとってくる
 				ArrayList<String> olist = inFrame.getmVals("親");
@@ -357,7 +358,7 @@ public class AIDemonProcs {
 					
 					if (parentframe.readSlotValue(inFrameSystem, "親", false) == null) {
 						// 祖父母が登録されていないことを返す
-						relist.add("親が登録されていないためわからない");
+						relist.add("登録されていないためわからない");
 					} else {
 					//祖父母の名前をとってくる
 					 ArrayList<String> glist = parentframe.getmVals("親");
@@ -408,7 +409,7 @@ public class AIDemonProcs {
 			//自分の親が登録されているかチェック
 			if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 				// 親が登録されていないことを返す
-				relist.add("親が登録されていないためわからない");
+				relist.add("登録されていないためわからない");
 			} else {
 				// 自分の親の名前をとってくる
 				ArrayList<String> olist = inFrame.getmVals("親");
@@ -424,7 +425,7 @@ public class AIDemonProcs {
 					
 					if (parentframe.readSlotValue(inFrameSystem, "親", false) == null) {
 						// 祖父母が登録されていないことを返す
-						relist.add("親が登録されていないためわからない");
+						relist.add("登録されていないためわからない");
 					} else {
 					//祖父母の名前をとってくる
 					 ArrayList<String> glist = parentframe.getmVals("親");
@@ -485,7 +486,7 @@ public class AIDemonProcs {
 				//自分の親が登録されているかチェック
 				if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 					// 親が登録されていないことを返す
-					relist.add("親が登録されていないためわからない");
+					relist.add("登録されていないためわからない");
 				} else {
 					
 					// 自分の親の名前をとってくる
@@ -556,7 +557,7 @@ public class AIDemonProcs {
 				//自分の親が登録されているかチェック
 				if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 					// 親が登録されていないことを返す
-					relist.add("親が登録されていないためわからない");
+					relist.add("登録されていないためわからない");
 				} else {
 					
 					// 自分の親の名前をとってくる
@@ -616,10 +617,10 @@ public class AIDemonProcs {
 			ArrayList<String> relist = new ArrayList<String>();
 			
 			//自分の親が登録されているかチェック
-			if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
+			//if (inFrame.readSlotValue(inFrameSystem, "親", false) == null) {
 				//親が登録されていないことを返す
-				relist.add("親が登録されていないためわからない");
-			} else {
+				//relist.add("登録されていないためわからない");}
+			 if(!(inFrame.readSlotValue(inFrameSystem, "親", false) == null)) {
 				
 				//自分の親の名前をとってくる
 				ArrayList<String> olist = inFrame.getmVals("親");
@@ -634,10 +635,11 @@ public class AIDemonProcs {
 					AIFrame parentframe = inFrameSystem.get_Frame(parentname);
 					
 					//とってきた親の親が登録されているかチェック
-					if (parentframe.readSlotValue(inFrameSystem, "親", false) == null) {
+//					if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)) {
 						//祖父母が登録されていないことを返す
-						relist.add("親の親が登録されていないためわからない");
-					} else {
+
+	//					relist.add("登録されていないためわからない");
+						if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)) {
 						
 						//祖父母の名前をとってくる
 						ArrayList<String> olist1 = parentframe.getmVals("親");
@@ -686,6 +688,9 @@ public class AIDemonProcs {
 					}
 				}
 			}
+			 
+			 if(relist.size()==0)
+				 relist.add("登録されていないので分からない");
 			//relistを返す
 			return AIFrame.makeEnum(new ArrayList<String>(relist));
 		}

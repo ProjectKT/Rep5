@@ -87,23 +87,17 @@ Kiyomi 性別 女
 アキカズ is-a 人間
 アキカズ 性別 男
 アキカズ 誕生日 19301217
-アキカズ 親 曾祖父A
-アキカズ 親 曾祖母A
 ヒサコ is-a 人間
 ヒサコ 性別 女
 ヒサコ 誕生日 19360713
-ヒサコ 親 曾祖父B
-ヒサコ 親 曾祖母B
 カズユキ is-a 人間
 カズユキ 性別 男
 カズユキ 誕生日 19400401
-カズユキ 親 曾祖父C
-カズユキ 親 曾祖母C
 ユリコ is-a 人間
 ユリコ 性別 女
 ユリコ 誕生日 19430525
-ユリコ 親 曾祖父D
-ユリコ 親 曾祖母D
+ユウミ is-a 人間
+ユウミ 性別 女
 =======
 >>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
 >>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
