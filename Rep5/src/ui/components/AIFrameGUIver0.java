@@ -7,6 +7,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,12 +26,20 @@ import Frame.AIFrameSystem;
 import Frame.OurFrameSystem;
 
 public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, ActionListener {
-
+	// AIFrameSystem のフレームと UIFrame との対応
+	protected HashMap<AIFrame,UIFrame> frameMap = new HashMap<AIFrame,UIFrame>();
+	
 	private AIFramePanelver0 mapPanel;
 	
 	private AIFrameSystem AIFramesystem;
 	
 	private String[] data = {"兄","姉","弟","妹"};
+	JTextField textfield;
+	JPanel commondPanel;
+	JList list;
+	
+	private ArrayList<AIFrame> openlist = new ArrayList<AIFrame>();
+	private ArrayList<AIFrame> closedlist = new ArrayList<AIFrame>();
 	
 	//コンストラクタ
 	public AIFrameGUIver0(AIFrameSystem AIFramesystem) throws HeadlessException {
@@ -59,28 +68,70 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	
 	//フレームを追加する部分
 	//検索ボタンを押す度に呼び出す予定
-	private void setupFrames() {
-		ArrayList<AIFrame> frames = AIFramesystem.getFrames();
-		for (AIFrame frame : frames) {
-			addFrame(frame);
-		}
+	private void setupFrames(String name) {
+		AIFrame frame = AIFramesystem.get_Frame(name);
+		int up;
+		int down;
+		addFrame(frame, 2, 2);
+		openlist.add(frame);
+		while(openlist.size()>0){
+			frame = openlist.get(0);
+			
+			up = frameMap.get(frame).get_up();
+			down = frameMap.get(frame).get_down();
+			if(up>0){
+			search_up(frame,up-1,down);
+			}
+			if(down>0){
+			search_down(frame,up,down-1);
+			}
+			openlist.remove(frame);
+			closedlist.add(frame);
 
+		}
+		for(int i =0;i<closedlist.size();i++){
+			System.out.println(closedlist.get(i).get_name());
+		}
+	}
+	
+	private void search_up(AIFrame frame,int up,int down){
+		ArrayList<String> parentlist = frame.getmVals("親");
+		for(int i=0; i < parentlist.size(); i++){
+			AIFrame parentframe = AIFramesystem.get_Frame(parentlist.get(i));
+			if(!openlist.contains(parentframe) & !closedlist.contains(parentframe)){
+				openlist.add(parentframe);
+				addFrame(parentframe,up,down);
+			}
+		}
+	}
+	
+	private void search_down(AIFrame frame,int up,int down){
+		ArrayList<String> childlist = frame.get_leankers_Slot_names("親");
+		for(int i=0; i < childlist.size(); i++){
+			AIFrame childframe = AIFramesystem.get_Frame(childlist.get(i));
+			if(!openlist.contains(childframe) & !closedlist.contains(childframe)){
+				openlist.add(childframe);
+				addFrame(childframe,up,down);
+			}
+		}
 	}
 	
 	/**
 	 * ビューに AIFrameSystem のフレームを加える
 	 * @param node
 	 */
-	public void addFrame(AIFrame aIFrame) {
-		mapPanel.add(new UIFrame(aIFrame));
+	public void addFrame(AIFrame aIFrame,int up,int down) {
+		UIFrame uIFrame = new UIFrame(aIFrame,up,down);
+		mapPanel.add(uIFrame);
+		frameMap.put(aIFrame, uIFrame);
 	}
 	
 	
 	//コマンドパネルを追加する部分
 	public void setupCommodPanel(){
-		JPanel commondPanel = new JPanel();
-		JTextField textfield = new JTextField();
-		JList list = new JList(data);
+		commondPanel = new JPanel();
+		list = new JList(data);
+		textfield = new JTextField("人名");
 		list.addListSelectionListener(this);
 		JButton button = new JButton("検索");
 		button.addActionListener(this);
@@ -92,7 +143,6 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 		commondPanel.add(sp);
 		commondPanel.add(button);
 		setupMapPanel();
-		textfield.setText("人名");
 		add(commondPanel ,BorderLayout.SOUTH);
 	}
 	
@@ -107,7 +157,8 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.print("a");
+		//System.out.println(textfield.getText());
+		setupFrames(textfield.getText());
 		
 	}
 
