@@ -13,6 +13,8 @@ import SemanticNet.Link;
 
 public class UIFrame extends MapComponent {
 	private AIFrame frame;
+	private int up;
+	private int down;
 	
 	// AIFrame のAISlotと UISlot との対応
 		protected HashMap<AISlot,UISlot> slotMap = new HashMap<AISlot,UISlot>();
@@ -22,11 +24,11 @@ public class UIFrame extends MapComponent {
 	 * AIFrameSystem のフレームを受け取って初期化するコンストラクタ
 	 * @param frame
 	 */
-	public UIFrame(AIFrame frame) {
+	public UIFrame(AIFrame framem,int up,int down) {
 		this.frame = frame;
-		int len = frame.get_name().length();
-		int hight = frame.get_Slot_size();
-		setSize(len*10, hight * 30);
+		//int len = frame.get_name().length();
+		//int hight = frame.get_Slot_size();
+		setSize(50, 50);
 	}
 	
 	/**
