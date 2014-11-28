@@ -13,7 +13,9 @@ import SemanticNet.Link;
 
 public class UIFrame extends MapComponent {
 	private AIFrame frame;
+	//何世代上に移動したか
 	private int up;
+	//何世代下に移動したか
 	private int down;
 	
 	// AIFrame のAISlotと UISlot との対応
@@ -26,11 +28,20 @@ public class UIFrame extends MapComponent {
 	 */
 	public UIFrame(AIFrame framem,int up,int down) {
 		this.frame = frame;
+		this.up = up;
+		this.down =down;
 		//int len = frame.get_name().length();
 		//int hight = frame.get_Slot_size();
 		setSize(50, 50);
 	}
 	
+	public int get_up(){
+		return up;
+	}
+	
+	public int get_down(){
+		return down;
+	}
 	/**
 	 * AIFrameSystem のフレームを返す
 	 * @return
