@@ -2,3 +2,5 @@ Shun is-a NIT-student
 Shun specially AI
 Shun play soccer
 Shun like water
+Shun play handball
+Shun like music
