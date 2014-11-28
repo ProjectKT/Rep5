@@ -91,10 +91,16 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 		}
 		for(int i =0;i<closedlist.size();i++){
 			System.out.println(closedlist.get(i).get_name());
+			up = frameMap.get(closedlist.get(i)).get_up();
+			down = frameMap.get(closedlist.get(i)).get_down();
+			System.out.println("up:"+up+", down:"+down);
 		}
 	}
 	
 	private void search_up(AIFrame frame,int up,int down){
+		//自分の親が登録されているかチェック
+		if (!(frame.readSlotValue(AIFramesystem, "親", false) == null)){
+			// 自分の親の名前をとってくる
 		ArrayList<String> parentlist = frame.getmVals("親");
 		for(int i=0; i < parentlist.size(); i++){
 			AIFrame parentframe = AIFramesystem.get_Frame(parentlist.get(i));
@@ -102,6 +108,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 				openlist.add(parentframe);
 				addFrame(parentframe,up,down);
 			}
+		}
 		}
 	}
 	
