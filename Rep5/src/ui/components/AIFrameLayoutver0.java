@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 
+import Frame.*;
+
 public class AIFrameLayoutver0 extends MapLayout {
 
 	// レイアウトスレッド
@@ -42,9 +44,17 @@ public class AIFrameLayoutver0 extends MapLayout {
 
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("addLayoutComponent");
+		if (comp instanceof UIFrame) {
+			getMapPanel().frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
+			layoutUIFrame(name, (UIFrame) comp);
+
+		} 
 	}
 
-
+	private void layoutUIFrame(String name, UIFrame comp) {
+		
+	}
+	
+	
 }
