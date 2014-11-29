@@ -112,10 +112,17 @@ public class SemanticNetPanel extends MapPanel {
 					toX -= coeff * hhWidth;
 				}
 				
-				// TODO 矢印を描く
+				// 色の設定
+				if (link.getInheritance()) {
+					g.setColor(Color.gray);
+				} else {
+					g.setColor(Color.red);
+				}
 				
-				g.setColor(Color.red);
+				// 線を描く
 				g.drawLine(fromX, fromY, toX, toY);
+				
+				// TODO 矢印を描く
 			}
 		}
 	}
