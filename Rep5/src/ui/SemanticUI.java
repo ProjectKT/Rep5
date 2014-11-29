@@ -33,6 +33,8 @@ import SemanticNet.SemanticNet;
 
 public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	
+	private static final String[] tableColumnNames = {"data"};
+	
 	// --- ビューのメンバ ---
 	private JLabel lblDataView;
 	private HintTextField tfFilter;
@@ -45,34 +47,45 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	private TableModel tableModel = new TableModel() {
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+			switch (columnIndex) {
+			case 0:
+//				semanticNet.getNodes().get(rowIndex).setName((String) aValue);
+			}
 		}
 		@Override
 		public void removeTableModelListener(TableModelListener l) {
-		}		
+		}
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return false;
 		}
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return null;
+			switch (columnIndex) {
+			case 0:
+				return semanticNet.getNodes().get(rowIndex);
+			default:
+				return null;
+			}
 		}
 		@Override
 		public int getRowCount() {
-			return 0;
+			return semanticNet.getNodes().size();
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
-			return null;
+			return tableColumnNames[columnIndex];
 		}
 		@Override
 		public int getColumnCount() {
-			// TODO Auto-generated method stub
-			return 0;
+			return 1;
 		}
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return null;
+			switch (columnIndex) {
+			case 0: return String.class;
+			default: return null;
+			}
 		}
 		@Override
 		public void addTableModelListener(TableModelListener l) {
@@ -93,8 +106,6 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		setBounds(10, 10, 800, 600);
 		setTitle("SemanticUI");
 		
-//		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-
 		/* --- MENU --- */
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
