@@ -2,14 +2,11 @@ package ui.components;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import Frame.AIFrame;
 import Frame.AISlot;
-import Frame.AIWhenConstructedProc;
-import SemanticNet.Link;
 
 public class UIFrame extends MapComponent {
 	private AIFrame frame;
@@ -17,6 +14,8 @@ public class UIFrame extends MapComponent {
 	private int up;
 	//あと何世代下に移動できるか
 	private int down;
+	
+	Color color = Color.blue;
 	
 	// AIFrame のAISlotと UISlot との対応
 		protected HashMap<AISlot,UISlot> slotMap = new HashMap<AISlot,UISlot>();
@@ -26,7 +25,7 @@ public class UIFrame extends MapComponent {
 	 * AIFrameSystem のフレームを受け取って初期化するコンストラクタ
 	 * @param frame
 	 */
-	public UIFrame(AIFrame framem,int up,int down) {
+	public UIFrame(AIFrame frame,int up,int down) {
 		this.frame = frame;
 		this.up = up;
 		this.down =down;
@@ -50,6 +49,14 @@ public class UIFrame extends MapComponent {
 		return frame;
 	}
 	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * ノードを描画する
@@ -59,7 +66,7 @@ public class UIFrame extends MapComponent {
 		super.paintComponent(g);
 		
 		// TODO ここに描画する部分を書く
-		g.setColor(Color.blue);
+		g.setColor(color);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
 		g.drawString(frame.get_name(), 0, 20);

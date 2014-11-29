@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 
-import Frame.*;
-
 public class AIFrameLayoutver0 extends MapLayout {
 
 	// レイアウトスレッド
@@ -16,8 +14,8 @@ public class AIFrameLayoutver0 extends MapLayout {
 	 * この LayoutManager が取り付けられている先の AIFramePanel を返すメソッド
 	 */
 	@Override
-	protected AIFramePanel getMapPanel() {
-		return (AIFramePanel) super.getMapPanel();
+	protected AIFramePanelver0 getMapPanel() {
+		return (AIFramePanelver0) super.getMapPanel();
 	}
 	
 
@@ -44,6 +42,7 @@ public class AIFrameLayoutver0 extends MapLayout {
 
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
+	
 		System.out.println("addLayoutComponent");
 		if (comp instanceof UIFrame) {
 			getMapPanel().frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
@@ -53,7 +52,18 @@ public class AIFrameLayoutver0 extends MapLayout {
 	}
 
 	private void layoutUIFrame(String name, UIFrame comp) {
-		
+		switch (comp.get_down() - comp.get_up()){
+		//２個下の世代
+		case -2:	comp.setCenter(0.0,200.0);	break;
+		//１個下の世代
+		case -1:	comp.setCenter(0.0,100.0);	break;
+		//同世代
+		case 0:		comp.setCenter(0.0,0.0);	break;
+		//１個上の世代
+		case 1:		comp.setCenter(0.0,-100.0);	break;
+		//２個上の世代
+		case 2:		comp.setCenter(0.0,-200.0);	break;
+		};
 	}
 	
 	
