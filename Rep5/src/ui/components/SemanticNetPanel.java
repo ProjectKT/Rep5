@@ -76,8 +76,10 @@ public class SemanticNetPanel extends MapPanel {
 	 * @param link
 	 */
 	public void addLink(Link link) {
-		if (!links.contains(link)) {
-			links.add(link);
+		synchronized(links) {
+			if (!links.contains(link)) {
+				links.add(link);
+			}
 		}
 	}
 
@@ -93,17 +95,35 @@ public class SemanticNetPanel extends MapPanel {
 	 * UINode 間のリンクを描画する
 	 */
 	private void drawLinks(Graphics g) {
-		for (Link link : links) {
-			UINode head = nodeMap.get(link.getHead());
-			UINode tail = nodeMap.get(link.getTail());
-			if (head != null && tail != null) {
-				// 矢印を描く
-				g.setColor(link.getInheritance() ? ColorSetting.inheritedLink : ColorSetting.link);
-				drawArrow(g, head, tail);
-				
-				// ラベルを描く
-				g.setColor(link.getInheritance() ? ColorSetting.inheritedLinkLabel : ColorSetting.linkLabel);
-				g.drawString(link.getLabel(), (Arrow.pt.x+Arrow.pf.x)/2, (Arrow.pt.y+Arrow.pf.y)/2);
+		synchronized(links) {
+			// inheritance リンクを初めに描画
+			for (Link link : links) {
+				UINode head = nodeMap.get(link.getHead());
+				UINode tail = nodeMap.get(link.getTail());
+				if (head != null && tail != null && link.getInheritance()) {
+					// 矢印を描く
+					g.setColor(ColorSetting.inheritedLink);
+					drawArrow(g, head, tail);
+					
+					// ラベルを描く
+					g.setColor(ColorSetting.inheritedLinkLabel);
+					g.drawString(link.getLabel(), (Arrow.pt.x+Arrow.pf.x)/2, (Arrow.pt.y+Arrow.pf.y)/2);
+				}
+			}
+			
+			// 明示的なリンクを上から描画
+			for (Link link : links) {
+				UINode head = nodeMap.get(link.getHead());
+				UINode tail = nodeMap.get(link.getTail());
+				if (head != null && tail != null && !link.getInheritance()) {
+					// 矢印を描く
+					g.setColor(ColorSetting.link);
+					drawArrow(g, head, tail);
+					
+					// ラベルを描く
+					g.setColor(ColorSetting.linkLabel);
+					g.drawString(link.getLabel(), (Arrow.pt.x+Arrow.pf.x)/2, (Arrow.pt.y+Arrow.pf.y)/2);
+				}
 			}
 		}
 	}
