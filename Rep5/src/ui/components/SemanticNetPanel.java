@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,6 +22,18 @@ public class SemanticNetPanel extends MapPanel {
 	protected ArrayList<Link> links = new ArrayList<Link>();
 	// 現在のパネル中心の UINode
 	protected UINode centerNode;
+	
+	// 矢印の描画に一時的に使う変数
+	private interface Arrow {
+		interface Default {
+			// 矢印の形を作る 2 点の座標
+			final Point2D.Double p1 = new Point2D.Double(-10.0, -5.0);
+			final Point2D.Double p2 = new Point2D.Double(-10.0,  5.0);
+		}
+		// 変換後の座標
+		final Point2D.Double p1 = new Point2D.Double();
+		final Point2D.Double p2 = new Point2D.Double();
+	}
 	
 	public SemanticNetPanel() {
 		super(new SemanticNetLayout());
@@ -75,43 +88,6 @@ public class SemanticNetPanel extends MapPanel {
 			UINode head = nodeMap.get(link.getHead());
 			UINode tail = nodeMap.get(link.getTail());
 			if (head != null && tail != null) {
-				final int hhWidth = head.getWidth()/2;
-				final int hhHeight = head.getHeight()/2;
-				final int htWidth = tail.getWidth()/2;
-				final int htHeight = tail.getHeight()/2;
-				
-				// from, to はそれぞれ head, tail の中心の座標
-				int fromX = tail.getX() + htWidth;
-				int fromY = tail.getY() + htHeight;
-				int toX = head.getX() + hhWidth;
-				int toY = head.getY() + hhHeight;
-				
-				// 枠外に線を引くよう調整
-				if (fromX != toX && fromY != toY) {
-					final int coeffX = (toX < fromX) ? (-1) : 1;
-					final int coeffY = (toY < fromY) ? (-1) : 1;
-					// 単位ベクトル [1 0] となす角度の tan
-					final double tan = (double) (toY-fromY) / (double) (toX-fromX);
-					// 単位ベクトル [0 1] となす角度の tan = 1 / tan
-					final double itan = (tan == 0) ? 0 : -(1.0/tan);
-	
-					// head, tail の中心の座標から枠外の座標を計算
-					fromX += absMin(coeffX * htWidth, (int)(-coeffY * htHeight*itan));
-					fromY += absMin(coeffY * htHeight, (int)(coeffX * htWidth*tan));
-					toX -= absMin(coeffX * hhWidth, (int)(-coeffY * hhHeight*itan));
-					toY -= absMin(coeffY * hhHeight, (int)(coeffX * hhWidth*tan));
-				} else if (fromX == toX) {
-					// tan が求まらないので適宜調整
-					final int coeff = (toY < fromY) ? (-1) : 1;
-					fromY += coeff * htHeight;
-					toY -= coeff * hhHeight;
-				} else {
-					// tan が 0 になるので適宜調整
-					final int coeff = (toX < fromX) ? (-1) : 1;
-					fromX += coeff * htWidth;
-					toX -= coeff * hhWidth;
-				}
-				
 				// 色の設定
 				if (link.getInheritance()) {
 					g.setColor(Color.gray);
@@ -119,12 +95,73 @@ public class SemanticNetPanel extends MapPanel {
 					g.setColor(Color.red);
 				}
 				
-				// 線を描く
-				g.drawLine(fromX, fromY, toX, toY);
-				
-				// TODO 矢印を描く
+				// 矢印を描く
+				drawArrow(g, head, tail);
 			}
 		}
+	}
+	
+	/**
+	 * 矢印を描く
+	 * @param g
+	 * @param head 矢印の先端
+	 * @param tail 矢印の出元
+	 */
+	private void drawArrow(Graphics g, UINode head, UINode tail) {	
+		// 各ノードの幅,高さの半分を求める
+		final int hhWidth = head.getWidth()/2;
+		final int hhHeight = head.getHeight()/2;
+		final int htWidth = tail.getWidth()/2;
+		final int htHeight = tail.getHeight()/2;
+		
+		// from, to はそれぞれ head, tail の中心の座標
+		int fromX = tail.getX() + htWidth;
+		int fromY = tail.getY() + htHeight;
+		int toX = head.getX() + hhWidth;
+		int toY = head.getY() + hhHeight;
+		
+		// ベクトルの長さ
+		final double len = head.center.distance(tail.center);
+		// cos, sin
+		final double cos = (double) (toX-fromX) / len;
+		final double sin = (double) (toY-fromY) / len;
+		
+		// 枠外に線を引くよう調整
+		if (fromX != toX && fromY != toY) {
+			final int coeffX = (toX < fromX) ? (-1) : 1;
+			final int coeffY = (toY < fromY) ? (-1) : 1;
+			// 単位ベクトル [1 0] となす角度の tan
+			final double tan = sin / cos;
+			// 単位ベクトル [0 1] となす角度の tan = 1 / tan
+			final double itan = (tan == 0) ? 0 : -(1.0/tan);
+
+			// head, tail の中心の座標から枠外の座標を計算
+			fromX += absMin(coeffX * htWidth, (int)(-coeffY * htHeight*itan));
+			fromY += absMin(coeffY * htHeight, (int)(coeffX * htWidth*tan));
+			toX -= absMin(coeffX * hhWidth, (int)(-coeffY * hhHeight*itan));
+			toY -= absMin(coeffY * hhHeight, (int)(coeffX * hhWidth*tan));
+		} else if (fromX == toX) {
+			// tan が求まらないので適宜調整
+			final int coeff = (toY < fromY) ? (-1) : 1;
+			fromY += coeff * htHeight;
+			toY -= coeff * hhHeight;
+		} else {
+			// tan が 0 になるので適宜調整
+			final int coeff = (toX < fromX) ? (-1) : 1;
+			fromX += coeff * htWidth;
+			toX -= coeff * hhWidth;
+		}
+
+		// 矢印の形を作る 2 点の座標を計算
+		Arrow.p1.x = Arrow.Default.p1.x * cos - Arrow.Default.p1.y * sin + toX;
+		Arrow.p1.y = Arrow.Default.p1.x * sin + Arrow.Default.p1.y * cos + toY;
+		Arrow.p2.x = Arrow.Default.p2.x * cos - Arrow.Default.p2.y * sin + toX;
+		Arrow.p2.y = Arrow.Default.p2.x * sin + Arrow.Default.p2.y * cos + toY;
+		
+		// 線を描く
+		g.drawLine(fromX, fromY, toX, toY);
+		g.drawLine((int) Arrow.p1.x, (int) Arrow.p1.y, toX, toY);
+		g.drawLine((int) Arrow.p2.x, (int) Arrow.p2.y, toX, toY);
 	}
 	
 	/**
@@ -174,8 +211,8 @@ public class SemanticNetPanel extends MapPanel {
 		public void mouseDragged(MouseEvent e) {
 			if (e.getComponent() instanceof UINode) {
 				final Point point = e.getPoint();
-				final double x = ((UINode) e.getComponent()).center.getX() + ((point.x - prevPoint.x) * zoom);
-				final double y = ((UINode) e.getComponent()).center.getY() + ((point.y - prevPoint.y) * zoom);
+				final double x = ((UINode) e.getComponent()).center.x + ((point.x - prevPoint.x) * zoom);
+				final double y = ((UINode) e.getComponent()).center.y + ((point.y - prevPoint.y) * zoom);
 				((UINode) e.getComponent()).setCenter(x,y);
 				prevPoint = point;
 			}
