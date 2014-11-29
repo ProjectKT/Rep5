@@ -1,4 +1,4 @@
-package ui.components;
+package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import ui.components.AIFramePanelver0;
+import ui.components.UIFrame;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
 import Frame.AIFrame;
