@@ -85,7 +85,6 @@ public class SemanticNetPanel extends MapPanel {
 				int fromY = tail.getY() + htHeight;
 				int toX = head.getX() + hhWidth;
 				int toY = head.getY() + hhHeight;
-				System.out.print("("+fromX+","+fromY+")->("+toX+","+toY+"), ");
 				
 				// 枠外に線を引くよう調整
 				if (fromX != toX && fromY != toY) {
@@ -101,9 +100,6 @@ public class SemanticNetPanel extends MapPanel {
 					fromY += absMin(coeffY * htHeight, (int)(coeffX * htWidth*tan));
 					toX -= absMin(coeffX * hhWidth, (int)(-coeffY * hhHeight*itan));
 					toY -= absMin(coeffY * hhHeight, (int)(coeffX * hhWidth*tan));
-					System.out.print("coeff=["+coeffX+","+coeffY+"], tan="+tan+", itan="+itan+", ("+fromX+","+fromY+")->("+toX+","+toY+")");
-					System.out.print(", w="+htWidth+", wdiff="+htHeight*itan+", h="+htHeight+", hdiff="+htWidth*tan);
-					System.out.println();
 				} else if (fromX == toX) {
 					// tan が求まらないので適宜調整
 					final int coeff = (toY < fromY) ? (-1) : 1;
@@ -116,7 +112,7 @@ public class SemanticNetPanel extends MapPanel {
 					toX -= coeff * hhWidth;
 				}
 				
-				// 矢印を描く
+				// TODO 矢印を描く
 				
 				g.setColor(Color.red);
 				g.drawLine(fromX, fromY, toX, toY);
