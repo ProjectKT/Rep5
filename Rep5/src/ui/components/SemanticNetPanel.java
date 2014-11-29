@@ -1,9 +1,12 @@
 package ui.components;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -50,13 +53,46 @@ public class SemanticNetPanel extends MapPanel {
 		final Point2D.Double p2 = new Point2D.Double();
 	}
 	
-	/** 色の設定 */
-	private interface ColorSetting {
-		Color link = Color.red;
-		Color inheritedLink = Color.gray;
-		Color linkLabel = Color.darkGray;
-		Color inheritedLinkLabel = Color.gray;
+	/** 設定 */
+	private interface Settings {
+		/** フォントの設定 */
+		interface Fonts {
+			Font linkLabel = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+			Font inheritedLinkLabel = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+		}
+		/** ストロークの設定 */
+		interface Strokes {
+			Stroke link = new BasicStroke(1.0f);
+			Stroke selectedLink = new BasicStroke(1.5f);
+			Stroke inheritedLink = new BasicStroke(
+					1.0f,						// 線の太さ
+					BasicStroke.CAP_BUTT,		// 両端の装飾
+					BasicStroke.JOIN_MITER,		// 輪郭線セグメントの接合部の装飾
+					3.0f,						// 接合トリミングの制限値
+					new float[]{10.0f, 5.0f},	// 破線パターンを表す配列
+					0.0f						// 破線パターン開始位置のオフセット
+			);
+			Stroke selectedInheritedLink = new BasicStroke(
+					1.5f,						// 線の太さ
+					BasicStroke.CAP_BUTT,		// 両端の装飾
+					BasicStroke.JOIN_MITER,		// 輪郭線セグメントの接合部の装飾
+					3.0f,						// 接合トリミングの制限値
+					new float[]{10.0f, 5.0f},	// 破線パターンを表す配列
+					0.0f						// 破線パターン開始位置のオフセット
+			);
+		}
+		/** 色の設定 */
+		interface Colors {
+			Color link = new Color(0xb0ff0000, true);
+			Color selectedLink = new Color(0xffff0000, true);
+			Color inheritedLink = new Color(0xb0000000, true);
+			Color selectedInheritedLink = new Color(0xf0000000, true);
+			Color linkLabel = new Color(0xb0880000, true);
+			Color inheritedLinkLabel = new Color(0xb0000000, true);
+		}
 	}
+	
+	
 	
 	public SemanticNetPanel() {
 		super(new SemanticNetLayout());
@@ -120,12 +156,18 @@ public class SemanticNetPanel extends MapPanel {
 				UINode tail = nodeMap.get(link.getTail());
 				if (head != null && tail != null && link.getInheritance()) {
 					// 矢印を描く
-					g.setColor(ColorSetting.inheritedLink);
+					((Graphics2D) g).setStroke(tail.isSelected ? Settings.Strokes.selectedInheritedLink : Settings.Strokes.inheritedLink);
+					g.setColor(tail.isSelected ? Settings.Colors.selectedInheritedLink : Settings.Colors.inheritedLink);
 					drawArrow(g, head, tail);
 					
 					// ラベルを描く
-					g.setColor(ColorSetting.inheritedLinkLabel);
-					g.drawString(link.getLabel(), (Arrow.pt.x+Arrow.pf.x)/2, (Arrow.pt.y+Arrow.pf.y)/2);
+					g.setFont(Settings.Fonts.inheritedLinkLabel.deriveFont((float) (Settings.Fonts.inheritedLinkLabel.getSize2D() / zoom)));
+					g.setColor(Settings.Colors.inheritedLinkLabel);
+					g.drawString(
+							link.getLabel(),
+							(Arrow.pt.x+Arrow.pf.x)/2 - g.getFontMetrics().stringWidth(link.getLabel())/2,
+							(Arrow.pt.y+Arrow.pf.y)/2 + g.getFontMetrics().getHeight()/2
+					);
 				}
 			}
 			
@@ -135,12 +177,18 @@ public class SemanticNetPanel extends MapPanel {
 				UINode tail = nodeMap.get(link.getTail());
 				if (head != null && tail != null && !link.getInheritance()) {
 					// 矢印を描く
-					g.setColor(ColorSetting.link);
+					((Graphics2D) g).setStroke(tail.isSelected ? Settings.Strokes.selectedLink : Settings.Strokes.link);
+					g.setColor(tail.isSelected ? Settings.Colors.selectedLink : Settings.Colors.link);
 					drawArrow(g, head, tail);
 					
 					// ラベルを描く
-					g.setColor(ColorSetting.linkLabel);
-					g.drawString(link.getLabel(), (Arrow.pt.x+Arrow.pf.x)/2, (Arrow.pt.y+Arrow.pf.y)/2);
+					g.setFont(Settings.Fonts.linkLabel.deriveFont((float) (Settings.Fonts.linkLabel.getSize2D() / zoom)));
+					g.setColor(Settings.Colors.linkLabel);
+					g.drawString(
+							link.getLabel(),
+							(Arrow.pt.x+Arrow.pf.x)/2 - g.getFontMetrics().stringWidth(link.getLabel())/2,
+							(Arrow.pt.y+Arrow.pf.y)/2 + g.getFontMetrics().getHeight()/2
+					);
 				}
 			}
 		}
@@ -235,6 +283,7 @@ public class SemanticNetPanel extends MapPanel {
 					it.next().isSelected = false;
 					it.remove();
 				}
+				callbacks.onSelectUINodes(new UINode[]{});
 			}
 		}
 	};
@@ -253,8 +302,13 @@ public class SemanticNetPanel extends MapPanel {
 				}
 			}
 			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).isSelected = true;
-				selectedNodes.add((UINode) e.getComponent());
+				UINode uiNode = (UINode) e.getComponent();
+				uiNode.isSelected = (e.isControlDown() || e.isMetaDown()) ? !uiNode.isSelected : true;
+				if (uiNode.isSelected && !selectedNodes.contains(uiNode)) {
+					selectedNodes.add(uiNode);
+				} else if (!uiNode.isSelected) {
+					selectedNodes.remove(uiNode);
+				}
 				callbacks.onSelectUINodes(selectedNodes.toArray(new UINode[selectedNodes.size()]));
 			}
 		}

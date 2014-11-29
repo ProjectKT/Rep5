@@ -16,8 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
@@ -33,7 +35,7 @@ import SemanticNet.SemanticNet;
 
 public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	
-	private static final String[] tableColumnNames = {"data"};
+	private static final String[] tableColumnNames = {"link"};
 	
 	// --- ビューのメンバ ---
 	private JLabel lblDataView;
@@ -63,14 +65,14 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return semanticNet.getNodes().get(rowIndex);
+				return semanticNet.getLinks().get(rowIndex);
 			default:
 				return null;
 			}
 		}
 		@Override
 		public int getRowCount() {
-			return semanticNet.getNodes().size();
+			return semanticNet.getLinks().size();
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
@@ -83,7 +85,7 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
 			switch (columnIndex) {
-			case 0: return String.class;
+			case 0: return Link.class;
 			default: return null;
 			}
 		}
@@ -180,7 +182,6 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		MapZoomListener zl = new MapZoomListener(mapPanel);
 		mapPanel.addMouseWheelListener(zl);
 		mapPanel.setCallbacks(this);
-//		getContentPane().add(mapPanel);
 	}
 	
 	/**
@@ -250,7 +251,16 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 
 	@Override
 	public void onSelectUINodes(UINode[] uiNodes) {
-		System.out.println(uiNodes);
+		tblDataView.clearSelection();
+		for (int i = tableModel.getRowCount()-1; i >= 0; --i) {
+			Link link = (Link) tableModel.getValueAt(i, 0);
+			for (UINode uiNode : uiNodes) {
+				if (link.getTail().equals(uiNode.getNode())) {
+					tblDataView.addRowSelectionInterval(i, i);
+					break;
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args){

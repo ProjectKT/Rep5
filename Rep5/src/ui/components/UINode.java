@@ -1,7 +1,16 @@
 package ui.components;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.SwingUtilities;
 
 import SemanticNet.Node;
 
@@ -10,9 +19,34 @@ import SemanticNet.Node;
  */
 public class UINode extends MapComponent {
 	
-	private interface ColorSetting {
-		Color normal = Color.green;
-		Color selected = Color.blue;
+	private interface Settings {
+		/** フォントの設定 */
+		interface Fonts {
+			Font label = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+		}
+		/** ストロークの設定 */
+		interface Strokes {
+			Stroke border = new BasicStroke(1.0f);
+			Stroke borderSelected = new BasicStroke(1.0f);
+		}
+		/** 色の設定 */
+		interface Colors {
+			Color backgroundNormal = new Color(0xbb00bffb, true);
+			Color backgroundSelected = new Color(0xee00eeff, true);
+			Color borderNormal = new Color(0xbb000000, true);
+			Color borderSelected = new Color(0xff000000, true);
+			Color labelNormal = Color.black;
+			Color labelSelected = Color.black;
+		}
+		/** パディング */
+		interface Paddings {
+			double left = 10;
+			double top = 10;
+			double right = 10;
+			double bottom = 10;
+		}
+		int arcWidth = 10;
+		int arcHeight = 10;
 	}
 	
 	/** SemanticNet のノード */
@@ -33,8 +67,12 @@ public class UINode extends MapComponent {
 	 */
 	public UINode(Node node) {
 		this.node = node;
-		int len = node.getName().length();
-		setSize(len*10.0, 50.0);
+		int width = getFontMetrics(Settings.Fonts.label).stringWidth(node.getName());
+		int height = getFontMetrics(Settings.Fonts.label).getHeight();
+		setSize(
+				Settings.Paddings.left + (double) width + Settings.Paddings.right,
+				Settings.Paddings.top + (double) height + Settings.Paddings.bottom
+		);
 	}
 
 	/**
@@ -63,13 +101,27 @@ public class UINode extends MapComponent {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.setFont(Settings.Fonts.label.deriveFont((float) (Settings.Fonts.label.getSize2D() / panel.zoom)));
 		
 		// 描画
-		g.setColor(isSelected ? ColorSetting.selected : ColorSetting.normal);
-//		g.fillRect(0, 0, getWidth(), getHeight());
-		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
-		g.setColor(Color.black);
-		g.drawString(node.getName(), 0, 20);
+		g.setColor(isSelected ? Settings.Colors.backgroundSelected : Settings.Colors.backgroundNormal);
+		g.fillRoundRect(0, 0, getWidth(), getHeight(),
+				(int) (Settings.arcWidth / panel.zoom),
+				(int) (Settings.arcHeight / panel.zoom)
+		);
+		((Graphics2D) g).setStroke(isSelected ? Settings.Strokes.borderSelected : Settings.Strokes.border);
+		g.setColor(isSelected ? Settings.Colors.borderSelected : Settings.Colors.borderNormal);
+		g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1,
+			(int) (Settings.arcWidth / panel.zoom),
+			(int) (Settings.arcHeight / panel.zoom)
+		);
+		g.setColor(isSelected ? Settings.Colors.labelSelected : Settings.Colors.labelNormal);
+		g.drawString(
+				node.getName(),
+				(int) (Settings.Paddings.left / panel.zoom),
+				(int) (getHeight() - Settings.Paddings.bottom / panel.zoom)
+		);
+		
 	}
 
 	

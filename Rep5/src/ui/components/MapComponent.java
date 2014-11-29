@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 public class MapComponent extends JComponent {
 
 	// マップビュー
-	private MapPanel panel;
+	MapPanel panel;
 	// ワールド座標系での中心の位置
 	Point2D.Double center;
 	// 幅

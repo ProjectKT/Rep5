@@ -171,6 +171,10 @@ public class SemanticNet {
 			}
 		}
 	}
+	
+	public ArrayList<Link> getLinks() {
+		return links;
+	}
 
 	public ArrayList<Node> getNodes() {
 		return nodes;

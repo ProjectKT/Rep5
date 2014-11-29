@@ -89,7 +89,7 @@ public class MapPanel extends JPanel implements DesignMode {
 		return zoom;
 	}
 	public void setZoom(double zoom) {
-		if (0 < zoom) {
+		if (0.1 < zoom) {
 			this.zoom = zoom;
 		}
 	}
