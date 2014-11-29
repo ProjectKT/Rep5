@@ -11,7 +11,7 @@ public class MapComponent extends JComponent {
 	// マップビュー
 	private MapPanel panel;
 	// ワールド座標系での中心の位置
-	Point2D center;
+	Point2D.Double center;
 	// 幅
 	double width;
 	// 高さ
@@ -23,7 +23,7 @@ public class MapComponent extends JComponent {
 	public MapComponent(double x, double y) {
 		this(new Point2D.Double(x, y));
 	}
-	public MapComponent(Point2D pos) {
+	public MapComponent(Point2D.Double pos) {
 		super();
 		this.center = pos;
 	}
