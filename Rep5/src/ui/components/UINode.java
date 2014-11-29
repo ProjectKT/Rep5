@@ -19,10 +19,11 @@ import SemanticNet.Node;
  */
 public class UINode extends MapComponent {
 	
-	private interface Settings {
+	/** 設定 */
+	private static interface Settings {
 		/** フォントの設定 */
 		interface Fonts {
-			Font label = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+			Font label = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
 		}
 		/** ストロークの設定 */
 		interface Strokes {
@@ -40,10 +41,10 @@ public class UINode extends MapComponent {
 		}
 		/** パディング */
 		interface Paddings {
-			double left = 10;
-			double top = 10;
-			double right = 10;
-			double bottom = 10;
+			double left = 8;
+			double top = 8;
+			double right = 8;
+			double bottom = 8;
 		}
 		int arcWidth = 10;
 		int arcHeight = 10;
