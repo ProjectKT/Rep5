@@ -1,16 +1,27 @@
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
+import ui.components.HintTextField;
 import ui.components.SemanticNetPanel;
 import ui.components.UINode;
 import ui.components.input.MapDragListener;
@@ -23,10 +34,50 @@ import SemanticNet.SemanticNet;
 public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	
 	// --- ビューのメンバ ---
+	private JLabel lblDataView;
+	private HintTextField tfFilter;
+	private JTable tblDataView;
 	private SemanticNetPanel mapPanel;
 	
 	// --- ロジックのメンバ ---
 	private SemanticNet semanticNet;
+	
+	private TableModel tableModel = new TableModel() {
+		@Override
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		}
+		@Override
+		public void removeTableModelListener(TableModelListener l) {
+		}		
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			return false;
+		}
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return null;
+		}
+		@Override
+		public int getRowCount() {
+			return 0;
+		}
+		@Override
+		public String getColumnName(int columnIndex) {
+			return null;
+		}
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return null;
+		}
+		@Override
+		public void addTableModelListener(TableModelListener l) {
+		}
+	};
 
 	public SemanticUI(SemanticNet semanticNet) throws HeadlessException {
 		this.semanticNet =  semanticNet;
@@ -42,7 +93,68 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		setBounds(10, 10, 800, 600);
 		setTitle("SemanticUI");
 		
+//		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+
+		/* --- MENU --- */
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		JMenuItem mntmLoadDataset = new JMenuItem("Load DataSet");
+		mnFile.add(mntmLoadDataset);
+		
+		JMenuItem mntmSaveDataset = new JMenuItem("Save DataSet");
+		mnFile.add(mntmSaveDataset);
+		
+		JMenuItem mntmSaveDatasetAs = new JMenuItem("Save DataSet As ...");
+		mnFile.add(mntmSaveDatasetAs);
+		
+		JMenuItem mntmExit = new JMenuItem("Exit");
+		mnFile.add(mntmExit);
+		
+		JMenu mnDataSet = new JMenu("DataSet");
+		menuBar.add(mnDataSet);
+		
+		JMenuItem mntmRefresh = new JMenuItem("Reload");
+		mnDataSet.add(mntmRefresh);
+		
+		JMenuItem mntmClear = new JMenuItem("Clear");
+		mnDataSet.add(mntmClear);
+		
+		/* --- Content --- */
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setResizeWeight(0.3);
+		getContentPane().add(splitPane);
+		
+		JPanel panel_1 = new JPanel();
+		splitPane.setLeftComponent(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		lblDataView = new JLabel("DataView");
+		panel_1.add(lblDataView, BorderLayout.NORTH);
+		
+		JPanel panel_1c = new JPanel();
+		panel_1c.setLayout(new BorderLayout(0, 0));
+		panel_1.add(panel_1c, BorderLayout.CENTER);
+		
+		tfFilter = new HintTextField("Filter", Color.GRAY);
+		tfFilter.setBackground(new Color(250, 250, 250));
+		tfFilter.setBorder(new EmptyBorder(2, 2, 2, 2));
+//		tfFilter.getDocument().addDocumentListener(filterChangeListener);
+		panel_1c.add(tfFilter, BorderLayout.NORTH);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(new EmptyBorder(0,0,0,0));
+		panel_1c.add(scrollPane, BorderLayout.CENTER);
+		
+		tblDataView = new JTable(tableModel);
+		scrollPane.setViewportView(tblDataView);
+		
 		setupMapPanel();
+		splitPane.setRightComponent(mapPanel);
 		setupNodes();
 	}
 	
@@ -57,7 +169,7 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		MapZoomListener zl = new MapZoomListener(mapPanel);
 		mapPanel.addMouseWheelListener(zl);
 		mapPanel.setCallbacks(this);
-		getContentPane().add(mapPanel);
+//		getContentPane().add(mapPanel);
 	}
 	
 	/**

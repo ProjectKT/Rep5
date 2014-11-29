@@ -1,6 +1,8 @@
 package ui.components;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -66,6 +68,23 @@ public class MapPanel extends JPanel implements DesignMode {
 		return false;
 	}
 	
+	@Override
+	public Dimension getPreferredSize() {
+		if (isPreferredSizeSet()) {
+			return super.getPreferredSize();
+		}
+		Container parent = getParent();
+		return (parent == null) ? super.getPreferredSize() : parent.getSize();
+	}
+	
+	@Override
+	public Dimension getMinimumSize() {
+		if (isMinimumSizeSet()) {
+			return super.getMinimumSize();
+		}
+		return new Dimension(0, 0);
+	}
+
 	public double getZoom() {
 		return zoom;
 	}
