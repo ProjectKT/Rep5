@@ -25,6 +25,7 @@ public class SemanticNetLayout extends MapLayout {
 
 	private Object mLock = new Object();
 	private Random random = new Random();
+	private UINode lastAddedUINode = null;
 	// 各ノードの速度ベクトルとの対応
 	private HashMap<UINode,LayoutParam> paramMap = new HashMap<UINode,LayoutParam>();
 	// レイアウトスレッド
@@ -100,14 +101,18 @@ public class SemanticNetLayout extends MapLayout {
 			paramMap.put(comp, new LayoutParam());
 			// この時点で今までに MapPanel に追加された UINode はすべて velocityMap に入っている
 
+			final double baseX = (lastAddedUINode == null) ? 0.0 : lastAddedUINode.center.x;
+			final double baseY = (lastAddedUINode == null) ? 0.0 : lastAddedUINode.center.y;
 			// ノードの位置を、(乱数, 乱数) にする。 // 2 つのノードがまったく同じ位置におかれないようにする。
 			comp.setCenter(
-					(random.nextDouble()-0.5) * paramMap.size() * 100,
-					(random.nextDouble()-0.5) * paramMap.size() * 100
+					baseX + (random.nextDouble()-0.5) * 100,
+					baseY + (random.nextDouble()-0.5) * 100
 			);
+			
+			lastAddedUINode = comp;
 		}
 		
-		ArrayList<Link> connectedLinks = getConnectedLinks(comp.getNode());
+		final ArrayList<Link> connectedLinks = getConnectedLinks(comp.getNode());
 		for (Link link : connectedLinks) {
 			Node opposite = (comp.getNode() == link.getTail()) ? link.getTail() : link.getHead();
 			UINode uiNode = getUINode(opposite);
