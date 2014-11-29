@@ -66,7 +66,8 @@ public class UINode extends MapComponent {
 		
 		// TODO ここに描画する部分を書く
 		g.setColor(color);
-		g.fillRect(0, 0, getWidth(), getHeight());
+//		g.fillRect(0, 0, getWidth(), getHeight());
+		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
 		g.setColor(Color.black);
 		g.drawString(node.getName(), 0, 20);
 	}

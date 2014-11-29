@@ -75,12 +75,63 @@ public class SemanticNetPanel extends MapPanel {
 			UINode head = nodeMap.get(link.getHead());
 			UINode tail = nodeMap.get(link.getTail());
 			if (head != null && tail != null) {
-				g.drawLine(head.getX() + head.getWidth()/2,
-							head.getY() + head.getHeight()/2,
-							tail.getX() + tail.getWidth()/2,
-							tail.getY() + tail.getHeight()/2);
+				final int hhWidth = head.getWidth()/2;
+				final int hhHeight = head.getHeight()/2;
+				final int htWidth = tail.getWidth()/2;
+				final int htHeight = tail.getHeight()/2;
+				
+				// from, to はそれぞれ head, tail の中心の座標
+				int fromX = tail.getX() + htWidth;
+				int fromY = tail.getY() + htHeight;
+				int toX = head.getX() + hhWidth;
+				int toY = head.getY() + hhHeight;
+				System.out.print("("+fromX+","+fromY+")->("+toX+","+toY+"), ");
+				
+				// 枠外に線を引くよう調整
+				if (fromX != toX && fromY != toY) {
+					final int coeffX = (toX < fromX) ? (-1) : 1;
+					final int coeffY = (toY < fromY) ? (-1) : 1;
+					// 単位ベクトル [1 0] となす角度の tan
+					final double tan = (double) (toY-fromY) / (double) (toX-fromX);
+					// 単位ベクトル [0 1] となす角度の tan = 1 / tan
+					final double itan = (tan == 0) ? 0 : -(1.0/tan);
+	
+					// head, tail の中心の座標から枠外の座標を計算
+					fromX += absMin(coeffX * htWidth, (int)(-coeffY * htHeight*itan));
+					fromY += absMin(coeffY * htHeight, (int)(coeffX * htWidth*tan));
+					toX -= absMin(coeffX * hhWidth, (int)(-coeffY * hhHeight*itan));
+					toY -= absMin(coeffY * hhHeight, (int)(coeffX * hhWidth*tan));
+					System.out.print("coeff=["+coeffX+","+coeffY+"], tan="+tan+", itan="+itan+", ("+fromX+","+fromY+")->("+toX+","+toY+")");
+					System.out.print(", w="+htWidth+", wdiff="+htHeight*itan+", h="+htHeight+", hdiff="+htWidth*tan);
+					System.out.println();
+				} else if (fromX == toX) {
+					// tan が求まらないので適宜調整
+					final int coeff = (toY < fromY) ? (-1) : 1;
+					fromY += coeff * htHeight;
+					toY -= coeff * hhHeight;
+				} else {
+					// tan が 0 になるので適宜調整
+					final int coeff = (toX < fromX) ? (-1) : 1;
+					fromX += coeff * htWidth;
+					toX -= coeff * hhWidth;
+				}
+				
+				// 矢印を描く
+				
+				g.setColor(Color.red);
+				g.drawLine(fromX, fromY, toX, toY);
 			}
 		}
+	}
+	
+	/**
+	 * 絶対値が小さい方を返す
+	 * @param i1
+	 * @param i2
+	 * @return
+	 */
+	private int absMin(int i1, int i2) {
+		return (Math.abs(i1) <= Math.abs(i2)) ? i1 : i2;
 	}
 	
 	/**
