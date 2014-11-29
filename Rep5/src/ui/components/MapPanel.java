@@ -70,7 +70,9 @@ public class MapPanel extends JPanel implements DesignMode {
 		return zoom;
 	}
 	public void setZoom(double zoom) {
-		this.zoom = zoom;
+		if (0 < zoom) {
+			this.zoom = zoom;
+		}
 	}
 	
 	public Point2D.Double getCenter() {
