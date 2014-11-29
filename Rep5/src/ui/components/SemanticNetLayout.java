@@ -140,7 +140,7 @@ public class SemanticNetLayout extends MapLayout {
 	private Runnable layoutRunnable = new Runnable() {
 		@Override
 		public void run() {
-			final long SLEEP = (long) (10);
+			final long SLEEP = (long) (1000.0/60.0);
 			
 			try {
 				for (;;) {
