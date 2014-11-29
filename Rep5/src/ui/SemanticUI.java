@@ -20,7 +20,7 @@ import SemanticNet.Node;
 import SemanticNet.OurSemanticNet;
 import SemanticNet.SemanticNet;
 
-public class SemanticUI extends JFrame {
+public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	
 	// --- ビューのメンバ ---
 	private SemanticNetPanel mapPanel;
@@ -56,6 +56,7 @@ public class SemanticUI extends JFrame {
 		mapPanel.addMouseMotionListener(dl);
 		MapZoomListener zl = new MapZoomListener(mapPanel);
 		mapPanel.addMouseWheelListener(zl);
+		mapPanel.setCallbacks(this);
 		getContentPane().add(mapPanel);
 	}
 	
@@ -124,6 +125,10 @@ public class SemanticUI extends JFrame {
 		mapPanel.addNode(node);
 	}
 
+	@Override
+	public void onSelectUINodes(UINode[] uiNodes) {
+		System.out.println(uiNodes);
+	}
 	
 	public static void main(String[] args){
 		OurSemanticNet osn = new OurSemanticNet();

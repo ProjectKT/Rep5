@@ -9,20 +9,33 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import SemanticNet.Link;
 import SemanticNet.Node;
 
 public class SemanticNetPanel extends MapPanel {
 
-	// SemanticNet のノードと UINode との対応
+	/** SemanticNet のノードと UINode との対応 */
 	protected HashMap<Node,UINode> nodeMap = new HashMap<Node,UINode>();
-	// ノード間のリンク
+	/** ノード間のリンク */
 	protected ArrayList<Link> links = new ArrayList<Link>();
-	// 現在のパネル中心の UINode
+	/** 現在のパネル中心の UINode */
 	protected UINode centerNode;
+	/** 現在選択されているノード */
+	protected ArrayList<UINode> selectedNodes = new ArrayList<UINode>();
+
+	/** コールバック */
+	public interface Callbacks {
+		public void onSelectUINodes(UINode[] uiNodes);
+	}
+	private static final Callbacks sDummyCallbacks = new Callbacks() {
+		@Override
+		public void onSelectUINodes(UINode[] uiNodes) { }
+	};
+	protected Callbacks callbacks = sDummyCallbacks;
 	
-	// 矢印の描画に一時的に使う変数
+	/** 矢印の描画に一時的に使う変数 */
 	private interface Arrow {
 		interface Default {
 			// 矢印の形を作る 2 点の座標
@@ -37,7 +50,7 @@ public class SemanticNetPanel extends MapPanel {
 		final Point2D.Double p2 = new Point2D.Double();
 	}
 	
-	// 色の設定
+	/** 色の設定 */
 	private interface ColorSetting {
 		Color link = Color.red;
 		Color inheritedLink = Color.gray;
@@ -47,6 +60,11 @@ public class SemanticNetPanel extends MapPanel {
 	
 	public SemanticNetPanel() {
 		super(new SemanticNetLayout());
+		addMouseListener(panelMouseAdapter);
+	}
+	
+	public void setCallbacks(Callbacks callbacks) {
+		this.callbacks = callbacks;
 	}
 	
 	/**
@@ -207,12 +225,38 @@ public class SemanticNetPanel extends MapPanel {
 	}
 	
 	/**
+	 * SemanticNetPanel のマウスアダプタ
+	 */
+	private MouseAdapter panelMouseAdapter = new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (!e.isControlDown() && !e.isMetaDown() && !e.isShiftDown()) {
+				for (Iterator<UINode> it = selectedNodes.iterator(); it.hasNext();) {
+					it.next().isSelected = false;
+					it.remove();
+				}
+			}
+		}
+	};
+	
+	/**
 	 * UINode 用のマウスアダプタ
 	 */
 	private MouseAdapter uiNodeMouseAdapter = new MouseAdapter() {
 		private Point prevPoint;
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			if (!e.isControlDown() && !e.isMetaDown() && !e.isShiftDown()) {
+				for (Iterator<UINode> it = selectedNodes.iterator(); it.hasNext();) {
+					it.next().isSelected = false;
+					it.remove();
+				}
+			}
+			if (e.getComponent() instanceof UINode) {
+				((UINode) e.getComponent()).isSelected = true;
+				selectedNodes.add((UINode) e.getComponent());
+				callbacks.onSelectUINodes(selectedNodes.toArray(new UINode[selectedNodes.size()]));
+			}
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -225,18 +269,6 @@ public class SemanticNetPanel extends MapPanel {
 		public void mouseReleased(MouseEvent e) {
 			if (e.getComponent() instanceof UINode) {
 				((UINode) e.getComponent()).isDragged = false;
-			}
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).color = Color.blue;
-			}
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			if (e.getComponent() instanceof UINode) {
-				((UINode) e.getComponent()).color = Color.green;
 			}
 		}
 		@Override

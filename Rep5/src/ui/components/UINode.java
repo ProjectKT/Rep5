@@ -10,8 +10,16 @@ import SemanticNet.Node;
  */
 public class UINode extends MapComponent {
 	
+	private interface ColorSetting {
+		Color normal = Color.green;
+		Color selected = Color.blue;
+	}
+	
+	/** SemanticNet のノード */
 	Node node;
-	Color color = Color.green;
+	/** 選択されているフラグ */
+	boolean isSelected = false;
+	/** ドラッグされているフラグ */
 	boolean isDragged = false;
 	
 	//変更 ky 11/21
@@ -46,14 +54,6 @@ public class UINode extends MapComponent {
 	public void putTheta(double theta){
 		this.tFromC = theta;
 	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
 	
 	
 	/**
@@ -64,8 +64,8 @@ public class UINode extends MapComponent {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		// TODO ここに描画する部分を書く
-		g.setColor(color);
+		// 描画
+		g.setColor(isSelected ? ColorSetting.selected : ColorSetting.normal);
 //		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
 		g.setColor(Color.black);
