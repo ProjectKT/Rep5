@@ -70,47 +70,44 @@ public class SemanticUI extends JFrame {
 		
 		final ArrayList<Node> fnodes = nodes;
 		
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				for(;;){
-//					try {
-//						Thread.sleep(10);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					final Node node = fnodes.get(0);
-//					fnodes.remove(0);
-//					
-//					if(node.getDepartFromMeLinks().size() > 0){
-//						ArrayList<Link> link = node.getDepartFromMeLinks();
-//						for(Link linkedNode:link){
-//							fnodes.add(0,linkedNode.getHead());
-//						}
-//					}
-//					
-//					try {
-//						SwingUtilities.invokeAndWait(new Runnable() {
-//							@Override
-//							public void run() {
-//								System.out.println("adding node");
-//								addNode(node);
-//							}
-//						});
-//					} catch (InvocationTargetException | InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					
-//					if(fnodes.size() == 0)
-//						break;
-//				}
-//			}
-//		}).start();
-
-		addNode(nodes.get(0));
-		addNode(nodes.get(0).getDepartFromMeLinks().get(0).getHead());
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for(;;){
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					final Node node = fnodes.get(0);
+					fnodes.remove(0);
+					
+					if(node.getDepartFromMeLinks().size() > 0){
+						ArrayList<Link> link = node.getDepartFromMeLinks();
+						for(Link linkedNode:link){
+							fnodes.add(0,linkedNode.getHead());
+						}
+					}
+					
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+							@Override
+							public void run() {
+								System.out.println("adding node");
+								addNode(node);
+							}
+						});
+					} catch (InvocationTargetException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if(fnodes.size() == 0)
+						break;
+				}
+			}
+		}).start();
 		
 
 		//  ノードセットの方針:リスト（OPENリスト)の先頭から展開していく
