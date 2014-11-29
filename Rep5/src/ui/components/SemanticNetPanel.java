@@ -35,6 +35,14 @@ public class SemanticNetPanel extends MapPanel {
 		final Point2D.Double p2 = new Point2D.Double();
 	}
 	
+	// 色の設定
+	private interface ColorSetting {
+		Color link = Color.red;
+		Color inheritedLink = Color.gray;
+		Color linkLabel = Color.darkGray;
+		Color inheritedLinkLabel = Color.gray;
+	}
+	
 	public SemanticNetPanel() {
 		super(new SemanticNetLayout());
 	}
@@ -83,20 +91,17 @@ public class SemanticNetPanel extends MapPanel {
 	 * UINode 間のリンクを描画する
 	 */
 	private void drawLinks(Graphics g) {
-		g.setColor(Color.red);
 		for (Link link : links) {
 			UINode head = nodeMap.get(link.getHead());
 			UINode tail = nodeMap.get(link.getTail());
 			if (head != null && tail != null) {
-				// 色の設定
-				if (link.getInheritance()) {
-					g.setColor(Color.gray);
-				} else {
-					g.setColor(Color.red);
-				}
-				
 				// 矢印を描く
+				g.setColor(link.getInheritance() ? ColorSetting.inheritedLink : ColorSetting.link);
 				drawArrow(g, head, tail);
+				
+				// ラベルを描く
+				g.setColor(link.getInheritance() ? ColorSetting.inheritedLinkLabel : ColorSetting.linkLabel);
+				g.drawString(link.getLabel(), (head.getX()+tail.getX())/2, (head.getY()+tail.getY())/2);
 			}
 		}
 	}
