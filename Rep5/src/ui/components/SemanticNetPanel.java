@@ -1,13 +1,12 @@
 package ui.components;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,7 +29,10 @@ public class SemanticNetPanel extends MapPanel {
 			final Point2D.Double p1 = new Point2D.Double(-10.0, -5.0);
 			final Point2D.Double p2 = new Point2D.Double(-10.0,  5.0);
 		}
-		// 変換後の座標
+		// 直線の始点(pf)と終点(pt)
+		final Point pf = new Point();
+		final Point pt = new Point();
+		// 変換後の矢印の先端の座標
 		final Point2D.Double p1 = new Point2D.Double();
 		final Point2D.Double p2 = new Point2D.Double();
 	}
@@ -101,7 +103,7 @@ public class SemanticNetPanel extends MapPanel {
 				
 				// ラベルを描く
 				g.setColor(link.getInheritance() ? ColorSetting.inheritedLinkLabel : ColorSetting.linkLabel);
-				g.drawString(link.getLabel(), (head.getX()+tail.getX())/2, (head.getY()+tail.getY())/2);
+				g.drawString(link.getLabel(), (Arrow.pt.x+Arrow.pf.x)/2, (Arrow.pt.y+Arrow.pf.y)/2);
 			}
 		}
 	}
@@ -157,6 +159,11 @@ public class SemanticNetPanel extends MapPanel {
 			toX -= coeff * hhWidth;
 		}
 
+		Arrow.pf.x = fromX;
+		Arrow.pf.y = fromY;
+		Arrow.pt.x = toX;
+		Arrow.pt.y = toY;
+		
 		// 矢印の形を作る 2 点の座標を計算
 		Arrow.p1.x = Arrow.Default.p1.x * cos - Arrow.Default.p1.y * sin + toX;
 		Arrow.p1.y = Arrow.Default.p1.x * sin + Arrow.Default.p1.y * cos + toY;
