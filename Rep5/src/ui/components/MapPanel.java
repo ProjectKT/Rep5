@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class MapPanel extends JPanel implements DesignMode {
 	
 	double zoom = 1.0f;
-	Point2D center = new Point2D.Double(0, 0);
+	Point2D.Double center = new Point2D.Double(0, 0);
 	
 	public MapPanel(MapLayout layoutManager) {
 		layoutManager.setMapPanel(this);
@@ -37,7 +37,7 @@ public class MapPanel extends JPanel implements DesignMode {
 	private void doPaintComponent(Graphics g) {
 		// 何か描く
 
-		String s = "center=("+center.getX()+","+center.getY()+"), zoom="+zoom;
+		String s = "center=("+center.x+","+center.y+"), zoom="+zoom;
 		g.drawString(s, 0, 10);
 	}
 
@@ -73,10 +73,10 @@ public class MapPanel extends JPanel implements DesignMode {
 		this.zoom = zoom;
 	}
 	
-	public Point2D getCenter() {
+	public Point2D.Double getCenter() {
 		return center;
 	}
-	public void setCenter(Point2D center) {
+	public void setCenter(Point2D.Double center) {
 		this.center = center;
 	}
 	
@@ -84,9 +84,9 @@ public class MapPanel extends JPanel implements DesignMode {
 		return toRelativePosition(new Point2D.Double(ax,ay));
 	}
 	
-	public Point2D toRelativePosition(Point2D p) {
-		final double rx = getViewportWidth()/2 + (p.getX() - center.getX()) / zoom;
-		final double ry = getViewportHeight()/2 + (p.getY() - center.getY()) / zoom;
+	public Point2D toRelativePosition(Point2D.Double p) {
+		final double rx = getViewportWidth()/2 + (p.x - center.x) / zoom;
+		final double ry = getViewportHeight()/2 + (p.y - center.y) / zoom;
 		p.setLocation(rx, ry);
 		return p;
 	}
@@ -99,13 +99,13 @@ public class MapPanel extends JPanel implements DesignMode {
 		return calculateViewportBounds(getCenter());
 	}
 
-	private Rectangle calculateViewportBounds(Point2D center) {
+	private Rectangle calculateViewportBounds(Point2D.Double center) {
 		Insets insets = getInsets();
 		// calculate the "visible" viewport area in pixels
 		int viewportWidth = getWidth() - insets.left - insets.right;
 		int viewportHeight = getHeight() - insets.top - insets.bottom;
-		int viewportX = (int) (center.getX() - viewportWidth / 2);
-		int viewportY = (int) (center.getY() - viewportHeight / 2);
+		int viewportX = (int) (center.x - viewportWidth / 2);
+		int viewportY = (int) (center.y - viewportHeight / 2);
 		return new Rectangle(viewportX, viewportY, viewportWidth, viewportHeight);
 	}
 	

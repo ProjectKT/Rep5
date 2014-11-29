@@ -11,7 +11,7 @@ public class MapComponent extends JComponent {
 	// マップビュー
 	private MapPanel panel;
 	// ワールド座標系での中心の位置
-	Point2D center;
+	Point2D.Double center;
 	// 幅
 	double width;
 	// 高さ
@@ -23,7 +23,7 @@ public class MapComponent extends JComponent {
 	public MapComponent(double x, double y) {
 		this(new Point2D.Double(x, y));
 	}
-	public MapComponent(Point2D pos) {
+	public MapComponent(Point2D.Double pos) {
 		super();
 		this.center = pos;
 	}
@@ -35,7 +35,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) (panel.getViewportWidth()/2 + (center.getX() - panel.center.getX() - width/2.0) / panel.zoom);
+			return (int) (panel.getViewportWidth()/2 + (center.x - panel.center.x - width/2.0) / panel.zoom);
 		}
 		return super.getX();
 	}
@@ -43,7 +43,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) (panel.getViewportHeight()/2 + (center.getY() - panel.center.getY() - height/2.0) / panel.zoom);
+			return (int) (panel.getViewportHeight()/2 + (center.y - panel.center.y - height/2.0) / panel.zoom);
 		}
 		return super.getY();
 	}
@@ -115,8 +115,8 @@ public class MapComponent extends JComponent {
 		if (panel == null) {
 			return super.contains(x, y);
 		}
-		double dx = panel.center.getX() + (x - panel.getViewportWidth()/2) * panel.zoom - center.getX();
-		double dy = panel.center.getY() + (y - panel.getViewportHeight()/2) * panel.zoom - center.getY();
+		double dx = panel.center.x + (x - panel.getViewportWidth()/2) * panel.zoom - center.x;
+		double dy = panel.center.y + (y - panel.getViewportHeight()/2) * panel.zoom - center.y;
 		return contains(dx, dy);
 	}
 	
