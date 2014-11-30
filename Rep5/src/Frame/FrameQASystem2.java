@@ -1,21 +1,20 @@
 package Frame;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.*;
 
-public class FrameQASystem_prototype2 {
+public class FrameQASystem2 {
 	static AIFrameSystem fs = new OurFrameSystem();
 
 	public static void main(String[] args) {
-		FrameQASystem_prototype2 test = new FrameQASystem_prototype2();
+		FrameQASystem2 test = new FrameQASystem2();
 	}
 
-	FrameQASystem_prototype2() {
+	FrameQASystem2() {
 		CallMain();
 	}
 
@@ -94,7 +93,7 @@ public class FrameQASystem_prototype2 {
 			ArrayList<String> relist = new ArrayList<String>();
 
 			for (int i = 0; i < list.size(); i++) {
-				AIFrame f = fs.get_Frame((String) list.get(i));
+				AIFrame f = fs.getFrame((String) list.get(i));
 				if (f == null) {
 					System.out.println(list.get(i) + "というフレームは存在しません");
 				} else {
@@ -109,7 +108,7 @@ public class FrameQASystem_prototype2 {
 							if (s2.equals("is-a")) {
 								AIFrame x = (AIFrame) fs.readSlotValue(
 										(String) list.get(i), s2);
-								list2.add(x.get_name());
+								list2.add(x.getName());
 							} else {
 								list2 = f.getmVals(s2);
 							}
@@ -135,7 +134,7 @@ public class FrameQASystem_prototype2 {
 			return relist = (ArrayList<java.lang.String>) unique(relist);
 		} else {
 			ArrayList<String> list = new ArrayList<String>();
-			AIFrame f = fs.get_Frame(s1);
+			AIFrame f = fs.getFrame(s1);
 			if (f == null) {
 				System.out.println(s1 + "というフレームは存在しません");
 			} else {
@@ -148,7 +147,7 @@ public class FrameQASystem_prototype2 {
 
 						if (s2.equals("is-a")) {
 							AIFrame x = (AIFrame) fs.readSlotValue(s1, s2);
-							list.add(x.get_name());
+							list.add(x.getName());
 						} else {
 							list = f.getmVals(s2);
 						}
@@ -175,10 +174,10 @@ public class FrameQASystem_prototype2 {
 
 	// 指定されたフレームのスロットを全て表示
 	public boolean PrintAllSlot(String inName) {
-		AIFrame f = fs.get_Frame(inName);
+		AIFrame f = fs.getFrame(inName);
 		if (f != null) {
-			for (int i = 0; i < f.get_Slot_size(); i++) {
-				PrintSlot(f.get_Slot_key(i), inName);
+			for (int i = 0; i < f.getSlotSize(); i++) {
+				PrintSlot(f.getSlotkey(i), inName);
 			}
 			return true;
 		} else {
@@ -188,10 +187,10 @@ public class FrameQASystem_prototype2 {
 
 	// フレームの指定されたスロットを表示
 	public void PrintSlot(String slotName, String inName) {
-		AIFrame f = fs.get_Frame(inName);
+		AIFrame f = fs.getFrame(inName);
 		if (slotName.equals("is-a") || slotName.equals("Ako")) {
 			AIFrame x = (AIFrame) fs.readSlotValue(inName, slotName);
-			System.out.println(inName + "は" + x.get_name() + "のインスタンスです。");
+			System.out.println(inName + "は" + x.getName() + "のインスタンスです。");
 		} else {
 			ArrayList list = f.getmVals(slotName);
 			for (int j = 0; j < list.size(); j++) {
@@ -203,10 +202,10 @@ public class FrameQASystem_prototype2 {
 
 	// 指定されたフレームの接続を全て表示
 	public void PrintAllLeankers(String inName) {
-		AIFrame f = fs.get_Frame(inName);
-		for (int i = 0; i < f.get_leankers_size(); i++) {
-			System.out.println(f.get_leankers_Slot_key(i) + "が"
-					+ f.get_leankers_Slot_value(i) + "で接続しています。");
+		AIFrame f = fs.getFrame(inName);
+		for (int i = 0; i < f.getLeankersSize(); i++) {
+			System.out.println(f.getLeankersSlotKey(i) + "が"
+					+ f.getLeankersSlotValue(i) + "で接続しています。");
 		}
 	}
 

@@ -35,7 +35,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) (panel.viewportBounds.width/2 + (center.x - panel.center.x - width/2.0) / panel.zoom);
+			return (int) panel.toRelativeX(center.x - width/2.0);
 		}
 		return super.getX();
 	}
@@ -43,7 +43,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) (panel.viewportBounds.height/2 + (center.y - panel.center.y - height/2.0) / panel.zoom);
+			return (int) panel.toRelativeY(center.y - height/2.0);
 		}
 		return super.getY();
 	}
@@ -51,7 +51,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getWidth() {
 		if (panel != null) {
-			return (int) (width / panel.zoom);
+			return (int) panel.toRelativeSize(width);
 		}
 		return (int) width;
 	}
@@ -59,7 +59,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getHeight() {
 		if (panel != null) {
-			return (int) (height / panel.getZoom());
+			return (int) panel.toRelativeSize(height);
 		}
 		return (int) height;
 	}
@@ -115,9 +115,7 @@ public class MapComponent extends JComponent {
 		if (panel == null) {
 			return super.contains(x, y);
 		}
-		double dx = panel.center.x + (x - panel.viewportBounds.width/2) * panel.zoom - center.x;
-		double dy = panel.center.y + (y - panel.viewportBounds.height/2) * panel.zoom - center.y;
-		return contains(dx, dy);
+		return contains(panel.toAbsoluteX(x) - center.x, panel.toAbsoluteY(y) - center.y);
 	}
 	
 	public boolean contains(double x, double y) {

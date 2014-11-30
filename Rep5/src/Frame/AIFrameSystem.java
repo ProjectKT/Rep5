@@ -249,46 +249,48 @@ public class AIFrameSystem {
 			System.out.println(err);
 		}
 	}
-	
-	//改変部
+
+	// 改変部
 	/**
 	 * 指定されたフレーム名のAIフレームを返す
 	 */
-	public AIFrame get_Frame(String frameName){
-		if(mFrames.containsKey(frameName)){
-		return mFrames.get(frameName);
-		}else{
+	public AIFrame getFrame(String frameName) {
+		if (mFrames.containsKey(frameName)) {
+			return mFrames.get(frameName);
+		} else {
 			return null;
 		}
 	}
-	
-	//改変部
+
+	// 改変部
 	/**
 	 * frameName1のleankersに新しくframeName2がSlotNameで接続していることを登録する
 	 */
-	void writeleankers(String frameName1,String frameName2,String slotName){
-		if(mFrames.containsKey(frameName1)){
-		get_Frame(frameName1).put_new_leanker(slotName,frameName2);
+	void writeLeankers(String frameName1, String frameName2, String slotName) {
+		if (mFrames.containsKey(frameName1)) {
+			getFrame(frameName1).putLeanker(slotName, frameName2);
 		}
 	}
-	
-	//改変部
+
+	// 改変部
 	/**
 	 * guiデ使うためにAIFrameを返す
+	 * 
 	 * @return
 	 */
-	public ArrayList<AIFrame> getFrames(){
+	public ArrayList<AIFrame> getFrames() {
 		ArrayList<AIFrame> list = new ArrayList<AIFrame>();
 		for (Iterator it = mFrames.entrySet().iterator(); it.hasNext();) {
-		    Map.Entry entry = (Map.Entry)it.next();
-		    AIFrame value = (AIFrame) entry.getValue();
-		    	list.add(value);
-		    
+			Map.Entry entry = (Map.Entry) it.next();
+			AIFrame value = (AIFrame) entry.getValue();
+			list.add(value);
+
 		}
 		return list;
 	}
-	
-	public HashMap<String,AIFrame> getmFrames(){
-		return this.mFrames;
+
+	public HashMap<String, AIFrame> getFrameMap() {
+		return mFrames;
 	}
+	
 } // end of class definition

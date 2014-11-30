@@ -119,6 +119,30 @@ public class MapPanel extends JPanel implements DesignMode {
 		return p;
 	}
 	
+	double toRelativeX(double ax) {
+		return (viewportBounds.width/2 + (ax - center.x) / zoom);
+	}
+	
+	double toRelativeY(double ay) {
+		return (viewportBounds.height/2 + (ay - center.y) / zoom);
+	}
+	
+	double toRelativeSize(double asize) {
+		return (asize / zoom);
+	}
+	
+	double toAbsoluteX(double rx) {
+		return (center.x + (rx - viewportBounds.width/2) * zoom);
+	}
+
+	double toAbsoluteY(double ry) {
+		return (center.y + (ry - viewportBounds.height/2) * zoom);
+	}
+	
+	double toAbsoluteSize(double rsize) {
+		return (rsize * zoom);
+	}
+	
 	/**
 	 * ビューポートの範囲を返す
 	 * @return

@@ -24,7 +24,7 @@ public class AISlot {
 		mDemons = new AIDemonProc[DEMON_PROCS];
 	}
 	
-	ArrayList getmVals(){
+	ArrayList getValues(){
 		return mVals;
 	}
 	
