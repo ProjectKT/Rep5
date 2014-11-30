@@ -132,7 +132,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					} else {
 						for (String inSuperClass : parseData.superClasses) {
 							createClassFrame(inSuperClass, inName);
-							writeleankers(inSuperClass,inName,"Ako");
+							writeLeankers(inSuperClass,inName,"Ako");
 						}
 					}
 				} else {
@@ -142,7 +142,7 @@ public class OurFrameSystem extends AIFrameSystem {
 					} else {
 						for (String inSuperName : parseData.superNames) {
 							createInstanceFrame(inSuperName, inName);
-							writeleankers(inSuperName,inName,"is-a");
+							writeLeankers(inSuperName,inName,"is-a");
 						}
 					}
 				}
@@ -172,14 +172,14 @@ public class OurFrameSystem extends AIFrameSystem {
 
 					for (String slotValue : slotValues) {
 						if(slotName.equals("is-a") || slotName.equals("ako")){
-							get_Frame(inName).add_super(slotValue);
+							getFrame(inName).addSuper(slotValue);
 						}
-						if(get_Frame(inName).slot_check(slotName)){
-							get_Frame(inName).addSlotValue(slotName, slotValue);
+						if(getFrame(inName).hasSlot(slotName)){
+							getFrame(inName).addSlotValue(slotName, slotValue);
 						}else{
 						writeSlotValue(inName, slotName, slotValue);
 						}
-						writeleankers(slotValue,inName,slotName);
+						writeLeankers(slotValue,inName,slotName);
 					}
 				}
 				

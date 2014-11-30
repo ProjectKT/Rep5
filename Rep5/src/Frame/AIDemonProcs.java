@@ -30,7 +30,7 @@ public class AIDemonProcs {
 					String parentname = (String) olist.get(i);
 
 					// 親の名前を元に親のフレームをとってくる
-					AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+					AIFrame parentframe = inFrameSystem.getFrame(parentname);
 					
 					if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)){
 					//祖父母の名前をとってくる
@@ -40,7 +40,7 @@ public class AIDemonProcs {
 							// 祖父母の名前をとる
 							String gparentname = (String) glist.get(j);
 							// 祖父母の名前を元に祖父母のフレームをとってくる
-							AIFrame gparentframe = inFrameSystem.get_Frame(gparentname);
+							AIFrame gparentframe = inFrameSystem.getFrame(gparentname);
 							    //女なら祖母
 								if(gparentframe.readSlotValue(inFrameSystem, "性別",false).equals("女")){
 									relist.add(gparentname);
@@ -77,7 +77,7 @@ public class AIDemonProcs {
 					String parentname = (String) olist.get(i);
 
 					// 親の名前を元に親のフレームをとってくる
-					AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+					AIFrame parentframe = inFrameSystem.getFrame(parentname);
 					
 					if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)){
 					
@@ -88,7 +88,7 @@ public class AIDemonProcs {
 							// 祖父母の名前をとる
 							String gparentname = (String) glist.get(j);
 							// 祖父母の名前を元に祖父母のフレームをとってくる
-							AIFrame gparentframe = inFrameSystem.get_Frame(gparentname);
+							AIFrame gparentframe = inFrameSystem.getFrame(gparentname);
 							    //男なら祖父
 								if(gparentframe.readSlotValue(inFrameSystem, "性別",false).equals("男")){
 									relist.add(gparentname);
@@ -136,19 +136,19 @@ public class AIDemonProcs {
 						String parentname = (String) olist.get(i);
 
 						// 親の名前を元に親のフレームをとってくる
-						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						AIFrame parentframe = inFrameSystem.getFrame(parentname);
 
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// klistは兄弟の名前のリスト
 						ArrayList<String> klist = parentframe
-								.get_leankers_Slot_names("親");
+								.getLeankersSlotNames("親");
 
 
 						// 親の子供の数(兄弟の数)だけループ
 						for (int j = 0; j < klist.size(); j++) {
 
 							// 兄弟の名前から兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+							AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 
 							// 兄弟フレームの誕生日スロットの値が自分より若く、かつ、性別スロットの値が男なら兄
 							if (Integer.parseInt((String) frame.readSlotValue(
@@ -206,19 +206,19 @@ public class AIDemonProcs {
 						String parentname = (String) olist.get(i);
 
 						// 親の名前を元に親のフレームをとってくる
-						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						AIFrame parentframe = inFrameSystem.getFrame(parentname);
 
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// klistは兄弟の名前のリスト
 						ArrayList<String> klist = parentframe
-								.get_leankers_Slot_names("親");
+								.getLeankersSlotNames("親");
 
 
 						// 親の子供の数(兄弟の数)だけループ
 						for (int j = 0; j < klist.size(); j++) {
 
 							// 兄弟の名前から兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+							AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 
 							// 兄弟フレームの誕生日スロットの値が自分より若く、かつ、性別スロットの値が男なら兄
 							if (Integer.parseInt((String) frame.readSlotValue(
@@ -256,13 +256,13 @@ public class AIDemonProcs {
 			// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 			// klistは息子の名前のリスト
 				ArrayList<String> klist = inFrame
-						.get_leankers_Slot_names("親");
+						.getLeankersSlotNames("親");
 
 			// 子供の数だけループ
 				for (int j = 0; j < klist.size(); j++) {
 
 					//子供の名前から子供のフレームをとってくる
-					AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+					AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 
 					// 性別スロットの値が男なら息子
 					if (frame.readSlotValue(inFrameSystem, "性別",
@@ -295,13 +295,13 @@ public class AIDemonProcs {
 			// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 			// klistは息子の名前のリスト
 				ArrayList<String> klist = inFrame
-						.get_leankers_Slot_names("親");
+						.getLeankersSlotNames("親");
 	
 			// 子供の数だけループ
 				for (int j = 0; j < klist.size(); j++) {
 	
 					//子供の名前から子供のフレームをとってくる
-					AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+					AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 	
 					// 性別スロットの値が男なら息子
 					if (frame.readSlotValue(inFrameSystem, "性別",
@@ -343,7 +343,7 @@ public class AIDemonProcs {
 					String parentname = (String) olist.get(i);
 
 					// 親の名前を元に親のフレームをとってくる
-					AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+					AIFrame parentframe = inFrameSystem.getFrame(parentname);
 					
 					if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)){
 					//祖父母の名前をとってくる
@@ -353,17 +353,17 @@ public class AIDemonProcs {
 							// 祖父母の名前をとる
 							String gparentname = (String) glist.get(j);
 							// 祖父母の名前を元に祖父母のフレームをとってくる
-							AIFrame gparentframe = inFrameSystem.get_Frame(gparentname);
+							AIFrame gparentframe = inFrameSystem.getFrame(gparentname);
 							
 							// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 							// klistは兄弟の名前のリスト
-							ArrayList<String> klist = gparentframe.get_leankers_Slot_names("親");
+							ArrayList<String> klist = gparentframe.getLeankersSlotNames("親");
 							
 							// 親の子供の数(兄弟の数)だけループ
 							for (int k = 0; k < klist.size(); k++) {
 
 								// 兄弟の名前から兄弟のフレームをとってくる
-								AIFrame frame = inFrameSystem.get_Frame(klist.get(k));
+								AIFrame frame = inFrameSystem.getFrame(klist.get(k));
 							//自分の親でない、かつ、男なら叔父
 								if(!klist.get(k).equals(olist.get(i)) && frame.readSlotValue(inFrameSystem, "性別",false).equals("男")){
 								
@@ -405,7 +405,7 @@ public class AIDemonProcs {
 					String parentname = (String) olist.get(i);
 	
 					// 親の名前を元に親のフレームをとってくる
-					AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+					AIFrame parentframe = inFrameSystem.getFrame(parentname);
 					
 					if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)){
 					//祖父母の名前をとってくる
@@ -415,17 +415,17 @@ public class AIDemonProcs {
 							// 祖父母の名前をとる
 							String gparentname = (String) glist.get(j);
 							// 祖父母の名前を元に祖父母のフレームをとってくる
-							AIFrame gparentframe = inFrameSystem.get_Frame(gparentname);
+							AIFrame gparentframe = inFrameSystem.getFrame(gparentname);
 							
 							// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 							// klistは兄弟の名前のリスト
-							ArrayList<String> klist = gparentframe.get_leankers_Slot_names("親");
+							ArrayList<String> klist = gparentframe.getLeankersSlotNames("親");
 							
 							// 親の子供の数(兄弟の数)だけループ
 							for (int k = 0; k < klist.size(); k++) {
 	
 								// 兄弟の名前から兄弟のフレームをとってくる
-								AIFrame frame = inFrameSystem.get_Frame(klist.get(k));
+								AIFrame frame = inFrameSystem.getFrame(klist.get(k));
 							//自分の親でない、かつ、女なら叔母
 								if(!klist.get(k).equals(olist.get(i)) && frame.readSlotValue(inFrameSystem, "性別",false).equals("女")){
 								
@@ -478,19 +478,19 @@ public class AIDemonProcs {
 						String parentname = (String) olist.get(i);
 
 						// 親の名前を元に親のフレームをとってくる
-						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						AIFrame parentframe = inFrameSystem.getFrame(parentname);
 
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// klistは兄弟の名前のリスト
 						ArrayList<String> klist = parentframe
-								.get_leankers_Slot_names("親");
+								.getLeankersSlotNames("親");
 
 
 						// 親の子供の数(兄弟の数)だけループ
 						for (int j = 0; j < klist.size(); j++) {
 
 							// 兄弟の名前から兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+							AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 
 							// 兄弟フレームの誕生日スロットの値が自分より若く、かつ、性別スロットの値が男なら兄
 							if (Integer.parseInt((String) frame.readSlotValue(
@@ -548,19 +548,19 @@ public class AIDemonProcs {
 						String parentname = (String) olist.get(i);
 
 						// 親の名前を元に親のフレームをとってくる
-						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						AIFrame parentframe = inFrameSystem.getFrame(parentname);
 
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// klistは兄弟の名前のリスト
 						ArrayList<String> klist = parentframe
-								.get_leankers_Slot_names("親");
+								.getLeankersSlotNames("親");
 
 
 						// 親の子供の数(兄弟の数)だけループ
 						for (int j = 0; j < klist.size(); j++) {
 
 							// 兄弟の名前から兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+							AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 
 							// 兄弟フレームの誕生日スロットの値が自分より若く、かつ、性別スロットの値が男なら兄
 							if (Integer.parseInt((String) frame.readSlotValue(
@@ -612,7 +612,7 @@ public class AIDemonProcs {
 					String parentname = (String) olist.get(i);
 					
 					//親の名前を元に親のフレームをとってくる
-					AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+					AIFrame parentframe = inFrameSystem.getFrame(parentname);
 					
 					//とってきた親の親が登録されているかチェック
 //					if (!(parentframe.readSlotValue(inFrameSystem, "親", false) == null)) {
@@ -631,11 +631,11 @@ public class AIDemonProcs {
 							String parentname1 = (String) olist1.get(j);
 							
 							//祖父母の名前を元に祖父母のフレームをとってくる
-							AIFrame parentframe1 = inFrameSystem.get_Frame(parentname1);
+							AIFrame parentframe1 = inFrameSystem.getFrame(parentname1);
 							
 							//祖父母の逆リンクから子供の名前をとってくる
 							//klistは親の兄弟のリスト
-							ArrayList<String> klist = parentframe1.get_leankers_Slot_names("親");
+							ArrayList<String> klist = parentframe1.getLeankersSlotNames("親");
 							
 							//祖父母の子供の数(親の兄弟の数)だけループ
 							for (int k = 0; k < klist.size(); k++) {
@@ -647,11 +647,11 @@ public class AIDemonProcs {
 								if (!parentname.equals(name)){
 									
 									//親の兄弟の名前から親の兄弟のフレームをとってくる
-									AIFrame frame = inFrameSystem.get_Frame(klist.get(k));
+									AIFrame frame = inFrameSystem.getFrame(klist.get(k));
 									
 									//親の兄弟の逆リンクから親の兄弟の子供の名前をとってくる
 									//klist1は親の兄弟の子供(従兄弟)のリスト
-									ArrayList<String> klist1 = frame.get_leankers_Slot_names("親");
+									ArrayList<String> klist1 = frame.getLeankersSlotNames("親");
 									
 									//親の兄弟の子供の数(従兄弟の数)だけループ
 									for (int l = 0; l < klist1.size(); l++) {
@@ -659,7 +659,7 @@ public class AIDemonProcs {
 										if (!relist.contains(klist1.get(l))) {
 											//従兄弟の名前を従兄弟としてリストに入れる
 											relist.add(klist1.get(l));
-											AIFrame frame1 = inFrameSystem.get_Frame(klist1.get(l));
+											AIFrame frame1 = inFrameSystem.getFrame(klist1.get(l));
 										}
 									}
 								}
@@ -688,19 +688,19 @@ public class AIDemonProcs {
 			// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 			// klistは子供の名前のリスト
 				ArrayList<String> klist = inFrame
-						.get_leankers_Slot_names("親");
+						.getLeankersSlotNames("親");
 
 			// 子供の数だけループ
 				for (int i = 0; i < klist.size(); i++) {
 
 					//子供の名前から子供のフレームをとってくる
-					AIFrame childframe = inFrameSystem.get_Frame(klist.get(i));
+					AIFrame childframe = inFrameSystem.getFrame(klist.get(i));
 					//親が登録されているかチェック
 					if (!(childframe.readSlotValue(inFrameSystem, "親", false) == null)){
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// gclistは孫の名前のリスト
 							ArrayList<String>  gclist = childframe
-									.get_leankers_Slot_names("親");
+									.getLeankersSlotNames("親");
 							// 孫の数だけループ
 							for (int j = 0; j < gclist.size(); j++) {
 								// 孫の名前をとる
@@ -746,29 +746,29 @@ public class AIDemonProcs {
 						String parentname = (String) olist.get(i);
 
 						// 親の名前を元に親のフレームをとってくる
-						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						AIFrame parentframe = inFrameSystem.getFrame(parentname);
 						
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// klistは兄弟の名前のリスト
-						ArrayList<String> klist = parentframe.get_leankers_Slot_names("親");
+						ArrayList<String> klist = parentframe.getLeankersSlotNames("親");
 						
 						
 						// 親の子供の数(兄弟の数)だけループ
 						for (int j = 0; j < klist.size(); j++) {
 							
 							// 兄弟の名前から兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+							AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 								
 							//対象が自分の場合は除く
 							if(!(frame.equals(inFrame))){
 							// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 							// neplistは兄弟の子供の名前のリスト
-							ArrayList<String> neplist = frame.get_leankers_Slot_names("親");
+							ArrayList<String> neplist = frame.getLeankersSlotNames("親");
 								
 								// 親の兄弟の子供の数だけループ
 								for (int k = 0; k < neplist.size(); k++) {
 									// 兄弟の子供の名前から兄弟の子供のフレームをとってくる
-									AIFrame nepframe = inFrameSystem.get_Frame(neplist.get(k));	
+									AIFrame nepframe = inFrameSystem.getFrame(neplist.get(k));	
 									
 									//性別スロットの値が男なら甥
 									if (nepframe.readSlotValue(inFrameSystem, "性別",false).equals("男")){ 
@@ -815,29 +815,29 @@ public class AIDemonProcs {
 						String parentname = (String) olist.get(i);
 
 						// 親の名前を元に親のフレームをとってくる
-						AIFrame parentframe = inFrameSystem.get_Frame(parentname);
+						AIFrame parentframe = inFrameSystem.getFrame(parentname);
 						
 						// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 						// klistは兄弟の名前のリスト
-						ArrayList<String> klist = parentframe.get_leankers_Slot_names("親");
+						ArrayList<String> klist = parentframe.getLeankersSlotNames("親");
 						
 						
 						// 親の子供の数(兄弟の数)だけループ
 						for (int j = 0; j < klist.size(); j++) {
 							
 							// 兄弟の名前から兄弟のフレームをとってくる
-							AIFrame frame = inFrameSystem.get_Frame(klist.get(j));
+							AIFrame frame = inFrameSystem.getFrame(klist.get(j));
 								
 							//対象が自分の場合は除く
 							if(!(frame.equals(inFrame))){
 							// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 							// neplistは兄弟の子供の名前のリスト
-							ArrayList<String> neplist = frame.get_leankers_Slot_names("親");
+							ArrayList<String> neplist = frame.getLeankersSlotNames("親");
 								
 								// 親の兄弟の子供の数だけループ
 								for (int k = 0; k < neplist.size(); k++) {
 									// 兄弟の子供の名前から兄弟の子供のフレームをとってくる
-									AIFrame nepframe = inFrameSystem.get_Frame(neplist.get(k));	
+									AIFrame nepframe = inFrameSystem.getFrame(neplist.get(k));	
 									
 									//性別スロットの値が女なら姪
 									if (nepframe.readSlotValue(inFrameSystem, "性別",false).equals("女")){ 

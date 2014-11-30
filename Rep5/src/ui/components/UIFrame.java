@@ -81,7 +81,7 @@ public class UIFrame extends MapComponent {
 		g.setColor(color);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
-		g.drawString(frame.get_name(), 0, 20);
+		g.drawString(frame.getName(), 0, 20);
 	}
 	
 	

@@ -355,18 +355,15 @@ public abstract class AIFrame {
 	 * is-a,akoのときスパークラスの名前を保存する
 	 * @param Name
 	 */
-	public void add_super(String Name){
+	public void addSuper(String Name){
 		supers.add(Name);
 	}
-	
-	public ArrayList<String> get_supers(){
-		return supers;
-	}
+
 	//改変部
 	/**
 	 * 指定された名前のスロットがすでにあるか返す
 	 */
-	public boolean slot_check(String slotName){
+	public boolean hasSlot(String slotName){
 		return mSlots.containsKey(slotName);
 	}
 
@@ -374,7 +371,7 @@ public abstract class AIFrame {
 	/**
 	 * フレームのスロット数を返す
 	 */
-	public int get_Slot_size(){
+	public int getSlotSize(){
 		return mSlots.size();
 	}
 	
@@ -382,7 +379,7 @@ public abstract class AIFrame {
 	/**
 	 * フレームの指定された位置のスロット名を返す
 	 */
-	public String get_Slot_key(int n){
+	public String getSlotkey(int n){
 		int count=0;
 		for (Iterator it = mSlots.entrySet().iterator(); it.hasNext();) {
 		    Map.Entry entry = (Map.Entry)it.next();
@@ -400,7 +397,7 @@ public abstract class AIFrame {
 	/**
 	 * leankersに新しいリンク情報を追加する
 	 */
-	public void put_new_leanker(String slotName,String frameName){
+	public void putLeanker(String slotName,String frameName){
 		//System.out.println(slotName+frameName);
 		leankers.put(frameName,slotName);
 	}
@@ -409,7 +406,7 @@ public abstract class AIFrame {
 	/**
 	 * leankersの数を返す
 	 */
-	public int get_leankers_size(){
+	public int getLeankersSize(){
 		return leankers.size();
 	}
 	
@@ -417,7 +414,7 @@ public abstract class AIFrame {
 	/**
 	 * フレームの指定された位置のleankersのキーを返す
 	 */
-	public String get_leankers_Slot_key(int n){
+	public String getLeankersSlotKey(int n){
 		int count=0;
 		for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
 		    Map.Entry entry = (Map.Entry)it.next();
@@ -435,7 +432,7 @@ public abstract class AIFrame {
 	/**
 	 * フレームの指定された位置のleankersのバリュを返す
 	 */
-	public String get_leankers_Slot_value(int n){
+	public String getLeankersSlotValue(int n){
 		int count=0;
 		for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
 		    Map.Entry entry = (Map.Entry)it.next();
@@ -453,7 +450,7 @@ public abstract class AIFrame {
 		/**
 		 * フレームの指定された位置のleankersの特定のスロット名のスロット値を返す
 		 */
-		public ArrayList<String> get_leankers_Slot_names(String slotName){
+		public ArrayList<String> getLeankersSlotNames(String slotName){
 			ArrayList<String> list = new ArrayList<String>();
 			for (Iterator it = leankers.entrySet().iterator(); it.hasNext();) {
 			    Map.Entry entry = (Map.Entry)it.next();
@@ -471,12 +468,12 @@ public abstract class AIFrame {
 	/**
 	 * 名前を返す
 	 */
-	public String get_name(){
+	public String getName(){
 		return mName;
 	}
 	
 	public ArrayList getmVals(String slotName){
-		return mSlots.get(slotName).getmVals();
+		return mSlots.get(slotName).getValues();
 	}
 	/*
 	public ArrayList getDepartFromMeSlots(){

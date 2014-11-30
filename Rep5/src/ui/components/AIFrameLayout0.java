@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 
-public class AIFrameLayoutver0 extends MapLayout {
+public class AIFrameLayout0 extends MapLayout {
 
 	// レイアウトスレッド
 	private Thread frameLayoutThread;
@@ -28,8 +28,8 @@ public class AIFrameLayoutver0 extends MapLayout {
 	 * この LayoutManager が取り付けられている先の AIFramePanel を返すメソッド
 	 */
 	@Override
-	protected AIFramePanelver0 getMapPanel() {
-		return (AIFramePanelver0) super.getMapPanel();
+	protected AIFramePanel0 getMapPanel() {
+		return (AIFramePanel0) super.getMapPanel();
 	}
 	
 

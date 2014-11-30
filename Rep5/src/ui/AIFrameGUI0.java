@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import ui.components.AIFramePanelver0;
+import ui.components.AIFramePanel0;
 import ui.components.UIFrame;
 import ui.components.input.MapDragListener;
 import ui.components.input.MapZoomListener;
@@ -30,11 +30,11 @@ import Frame.AIFrame;
 import Frame.AIFrameSystem;
 import Frame.OurFrameSystem;
 
-public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, ActionListener {
+public class AIFrameGUI0 extends JFrame implements ListSelectionListener, ActionListener {
 	// AIFrameSystem のフレームと UIFrame との対応
 	protected HashMap<AIFrame,UIFrame> frameMap = new HashMap<AIFrame,UIFrame>();
 	
-	private AIFramePanelver0 mapPanel;
+	private AIFramePanel0 mapPanel;
 	
 	private AIFrame center;
 	
@@ -52,7 +52,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	private ArrayList<AIFrame> closedlist = new ArrayList<AIFrame>();
 	
 	//コンストラクタ
-	public AIFrameGUIver0(AIFrameSystem AIFramesystem) throws HeadlessException {
+	public AIFrameGUI0(AIFrameSystem AIFramesystem) throws HeadlessException {
 		this.AIFramesystem = AIFramesystem;
 		initialize();
 		setVisible(true);
@@ -67,7 +67,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	}
 	
 	private void setupMapPanel() {
-		mapPanel = new AIFramePanelver0();
+		mapPanel = new AIFramePanel0();
 		MapDragListener dl = new MapDragListener(mapPanel);
 		mapPanel.addMouseListener(dl);
 		mapPanel.addMouseMotionListener(dl);
@@ -95,7 +95,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	//フレームを追加する部分
 	//検索ボタンを押す度に呼び出す予定
 	private void setupFrames(String name) {
-		AIFrame frame = AIFramesystem.get_Frame(name);
+		AIFrame frame = AIFramesystem.getFrame(name);
 		center = frame;
 		int up;
 		int down;
@@ -117,7 +117,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 
 		}
 		for(int i =0;i<closedlist.size();i++){
-			System.out.println(closedlist.get(i).get_name());
+			System.out.println(closedlist.get(i).getName());
 			up = frameMap.get(closedlist.get(i)).get_up();
 			down = frameMap.get(closedlist.get(i)).get_down();
 			System.out.println("up:"+up+", down:"+down);
@@ -130,7 +130,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 			// 自分の親の名前をとってくる
 		ArrayList<String> parentlist = frame.getmVals("親");
 		for(int i=0; i < parentlist.size(); i++){
-			AIFrame parentframe = AIFramesystem.get_Frame(parentlist.get(i));
+			AIFrame parentframe = AIFramesystem.getFrame(parentlist.get(i));
 			if(!openlist.contains(parentframe) & !closedlist.contains(parentframe)){
 				openlist.add(parentframe);
 				addFrame(parentframe,up,down);
@@ -140,9 +140,9 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	}
 	
 	private void search_down(AIFrame frame,int up,int down){
-		ArrayList<String> childlist = frame.get_leankers_Slot_names("親");
+		ArrayList<String> childlist = frame.getLeankersSlotNames("親");
 		for(int i=0; i < childlist.size(); i++){
-			AIFrame childframe = AIFramesystem.get_Frame(childlist.get(i));
+			AIFrame childframe = AIFramesystem.getFrame(childlist.get(i));
 			if(!openlist.contains(childframe) & !closedlist.contains(childframe)){
 				openlist.add(childframe);
 				addFrame(childframe,up,down);
@@ -190,19 +190,19 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	//デモン手続きで親族を見つけその色を変える
 	 public void search_demon(String demon){
 		 for(int i=0; i<demonlist.size();i++){
-			 if(AIFramesystem.get_Frame(demonlist.get(i))!=null){
-			 AIFrame changeframe = AIFramesystem.get_Frame(demonlist.get(i));
+			 if(AIFramesystem.getFrame(demonlist.get(i))!=null){
+			 AIFrame changeframe = AIFramesystem.getFrame(demonlist.get(i));
 			 frameMap.get(changeframe).setColor(Color.BLUE);;
 			 }
 		 }
 		 if(center!=null){
-			 if(AIFramesystem.get_Frame(center.get_name())!=null){
-		 demonlist = (ArrayList<String>) AIFramesystem.readSlotValue(center.get_name(), demon);
+			 if(AIFramesystem.getFrame(center.getName())!=null){
+		 demonlist = (ArrayList<String>) AIFramesystem.readSlotValue(center.getName(), demon);
 			 }
 		 }
 		 for(int i=0; i<demonlist.size();i++){
-			 if(AIFramesystem.get_Frame(demonlist.get(i))!=null){
-			 AIFrame changeframe = AIFramesystem.get_Frame(demonlist.get(i));
+			 if(AIFramesystem.getFrame(demonlist.get(i))!=null){
+			 AIFrame changeframe = AIFramesystem.getFrame(demonlist.get(i));
 			 frameMap.get(changeframe).setColor(Color.RED);;
 			 }
 		 }
@@ -210,7 +210,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 
 	 //登録されている人の名前をコンソールに列挙
 	 public void print_human_name(){
-		 ArrayList<String> list = AIFramesystem.get_Frame("人間").get_leankers_Slot_names("is-a");
+		 ArrayList<String> list = AIFramesystem.getFrame("人間").getLeankersSlotNames("is-a");
 		 for(int i =0; i<list.size();i++){
 			 System.out.println(list.get(i));
 		 }
@@ -229,7 +229,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		//いま出ているフレームをリセット
-		if(AIFramesystem.get_Frame((String)textfield.getText())==null){
+		if(AIFramesystem.getFrame((String)textfield.getText())==null){
 			System.out.println("そのような名前のフレームは登録されていません\n以下の名前のフレームが存在します");
 			print_human_name();
 		}else{
@@ -244,7 +244,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	public static void main(String[] args) {
 		OurFrameSystem ofs = new OurFrameSystem();
 
-	AIFrameGUIver0 gui = new AIFrameGUIver0(ofs);
+	AIFrameGUI0 gui = new AIFrameGUI0(ofs);
 	gui.setVisible(true);
 }
 
