@@ -35,7 +35,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getX() {
 		if (panel != null) {
-			return (int) (panel.getViewportWidth()/2 + (center.x - panel.center.x - width/2.0) / panel.zoom);
+			return (int) (panel.viewportBounds.width/2 + (center.x - panel.center.x - width/2.0) / panel.zoom);
 		}
 		return super.getX();
 	}
@@ -43,7 +43,7 @@ public class MapComponent extends JComponent {
 	@Override
 	public int getY() {
 		if (panel != null) {
-			return (int) (panel.getViewportHeight()/2 + (center.y - panel.center.y - height/2.0) / panel.zoom);
+			return (int) (panel.viewportBounds.height/2 + (center.y - panel.center.y - height/2.0) / panel.zoom);
 		}
 		return super.getY();
 	}
@@ -115,8 +115,8 @@ public class MapComponent extends JComponent {
 		if (panel == null) {
 			return super.contains(x, y);
 		}
-		double dx = panel.center.x + (x - panel.getViewportWidth()/2) * panel.zoom - center.x;
-		double dy = panel.center.y + (y - panel.getViewportHeight()/2) * panel.zoom - center.y;
+		double dx = panel.center.x + (x - panel.viewportBounds.width/2) * panel.zoom - center.x;
+		double dy = panel.center.y + (y - panel.viewportBounds.height/2) * panel.zoom - center.y;
 		return contains(dx, dy);
 	}
 	

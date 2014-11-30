@@ -25,7 +25,7 @@ public class MapZoomListener extends MouseAdapter {
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		Point current = e.getPoint();
-		Rectangle bound = panel.getViewportBounds();
+//		Rectangle bound = panel.getViewportBounds();
 		
 //		double dx = current.x - bound.width / 2;
 //		double dy = current.y - bound.height / 2;
