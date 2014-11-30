@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Kiyo is-a 男
 Kiyo 誕生日 19930524
 Kiyo 身長 xsd:nonNegativeInteger
@@ -12,7 +11,7 @@ Shun 誕生日 19930706
 
 Kiyo 子 Kotori
 Kiyo 子 Rin
-=======
+
 Kiyojiro is-a 人間
 Kiyojiro 性別 男
 Kiyojiro 誕生日 19970524
@@ -33,7 +32,7 @@ Kiyotaro 性別 男
 Kiyotaro 誕生日 19500714
 Kiyomi is-a 人間
 Kiyomi 性別 女
-<<<<<<< HEAD
+
 カズキ is-a 人間
 カズキ 性別 男
 カズキ 誕生日 19931128
@@ -98,6 +97,22 @@ Kiyomi 性別 女
 ユリコ 誕生日 19430525
 ユウミ is-a 人間
 ユウミ 性別 女
-=======
->>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
->>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
+
+Masayuki is-a 人間
+Masayuki 性別 男
+Masayuki 誕生日 19931228
+Masayuki 親 Tsutomu
+Masayuki 親 Yuko
+Daiki is-a 人間
+Daiki 性別 男
+Daiki 誕生日 19931228
+Daiki 親 Tsutomu
+Daiki 親 Yuko
+Yumi is-a 人間
+Yumi 性別 女
+Yumi 親 Tsutomu
+Yumi 親 Yuko
+Tsutomu is-a 人間
+Tsutomu 性別 男
+Yuko is-a 人間
+Yuko 性別 女
