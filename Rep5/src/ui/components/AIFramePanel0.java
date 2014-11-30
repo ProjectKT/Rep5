@@ -102,6 +102,7 @@ public class AIFramePanel0 extends MapPanel {
 		frameMap = new HashMap<AIFrame, UIFrame>();
 		openList.clear();
 		closedList.clear();
+		((AIFrameLayout0) getLayout()).clear();
 		repaint();
 	}
 
