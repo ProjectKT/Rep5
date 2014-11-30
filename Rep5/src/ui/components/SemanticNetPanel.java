@@ -49,12 +49,12 @@ public class SemanticNetPanel extends MapPanel {
 		}
 		/** 色の設定 */
 		interface Colors {
-			Color link = new Color(0xb0ff0000, true);
-			Color selectedLink = new Color(0xffff0000, true);
-			Color inheritedLink = new Color(0xb0000000, true);
-			Color selectedInheritedLink = new Color(0xf0000000, true);
-			Color linkLabel = new Color(0xb0880000, true);
-			Color inheritedLinkLabel = new Color(0xb0000000, true);
+			Color link = new Color(0xb0ff0000);
+			Color selectedLink = new Color(0xffff0000);
+			Color inheritedLink = new Color(0xb0000000);
+			Color selectedInheritedLink = new Color(0xf0000000);
+			Color linkLabel = new Color(0xb0880000);
+			Color inheritedLinkLabel = new Color(0xb0000000);
 		}
 	}
 

@@ -32,10 +32,10 @@ public class UINode extends MapComponent {
 		}
 		/** 色の設定 */
 		interface Colors {
-			Color backgroundNormal = new Color(0xbb00bffb, true);
-			Color backgroundSelected = new Color(0xee00eeff, true);
-			Color borderNormal = new Color(0xbb000000, true);
-			Color borderSelected = new Color(0xff000000, true);
+			Color backgroundNormal = new Color(0xbb00bffb);
+			Color backgroundSelected = new Color(0xee00eeff);
+			Color borderNormal = new Color(0xbb000000);
+			Color borderSelected = new Color(0xff000000);
 			Color labelNormal = Color.black;
 			Color labelSelected = Color.black;
 		}
