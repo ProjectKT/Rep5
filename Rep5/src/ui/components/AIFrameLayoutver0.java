@@ -10,19 +10,19 @@ public class AIFrameLayoutver0 extends MapLayout {
 	private Thread frameLayoutThread;
 	
 	//一番上の世代(祖父、祖母の世代)の数
-	private int count1;
+	private int count1 = 0;
 	
 	//二番目に上の世代(親、叔父、叔母の世代)の数
-	private int count2;
+	private int count2 = 0;
 	
 	//中心の世代(自分、従兄弟の世代)の数
-	private int count3;
+	private int count3 = 0;
 	
 	//二番目に下の世代(子、甥、姪の世代)の数
-	private int count4;
+	private int count4 = 0;
 	
 	//一番下の世代(孫の世代)の数
-	private int count5;
+	private int count5 = 0;
 	
 	/**
 	 * この LayoutManager が取り付けられている先の AIFramePanel を返すメソッド
@@ -68,15 +68,15 @@ public class AIFrameLayoutver0 extends MapLayout {
 	private void layoutUIFrame(String name, UIFrame comp) {
 		switch (comp.get_down() - comp.get_up()){
 		//２個下の世代
-		case -2:	comp.setCenter(0.0,200.0);	break;
+		case -2:	comp.setCenter((double)(((-1)^(count5))*(count5++)*100),200.0);	break;
 		//１個下の世代
-		case -1:	comp.setCenter(0.0,100.0);	break;
+		case -1:	comp.setCenter((double)(((-1)^(count4))*(count4++)*100),100.0);	break;
 		//同世代
-		case 0:		comp.setCenter(0.0,0.0);	break;
+		case 0:		comp.setCenter((double)(((-1)^(count3))*(count3++)*100),0.0);	break;
 		//１個上の世代
-		case 1:		comp.setCenter(0.0,-100.0);	break;
+		case 1:		comp.setCenter((double)(((-1)^(count2))*(count2++)*100),-100.0);	break;
 		//２個上の世代
-		case 2:		comp.setCenter(0.0,-200.0);	break;
+		case 2:		comp.setCenter((double)(((-1)^(count1))*(count1++)*100),-200.0);	break;
 		};
 	}
 	

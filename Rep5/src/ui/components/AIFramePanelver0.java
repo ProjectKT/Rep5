@@ -1,8 +1,8 @@
 package ui.components;
 
 import java.awt.Component;
-import java.util.HashMap;
-
+import java.util.*;
+import ui.*;
 import Frame.AIFrame;
 
 public class AIFramePanelver0  extends MapPanel {
@@ -19,8 +19,8 @@ public class AIFramePanelver0  extends MapPanel {
 		//名前を指定されているフレームの予定
 		protected UIFrame centerFrame;
 		
-
-	
+		
+		
 	/**
 	 * コンポーネントを追加する
 	 * UIFrame であればすでに追加されていない場合のみ追加する
@@ -39,6 +39,5 @@ public class AIFramePanelver0  extends MapPanel {
 		}
 		return super.add(comp);
 	}
-
 	
 }

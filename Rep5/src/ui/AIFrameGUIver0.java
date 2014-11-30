@@ -42,6 +42,8 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	
 	private ArrayList<String> demonlist= new ArrayList<String>();
 	
+	private ArrayList<UIFrame> uiList = new ArrayList<UIFrame>();
+	
 	private String[] data = {"兄","姉","弟","妹","祖父","祖母","息子","娘","叔父","伯父","叔母","伯母","従兄弟","孫","甥","姪"};
 	JTextField textfield;
 	JPanel commondPanel;
@@ -87,6 +89,7 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 		    		}
 		frameMap.clear();
 		frameMap = new HashMap<AIFrame,UIFrame>();
+		uiList.clear();
 		openlist.clear();
 		closedlist.clear();
 
@@ -160,8 +163,13 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 			uIFrame.setColor(Color.GREEN);
 		}
 		uIFrame.setVisible(true);
+		uiList.add(uIFrame);
 		mapPanel.add(uIFrame);
 		frameMap.put(aIFrame, uIFrame);
+	}
+	
+	public void printResult(){
+		mapPanel.result(uiList);
 	}
 	
 	
