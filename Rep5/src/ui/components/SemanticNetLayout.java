@@ -51,6 +51,13 @@ public class SemanticNetLayout extends MapLayout {
 		nodeLayoutThread.start();
 	}
 	
+	public void clear() throws InterruptedException {
+		nodeLayoutThread.interrupt();
+		nodeLayoutThread.join();
+		paramMap.clear();
+		e = 0;
+	}
+	
 	/**
 	 * この LayoutManager が取り付けられている先の SemanticNetPanel を返すメソッド
 	 */
@@ -109,7 +116,7 @@ public class SemanticNetLayout extends MapLayout {
 
 			final int n = paramMap.size();
 			final double r = n * 10;
-			final double t = (Math.PI / 5) * (double) n;
+			final double t = (Math.PI / 6.0) * (double) n;
 			
 			// ノードの初期位置を設定. 2 つのノードがまったく同じ位置におかれないようにする。
 			lp.x = r * Math.cos(t);
@@ -147,9 +154,7 @@ public class SemanticNetLayout extends MapLayout {
 						}
 					});
 				}
-			} catch (InterruptedException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
+			} catch (InterruptedException | InvocationTargetException e) { }
 			
 			synchronized(mLock) {
 				nodeLayoutThread = null;

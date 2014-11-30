@@ -122,8 +122,6 @@ public class SemanticNetPanel extends MapPanel implements SemanticNet.Observer {
 	 * SemanticNet 内のノードを addNode
 	 */
 	private void initialize() {
-		clear();
-		
 		ArrayList<Node> nodes = new ArrayList<Node>(semanticNet.getHeadNodes());
 		Node centerNode = semanticNet.getMostLink();
 		nodes.remove(centerNode);
@@ -176,11 +174,18 @@ public class SemanticNetPanel extends MapPanel implements SemanticNet.Observer {
 		//
 	}
 	
-	public void clear() {
+	public void clear() throws InterruptedException {
+		removeAll();
 		nodeMap.clear();
 		links.clear();
 		centerNode = null;
 		selectedNodes.clear();
+		((SemanticNetLayout) getLayout()).clear();
+	}
+	
+	public void refresh() throws InterruptedException {
+		clear();
+		initialize();
 	}
 	
 	/**
@@ -431,7 +436,11 @@ public class SemanticNetPanel extends MapPanel implements SemanticNet.Observer {
 
 	@Override
 	public void onDataSetChanged() {
-		initialize();
+		try {
+			refresh();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

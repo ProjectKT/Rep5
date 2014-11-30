@@ -3,6 +3,8 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -105,7 +107,7 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	 */
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(10, 10, 800, 600);
+		setBounds(10, 10, 1200, 800);
 		setTitle("SemanticUI");
 		
 		/* --- MENU --- */
@@ -115,31 +117,29 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-		JMenuItem mntmLoadDataset = new JMenuItem("Load DataSet");
-		mnFile.add(mntmLoadDataset);
-		
-		JMenuItem mntmSaveDataset = new JMenuItem("Save DataSet");
-		mnFile.add(mntmSaveDataset);
-		
-		JMenuItem mntmSaveDatasetAs = new JMenuItem("Save DataSet As ...");
-		mnFile.add(mntmSaveDatasetAs);
-		
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
 		
-		JMenu mnDataSet = new JMenu("DataSet");
+		JMenu mnDataSet = new JMenu("Graph");
 		menuBar.add(mnDataSet);
 		
-		JMenuItem mntmRefresh = new JMenuItem("Reload");
+		JMenuItem mntmRefresh = new JMenuItem("Refresh");
+		mntmRefresh.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					mapPanel.refresh();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnDataSet.add(mntmRefresh);
-		
-		JMenuItem mntmClear = new JMenuItem("Clear");
-		mnDataSet.add(mntmClear);
 		
 		/* --- Content --- */
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setResizeWeight(0.3);
+		splitPane.setResizeWeight(0.2);
 		getContentPane().add(splitPane);
 		
 		JPanel panel_1 = new JPanel();
@@ -148,20 +148,10 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 		
 		lblDataView = new JLabel("DataView");
 		panel_1.add(lblDataView, BorderLayout.NORTH);
-		
-		JPanel panel_1c = new JPanel();
-		panel_1c.setLayout(new BorderLayout(0, 0));
-		panel_1.add(panel_1c, BorderLayout.CENTER);
-		
-		tfFilter = new HintTextField("Filter", Color.GRAY);
-		tfFilter.setBackground(new Color(250, 250, 250));
-		tfFilter.setBorder(new EmptyBorder(2, 2, 2, 2));
-//		tfFilter.getDocument().addDocumentListener(filterChangeListener);
-		panel_1c.add(tfFilter, BorderLayout.NORTH);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(new EmptyBorder(0,0,0,0));
-		panel_1c.add(scrollPane, BorderLayout.CENTER);
+		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
 		tblDataView = new JTable(tableModel);
 		scrollPane.setViewportView(tblDataView);
