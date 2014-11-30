@@ -141,8 +141,9 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener,
 				AIFrame parentframe = aIFrameSystem.getFrame(parentlist.get(i));
 				if (!openList.contains(parentframe)
 						& !closedList.contains(parentframe)) {
-					openList.add(parentframe);
+					openList.add(0,parentframe);
 					addFrame(parentframe, up, down);
+					
 				}
 			}
 		}
@@ -154,7 +155,7 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener,
 			AIFrame childframe = aIFrameSystem.getFrame(childlist.get(i));
 			if (!openList.contains(childframe)
 					& !closedList.contains(childframe)) {
-				openList.add(childframe);
+				openList.add(0,childframe);
 				addFrame(childframe, up, down);
 			}
 		}

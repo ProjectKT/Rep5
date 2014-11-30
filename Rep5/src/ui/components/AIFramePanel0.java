@@ -2,7 +2,8 @@ package ui.components;
 
 import java.awt.Component;
 import java.util.HashMap;
-
+import java.awt.Color;
+import java.awt.Graphics;
 import Frame.AIFrame;
 
 public class AIFramePanel0 extends MapPanel {
@@ -34,5 +35,20 @@ public class AIFramePanel0 extends MapPanel {
 		}
 		return super.add(comp);
 	}
+	
+	
 
+	@Override
+	protected void doPaintComponent(Graphics g) {
+		// TODO Auto-generated method stub
+		super.doPaintComponent(g);
+		
+	}
+
+
+
+	private void drawline(Graphics g,UIFrame frame1,UIFrame frame2){
+		g.drawLine((int)frame1.getCenter().getX(),(int)frame1.getCenter().getY(),(int)frame2.getCenter().getX(),(int)frame2.getCenter().getY());
+	}
+	
 }

@@ -68,15 +68,15 @@ public class AIFrameLayout0 extends MapLayout {
 	private void layoutUIFrame(String name, UIFrame comp) {
 		switch (comp.getDown() - comp.getUp()){
 		//２個下の世代
-		case -2:	comp.setCenter((double)(((-1)^(count5))*(count5++)*100),200.0);	break;
+		case -2:	comp.setCenter((double)((count5++)*100),200.0);	break;
 		//１個下の世代
-		case -1:	comp.setCenter((double)(((-1)^(count4))*(count4++)*100),100.0);	break;
+		case -1:	comp.setCenter((double)((count4++)*100),100.0);	break;
 		//同世代
-		case 0:		comp.setCenter((double)(((-1)^(count3))*(count3++)*100),0.0);	break;
+		case 0:		comp.setCenter((double)((count3++)*100),0.0);	break;
 		//１個上の世代
-		case 1:		comp.setCenter((double)(((-1)^(count2))*(count2++)*100),-100.0);	break;
+		case 1:		comp.setCenter((double)((count2++)*100),-100.0);	break;
 		//２個上の世代
-		case 2:		comp.setCenter((double)(((-1)^(count1))*(count1++)*100),-200.0);	break;
+		case 2:		comp.setCenter((double)((count1++)*100),-200.0);	break;
 		};
 	}
 	
