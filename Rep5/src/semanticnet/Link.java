@@ -1,4 +1,4 @@
-package SemanticNet;
+package semanticnet;
 import java.util.*;
 
 public class Link {

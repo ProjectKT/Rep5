@@ -12,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.SwingUtilities;
 
-import SemanticNet.Node;
+import semanticnet.Node;
 
 /**
  * SemanticNet のノードを表すビュー

@@ -1,5 +1,9 @@
-package SemanticNet;
-import java.util.*;
+package semanticnet;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /***
  * 意味ネットワーク (Semantic Net)
@@ -9,11 +13,13 @@ public class SemanticNet {
 	ArrayList<Link> links;
 	ArrayList<Node> nodes;
 	HashMap<String, Node> nodesNameTable;
+	Observable observable;
 
 	SemanticNet() {
 		links = new ArrayList<Link>();
 		nodes = new ArrayList<Node>();
 		nodesNameTable = new HashMap<String, Node>();
+		observable = new Observable();
 	}
 
 	public void query(ArrayList<Link> theQueries) {
@@ -145,6 +151,8 @@ public class SemanticNet {
 		// 関係を head と tail に登録．
 		head.addArriveAtMeLinks(theLink);
 		tail.addDepartFromMeLinks(theLink);
+		
+		observable.notifyDataAdded(theLink);
 	}
 
 	/***
@@ -233,6 +241,28 @@ public class SemanticNet {
 			System.out.println(((Node) nodes.get(i)).toString());
 		}
 	}
+	
+	public void registerObserver(Observer observer) {
+		observable.registerObserver(observer);
+	}
+	public void unregisterObserver(Observer observer) {
+		observable.unregisterObserver(observer);
+	}
+	
+	
+	public interface Observer extends content.Observer<Link> {
+		public void onLinkAdded(Link data);
+	}
+
+	class Observable extends content.Observable<Link> {
+		public void notifyDataAdded(Link data) {
+			synchronized(observers) {
+				for (int i = observers.size()-1; i >= 0; --i) {
+					((SemanticNet.Observer) observers.get(i)).onLinkAdded(data);
+				}
+			}
+		}
+	}
 }
 
 class Matcher {
@@ -312,3 +342,4 @@ class Matcher {
 	}
 
 }
+
