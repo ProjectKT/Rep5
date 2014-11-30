@@ -93,20 +93,16 @@ public class AIFramePanel0 extends MapPanel {
 	 * フレームを全部消す
 	 */
 	public void clear() {
-		for (Iterator it = frameMap.entrySet().iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			AIFrame key = (AIFrame) entry.getKey();
-			UIFrame value = (UIFrame) entry.getValue();
-			value.setVisible(false);
-			remove(value);
-		}
 		if (centerFrame != null) {
 			centerFrame.isCenter = false;
 		}
+		centerFrame = null;
+		removeAll();
 		frameMap.clear();
 		frameMap = new HashMap<AIFrame, UIFrame>();
 		openList.clear();
 		closedList.clear();
+		repaint();
 	}
 
 	/**
