@@ -242,8 +242,8 @@ public class SemanticNetLayout extends MapLayout {
 			for (UINode node : uiNodeSet) {
 				LayoutParam lp = paramMap.get(node);
 				if (node.isDragged) {
-					lp.x = node.center.getX();
-					lp.y = node.center.getY();
+					lp.x = node.center.x;
+					lp.y = node.center.y;
 				} else {
 					node.setCenter(lp.x, lp.y);
 				}
