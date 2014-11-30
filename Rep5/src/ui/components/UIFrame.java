@@ -44,11 +44,11 @@ public class UIFrame extends MapComponent {
 	 * public int get_groupnumber(){ return groupnumber; }
 	 */
 
-	public int get_up() {
+	public int getUp() {
 		return up;
 	}
 
-	public int get_down() {
+	public int getDown() {
 		return down;
 	}
 

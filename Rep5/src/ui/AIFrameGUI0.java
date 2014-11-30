@@ -106,8 +106,8 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener,
 		while (openlist.size() > 0) {
 			frame = openlist.get(0);
 
-			up = frameMap.get(frame).get_up();
-			down = frameMap.get(frame).get_down();
+			up = frameMap.get(frame).getUp();
+			down = frameMap.get(frame).getDown();
 			if (up > 0) {
 				search_up(frame, up - 1, down);
 			}
@@ -120,8 +120,8 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener,
 		}
 		for (int i = 0; i < closedlist.size(); i++) {
 			System.out.println(closedlist.get(i).getName());
-			up = frameMap.get(closedlist.get(i)).get_up();
-			down = frameMap.get(closedlist.get(i)).get_down();
+			up = frameMap.get(closedlist.get(i)).getUp();
+			down = frameMap.get(closedlist.get(i)).getDown();
 			System.out.println("up:" + up + ", down:" + down);
 		}
 	}

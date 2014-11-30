@@ -65,7 +65,7 @@ public class AIFrameLayout0 extends MapLayout {
 	}
 
 	private void layoutUIFrame(String name, UIFrame comp) {
-		switch (comp.get_down() - comp.get_up()){
+		switch (comp.getDown() - comp.getUp()){
 		//２個下の世代
 		case -2:	comp.setCenter(0.0,200.0);	break;
 		//１個下の世代
