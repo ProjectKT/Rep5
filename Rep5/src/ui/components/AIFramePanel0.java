@@ -20,7 +20,7 @@ public class AIFramePanel0 extends MapPanel {
 	// 名前を指定されているフレームの予定
 	protected UIFrame centerFrame;
 
-	private ArrayList<String> demonlist = new ArrayList<String>();
+	private ArrayList<String> demonList = new ArrayList<String>();
 	private ArrayList<AIFrame> openList = new ArrayList<AIFrame>();
 	private ArrayList<AIFrame> closedList = new ArrayList<AIFrame>();
 
@@ -38,6 +38,7 @@ public class AIFramePanel0 extends MapPanel {
 		
 		AIFrame frame = aIFrameSystem.getFrame(centerFrameName);
 		centerFrame = addFrame(frame, 2, 2);
+		centerFrame.setColor(Color.green);
 		int up;
 		int down;
 		
@@ -77,9 +78,6 @@ public class AIFramePanel0 extends MapPanel {
 		}
 		
 		uiFrame = new UIFrame(aiFrame, up, down);
-		if (uiFrame == centerFrame) {
-			uiFrame.setColor(Color.GREEN);
-		}
 		add(uiFrame);
 		frameMap.put(aiFrame, uiFrame);
 		return uiFrame;
@@ -148,26 +146,24 @@ public class AIFramePanel0 extends MapPanel {
 	 * @param demon
 	 */
 	public void highlightRelatedFrames(String demon) {
-		for (int i = 0; i < demonlist.size(); i++) {
-			if (aIFrameSystem.getFrame(demonlist.get(i)) != null) {
-				AIFrame changeframe = aIFrameSystem.getFrame(demonlist.get(i));
+		for (int i = 0; i < demonList.size(); i++) {
+			if (aIFrameSystem.getFrame(demonList.get(i)) != null) {
+				AIFrame changeframe = aIFrameSystem.getFrame(demonList.get(i));
 				frameMap.get(changeframe).setColor(Color.BLUE);
-				;
 			}
 		}
-		if (center != null) {
-			if (aIFrameSystem.getFrame(centerFrame.getName()) != null) {
-				demonlist = (ArrayList<String>) aIFrameSystem.readSlotValue(
-						centerFrame.getName(), demon);
+		if (centerFrame != null) {
+			if (aIFrameSystem.getFrame(centerFrame.getFrame().getName()) != null) {
+				demonList = (ArrayList<String>) aIFrameSystem.readSlotValue(centerFrame.getFrame().getName(), demon);
 			}
 		}
-		for (int i = 0; i < demonlist.size(); i++) {
-			if (aIFrameSystem.getFrame(demonlist.get(i)) != null) {
-				AIFrame changeframe = aIFrameSystem.getFrame(demonlist.get(i));
+		for (int i = 0; i < demonList.size(); i++) {
+			if (aIFrameSystem.getFrame(demonList.get(i)) != null) {
+				AIFrame changeframe = aIFrameSystem.getFrame(demonList.get(i));
 				frameMap.get(changeframe).setColor(Color.RED);
-				;
 			}
 		}
+		repaint();
 	}
 	
 	@Override

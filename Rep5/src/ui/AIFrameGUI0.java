@@ -100,9 +100,7 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener,
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		JList lst = (JList) e.getSource();
-		// System.out.println(lst.getSelectedValue());
 		mapPanel.highlightRelatedFrames((String) lst.getSelectedValue());
-		repaint();
 	}
 
 	@Override
