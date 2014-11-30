@@ -17,6 +17,8 @@ import java.util.Iterator;
 import SemanticNet.Link;
 import SemanticNet.Node;
 
+
+
 public class SemanticNetPanel extends MapPanel {
 	
 	/** 設定 */

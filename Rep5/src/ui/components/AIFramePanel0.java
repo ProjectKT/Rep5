@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.awt.geom.Point2D;
 
 import Frame.AIFrame;
 import Frame.AIFrameSystem;
@@ -171,12 +172,33 @@ public class AIFramePanel0 extends MapPanel {
 		// TODO Auto-generated method stub
 		super.doPaintComponent(g);
 		
+		drawline(g);
 	}
 
 
 
-	private void drawline(Graphics g,UIFrame frame1,UIFrame frame2){
-		g.drawLine((int)frame1.getCenter().getX(),(int)frame1.getCenter().getY(),(int)frame2.getCenter().getX(),(int)frame2.getCenter().getY());
+	private void drawline(Graphics g){
+		for(int i = 0; i< closedList.size();i++){
+			AIFrame frame = closedList.get(i);
+			if(!(frame.readSlotValue(aIFrameSystem, "親", false) == null)){
+				ArrayList<String> parents = frame.getmVals("親");
+				System.out.println(frame.getName());
+				for(int j = 0; j < parents.size();j++){
+					System.out.println("check1");
+					AIFrame parent = aIFrameSystem.getFrame(parents.get(j));
+					System.out.println("check3");
+					if(frameMap.containsKey(parent)){
+						Point2D from =frameMap.get(parent).getCenter();
+						Point2D to = frameMap.get(frame).getCenter();
+						System.out.println(from.getX()+":"+from.getY());
+						System.out.println(to.getX()+":"+to.getY());	
+						
+						g.setColor(Color.black);
+						g.drawLine((int)from.getX(),(int)from.getY(),(int)to.getX(),(int)to.getY());
+					}
+				}
+			}
+		}
 	}
 	
 }
