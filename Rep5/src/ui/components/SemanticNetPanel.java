@@ -10,14 +10,19 @@ import java.awt.Stroke;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import SemanticNet.Link;
-import SemanticNet.Node;
+import javax.swing.SwingUtilities;
 
-public class SemanticNetPanel extends MapPanel {
+import semanticnet.Link;
+import semanticnet.Node;
+import semanticnet.SemanticNet;
+import util.SemanticNetUtils;
+
+public class SemanticNetPanel extends MapPanel implements SemanticNet.Observer {
 	
 	/** 設定 */
 	private static interface Settings {
@@ -58,6 +63,8 @@ public class SemanticNetPanel extends MapPanel {
 		}
 	}
 
+	/** 扱う SemanticNet */
+	protected SemanticNet semanticNet;
 	/** SemanticNet のノードと UINode との対応 */
 	protected HashMap<Node,UINode> nodeMap = new HashMap<Node,UINode>();
 	/** ノード間のリンク */
@@ -94,9 +101,12 @@ public class SemanticNetPanel extends MapPanel {
 	
 	
 	
-	public SemanticNetPanel() {
+	public SemanticNetPanel(SemanticNet semanticNet) {
 		super(new SemanticNetLayout());
+		this.semanticNet = semanticNet;
 		addMouseListener(panelMouseAdapter);
+		
+		initialize();
 	}
 	
 	public void setCallbacks(Callbacks callbacks) {
@@ -105,6 +115,71 @@ public class SemanticNetPanel extends MapPanel {
 	
 	public void startLayout() throws InterruptedException {
 		((SemanticNetLayout) getLayout()).startLayoutThread();
+	}
+	
+	/**
+	 * SemanticNet 内のノードを addNode
+	 */
+	private void initialize() {
+		clear();
+		
+		ArrayList<Node> nodes = new ArrayList<Node>(semanticNet.getHeadNodes());
+		Node centerNode = semanticNet.getMostLink();
+		nodes.remove(centerNode);
+		nodes.add(0,centerNode);
+		
+		final ArrayList<Node> fnodes = nodes;
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for(;;){
+					final Node node = fnodes.get(0);
+					fnodes.remove(0);
+					
+					if(node.getDepartFromMeLinks().size() > 0){
+						ArrayList<Link> link = node.getDepartFromMeLinks();
+						for(Link linkedNode:link){
+							fnodes.add(0,linkedNode.getHead());
+						}
+					}
+					
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+							@Override
+							public void run() {
+								System.out.println("adding node");
+								addNode(node);
+							}
+						});
+					} catch (InvocationTargetException | InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					if(fnodes.size() == 0)
+						break;
+				}
+				
+				try {
+					startLayout();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
+
+		//  ノードセットの方針:リスト（OPENリスト)の先頭から展開していく
+		//	リンクが入ってない（ヘッドノード)をOPENリストに、その中で一番リンクが出ているノードを初めに展開する。
+		//	出てきたリンクをOPENリストの先頭に入れ、以上を繰り返す
+		//
+	}
+	
+	public void clear() {
+		nodeMap.clear();
+		links.clear();
+		centerNode = null;
+		selectedNodes.clear();
 	}
 	
 	/**
@@ -124,6 +199,15 @@ public class SemanticNetPanel extends MapPanel {
 		nodeMap.put(node, uiNode);
 		if (centerNode == null) {
 			centerNode = uiNode;
+		}
+		
+		// リンクも入れる
+		final ArrayList<Link> connectedLinks = SemanticNetUtils.getConnectedLinks(node);
+		for (Link link : connectedLinks) {
+			Node opposite = (node == link.getTail()) ? link.getTail() : link.getHead();
+			if (nodeMap.get(opposite) != null) {
+				addLink(link);
+			}
 		}
 		
 		return (UINode) add(uiNode);
@@ -340,4 +424,18 @@ public class SemanticNetPanel extends MapPanel {
 			}
 		}
 	};
+
+	@Override
+	public void onDataChanged(Link data) { }
+
+	@Override
+	public void onDataSetChanged() {
+		initialize();
+	}
+
+	@Override
+	public void onLinkAdded(Link link) {
+		addNode(link.getHead());
+		addNode(link.getTail());
+	}
 }

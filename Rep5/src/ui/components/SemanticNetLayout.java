@@ -12,8 +12,9 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import SemanticNet.Link;
-import SemanticNet.Node;
+import semanticnet.Link;
+import semanticnet.Node;
+import util.SemanticNetUtils;
 
 public class SemanticNetLayout extends MapLayout {
 
@@ -116,26 +117,6 @@ public class SemanticNetLayout extends MapLayout {
 			comp.setCenter(lp.x, lp.y);
 			getMapPanel().repaint();
 		}
-		
-		final ArrayList<Link> connectedLinks = getConnectedLinks(comp.getNode());
-		for (Link link : connectedLinks) {
-			Node opposite = (comp.getNode() == link.getTail()) ? link.getTail() : link.getHead();
-			UINode uiNode = getUINode(opposite);
-			if (uiNode != null) {
-				getMapPanel().addLink(link);
-			}
-		}
-	}
-
-	/**
-	 * 繋がってる全部のリンクを返す
-	 * @param node
-	 * @return
-	 */
-	private ArrayList<Link> getConnectedLinks(Node node) {
-		ArrayList<Link> links = new ArrayList<Link>(node.getDepartFromMeLinks());
-		links.addAll(node.getArriveAtMeLinks());
-		return links;
 	}
 	
 	/**
@@ -196,7 +177,7 @@ public class SemanticNetLayout extends MapLayout {
 				
 				// ノードの位置とノードにつながっているリンクを取得
 				Point2D p1 = n1.getCenter();
-				ArrayList<Link> links = getConnectedLinks(n1.getNode());
+				ArrayList<Link> links = SemanticNetUtils.getConnectedLinks(n1.getNode());
 				double w = 1.0;
 				
 				// 力 := (0, 0) // この粒子について作用するすべての力の合成を計算する。
