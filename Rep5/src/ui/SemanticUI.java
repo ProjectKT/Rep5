@@ -1,14 +1,10 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -18,18 +14,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import semanticnet.Link;
-import semanticnet.Node;
 import semanticnet.OurSemanticNet;
 import semanticnet.SemanticNet;
-import ui.components.HintTextField;
 import ui.components.SemanticNetPanel;
 import ui.components.UINode;
 import ui.components.input.MapDragListener;
@@ -41,7 +32,6 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 	
 	// --- ビューのメンバ ---
 	private JLabel lblDataView;
-	private HintTextField tfFilter;
 	private JTable tblDataView;
 	private SemanticNetPanel mapPanel;
 	
