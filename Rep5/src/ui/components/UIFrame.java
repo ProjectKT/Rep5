@@ -17,7 +17,14 @@ public class UIFrame extends MapComponent {
 
 	// private int groupnumber;
 
-	Color color = Color.blue;
+	private static interface ColorPalette {
+		Color normal = new Color(0xffadd8e6);
+		Color center = new Color(0xff00ff00);
+		Color highlighted = new Color(0xffff0000);
+	}
+	
+	boolean isCenter = false;
+	boolean isHighlighted = false;
 
 	// AIFrame のAISlotと UISlot との対応
 	protected HashMap<AISlot, UISlot> slotMap = new HashMap<AISlot, UISlot>();
@@ -61,14 +68,6 @@ public class UIFrame extends MapComponent {
 		return frame;
 	}
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 	/**
 	 * {@inheritDoc} ノードを描画する
 	 */
@@ -77,7 +76,7 @@ public class UIFrame extends MapComponent {
 		super.paintComponent(g);
 
 		// TODO ここに描画する部分を書く
-		g.setColor(color);
+		g.setColor(isCenter ? ColorPalette.center : isHighlighted ? ColorPalette.highlighted : ColorPalette.normal);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
 		g.drawString(frame.getName(), 0, 20);

@@ -13,6 +13,10 @@ import Frame.AIFrame;
 import Frame.AIFrameSystem;
 
 public class AIFramePanel0 extends MapPanel {
+	
+	private static interface ColorPalette {
+		Color skyblue = new Color(0xffadd8e6);
+	}
 
 	// AIFrameSystem
 	protected AIFrameSystem aIFrameSystem;
@@ -40,7 +44,7 @@ public class AIFramePanel0 extends MapPanel {
 		
 		AIFrame frame = aIFrameSystem.getFrame(centerFrameName);
 		centerFrame = addFrame(frame, 2, 2);
-		centerFrame.setColor(Color.green);
+		centerFrame.isCenter = true;
 		int up;
 		int down;
 		
@@ -95,6 +99,9 @@ public class AIFramePanel0 extends MapPanel {
 			UIFrame value = (UIFrame) entry.getValue();
 			value.setVisible(false);
 			remove(value);
+		}
+		if (centerFrame != null) {
+			centerFrame.isCenter = false;
 		}
 		frameMap.clear();
 		frameMap = new HashMap<AIFrame, UIFrame>();
@@ -151,7 +158,7 @@ public class AIFramePanel0 extends MapPanel {
 		for (int i = 0; i < demonList.size(); i++) {
 			if (aIFrameSystem.getFrame(demonList.get(i)) != null) {
 				AIFrame changeframe = aIFrameSystem.getFrame(demonList.get(i));
-				frameMap.get(changeframe).setColor(Color.BLUE);
+				frameMap.get(changeframe).isHighlighted = false;
 			}
 		}
 		if (centerFrame != null) {
@@ -162,7 +169,7 @@ public class AIFramePanel0 extends MapPanel {
 		for (int i = 0; i < demonList.size(); i++) {
 			if (aIFrameSystem.getFrame(demonList.get(i)) != null) {
 				AIFrame changeframe = aIFrameSystem.getFrame(demonList.get(i));
-				frameMap.get(changeframe).setColor(Color.RED);
+				frameMap.get(changeframe).isHighlighted = true;
 			}
 		}
 		repaint();
