@@ -17,18 +17,13 @@ import java.util.Iterator;
 
 import javax.swing.SwingUtilities;
 
-<<<<<<< HEAD
-
-
-public class SemanticNetPanel extends MapPanel {
-=======
 import semanticnet.Link;
 import semanticnet.Node;
 import semanticnet.SemanticNet;
 import util.SemanticNetUtils;
+import Frame.Arrow;
 
 public class SemanticNetPanel extends MapPanel implements SemanticNet.Observer {
->>>>>>> branch 'master' of https://github.com/ProjectKT/Rep5.git
 	
 	/** 設定 */
 	private static interface Settings {
