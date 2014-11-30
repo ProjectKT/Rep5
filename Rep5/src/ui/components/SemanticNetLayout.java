@@ -25,7 +25,6 @@ public class SemanticNetLayout extends MapLayout {
 
 	private Object mLock = new Object();
 	private Random random = new Random();
-	private UINode lastAddedUINode = null;
 	// 各ノードの速度ベクトルとの対応
 	private HashMap<UINode,LayoutParam> paramMap = new HashMap<UINode,LayoutParam>();
 	// レイアウトスレッド
@@ -39,11 +38,16 @@ public class SemanticNetLayout extends MapLayout {
 			throw new ClassCastException("mapPanel must be "+SemanticNetPanel.class.getSimpleName());
 		}
 		super.setMapPanel(mapPanel);
-		
-		if (nodeLayoutThread == null) {
-			nodeLayoutThread = new Thread(layoutRunnable);
-			nodeLayoutThread.start();
+	}
+	
+	public void startLayoutThread() throws InterruptedException {
+		if (nodeLayoutThread != null) {
+			nodeLayoutThread.interrupt();
+			nodeLayoutThread.join();
 		}
+
+		nodeLayoutThread = new Thread(layoutRunnable);
+		nodeLayoutThread.start();
 	}
 	
 	/**
@@ -98,18 +102,19 @@ public class SemanticNetLayout extends MapLayout {
 
 		synchronized(mLock) {
 			// LayoutParams を作って map に追加
-			paramMap.put(comp, new LayoutParam());
+			LayoutParam lp = new LayoutParam();
+			paramMap.put(comp, lp);
 			// この時点で今までに MapPanel に追加された UINode はすべて velocityMap に入っている
 
-			final double baseX = (lastAddedUINode == null) ? 0.0 : lastAddedUINode.center.x;
-			final double baseY = (lastAddedUINode == null) ? 0.0 : lastAddedUINode.center.y;
-			// ノードの位置を、(乱数, 乱数) にする。 // 2 つのノードがまったく同じ位置におかれないようにする。
-			comp.setCenter(
-					baseX + (random.nextDouble()-0.5) * 100,
-					baseY + (random.nextDouble()-0.5) * 100
-			);
+			final int n = paramMap.size();
+			final double r = n * 10;
+			final double t = (Math.PI / 5) * (double) n;
 			
-			lastAddedUINode = comp;
+			// ノードの初期位置を設定. 2 つのノードがまったく同じ位置におかれないようにする。
+			lp.x = r * Math.cos(t);
+			lp.y = r * Math.sin(t);
+			comp.setCenter(lp.x, lp.y);
+			getMapPanel().repaint();
 		}
 		
 		final ArrayList<Link> connectedLinks = getConnectedLinks(comp.getNode());
@@ -261,13 +266,9 @@ public class SemanticNetLayout extends MapLayout {
 	}
 	
 	private class LayoutParam {
-		double x;
-		double y;
-		double vx;
-		double vy;
-		
-		public LayoutParam() {
-			this.x = this.y = this.vx = this.vy = 0;
-		}
+		double x = 0;
+		double y = 0;
+		double vx = 0;
+		double vy = 0;
 	}
 }

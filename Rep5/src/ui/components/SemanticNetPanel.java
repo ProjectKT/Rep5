@@ -103,6 +103,10 @@ public class SemanticNetPanel extends MapPanel {
 		this.callbacks = callbacks;
 	}
 	
+	public void startLayout() throws InterruptedException {
+		((SemanticNetLayout) getLayout()).startLayoutThread();
+	}
+	
 	/**
 	 * SemanticNet のノードを追加する
 	 * @param node

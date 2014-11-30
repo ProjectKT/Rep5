@@ -199,12 +199,12 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 			@Override
 			public void run() {
 				for(;;){
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+//						Thread.sleep(1);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 					final Node node = fnodes.get(0);
 					fnodes.remove(0);
 					
@@ -230,6 +230,12 @@ public class SemanticUI extends JFrame implements SemanticNetPanel.Callbacks {
 					
 					if(fnodes.size() == 0)
 						break;
+				}
+				
+				try {
+					mapPanel.startLayout();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		}).start();

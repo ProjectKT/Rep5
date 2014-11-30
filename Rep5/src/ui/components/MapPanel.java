@@ -43,7 +43,7 @@ public class MapPanel extends JPanel implements DesignMode {
 		super.paintBorder(g);
 	}
 	
-	private void doPaintComponent(Graphics g) {
+	protected void doPaintComponent(Graphics g) {
 		// 何か描く
 
 		String s = "center=("+center.x+","+center.y+"), zoom="+zoom;
