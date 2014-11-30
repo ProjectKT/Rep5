@@ -15,6 +15,8 @@ public class UIFrame extends MapComponent {
 	//あと何世代下に移動できるか
 	private int down;
 	
+	//private int groupnumber;
+	
 	Color color = Color.blue;
 	
 	// AIFrame のAISlotと UISlot との対応
@@ -33,6 +35,16 @@ public class UIFrame extends MapComponent {
 		//int hight = frame.get_Slot_size();
 		setSize(50, 50);
 	}
+	
+	/*
+	public void set_groupnumber(int x){
+		groupnumber = x;
+	}
+	
+	public int get_groupnumber(){
+		return groupnumber;
+	}
+	*/
 	
 	public int get_up(){
 		return up;

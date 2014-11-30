@@ -9,6 +9,20 @@ public class AIFrameLayoutver0 extends MapLayout {
 	// レイアウトスレッド
 	private Thread frameLayoutThread;
 	
+	//一番上の世代(祖父、祖母の世代)の数
+	private int count1;
+	
+	//二番目に上の世代(親、叔父、叔母の世代)の数
+	private int count2;
+	
+	//中心の世代(自分、従兄弟の世代)の数
+	private int count3;
+	
+	//二番目に下の世代(子、甥、姪の世代)の数
+	private int count4;
+	
+	//一番下の世代(孫の世代)の数
+	private int count5;
 	
 	/**
 	 * この LayoutManager が取り付けられている先の AIFramePanel を返すメソッド
