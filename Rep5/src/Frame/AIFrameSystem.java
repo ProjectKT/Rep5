@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import SemanticNet.Node;
-
 public class AIFrameSystem {
 
 	final static String sTopFrameName = "top_level_frame";

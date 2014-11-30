@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import Frame.AIFrame;
 import Frame.AIFrameSystem;
@@ -182,19 +183,18 @@ public class AIFramePanel0 extends MapPanel {
 			AIFrame frame = closedList.get(i);
 			if(!(frame.readSlotValue(aIFrameSystem, "親", false) == null)){
 				ArrayList<String> parents = frame.getmVals("親");
-				System.out.println(frame.getName());
+				UIFrame to = frameMap.get(frame);
 				for(int j = 0; j < parents.size();j++){
-					System.out.println("check1");
 					AIFrame parent = aIFrameSystem.getFrame(parents.get(j));
-					System.out.println("check3");
+					UIFrame from = frameMap.get(parent);
 					if(frameMap.containsKey(parent)){
-						Point2D from =frameMap.get(parent).getCenter();
-						Point2D to = frameMap.get(frame).getCenter();
-						System.out.println(from.getX()+":"+from.getY());
-						System.out.println(to.getX()+":"+to.getY());	
+						final double fromX = toRelativeX(from.center.x);
+						final double fromY = toRelativeY(from.center.y);
+						final double toX = toRelativeX(to.center.x);
+						final double toY = toRelativeY(to.center.y);
 						
 						g.setColor(Color.black);
-						g.drawLine((int)from.getX(),(int)from.getY(),(int)to.getX(),(int)to.getY());
+						g.drawLine((int) fromX, (int) fromY, (int) toX, (int) toY);
 					}
 				}
 			}
