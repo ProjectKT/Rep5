@@ -30,42 +30,44 @@ import Frame.AIFrame;
 import Frame.AIFrameSystem;
 import Frame.OurFrameSystem;
 
-public class AIFrameGUI0 extends JFrame implements ListSelectionListener, ActionListener {
+public class AIFrameGUI0 extends JFrame implements ListSelectionListener,
+		ActionListener {
 	// AIFrameSystem のフレームと UIFrame との対応
-	protected HashMap<AIFrame,UIFrame> frameMap = new HashMap<AIFrame,UIFrame>();
-	
+	protected HashMap<AIFrame, UIFrame> frameMap = new HashMap<AIFrame, UIFrame>();
+
 	private AIFramePanel0 mapPanel;
-	
+
 	private AIFrame center;
-	
+
 	private AIFrameSystem AIFramesystem;
-	
-	private ArrayList<String> demonlist= new ArrayList<String>();
-	
-	private String[] data = {"兄","姉","弟","妹","祖父","祖母","息子","娘","叔父","伯父","叔母","伯母","従兄弟","孫","甥","姪"};
+
+	private ArrayList<String> demonlist = new ArrayList<String>();
+
+	private String[] data = { "兄", "姉", "弟", "妹", "祖父", "祖母", "息子", "娘", "叔父",
+			"伯父", "叔母", "伯母", "従兄弟", "孫", "甥", "姪" };
 	JTextField textfield;
 	JPanel commondPanel;
 	JList list;
 	JButton button;
-	
+
 	private ArrayList<AIFrame> openlist = new ArrayList<AIFrame>();
 	private ArrayList<AIFrame> closedlist = new ArrayList<AIFrame>();
-	
-	//コンストラクタ
+
+	// コンストラクタ
 	public AIFrameGUI0(AIFrameSystem AIFramesystem) throws HeadlessException {
 		this.AIFramesystem = AIFramesystem;
 		initialize();
 		setVisible(true);
 	}
-	
-	//初期化
-	private void initialize(){
+
+	// 初期化
+	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, 1000, 800);
 		setTitle("AIFrameUI");
 		setupCommodPanel();
 	}
-	
+
 	private void setupMapPanel() {
 		mapPanel = new AIFramePanel0();
 		MapDragListener dl = new MapDragListener(mapPanel);
@@ -75,25 +77,25 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener, Action
 		mapPanel.addMouseWheelListener(zl);
 		getContentPane().add(mapPanel);
 	}
-	
-	//フレームを全部消す
-	private void resetFrames(){
+
+	// フレームを全部消す
+	private void resetFrames() {
 		for (Iterator it = frameMap.entrySet().iterator(); it.hasNext();) {
-		    Map.Entry entry = (Map.Entry)it.next();
-		    AIFrame key = (AIFrame) entry.getKey();
-		    UIFrame value = (UIFrame) entry.getValue();
-		    value.setVisible(false);
-		     mapPanel.remove(value);
-		    		}
+			Map.Entry entry = (Map.Entry) it.next();
+			AIFrame key = (AIFrame) entry.getKey();
+			UIFrame value = (UIFrame) entry.getValue();
+			value.setVisible(false);
+			mapPanel.remove(value);
+		}
 		frameMap.clear();
-		frameMap = new HashMap<AIFrame,UIFrame>();
+		frameMap = new HashMap<AIFrame, UIFrame>();
 		openlist.clear();
 		closedlist.clear();
 
 	}
-	
-	//フレームを追加する部分
-	//検索ボタンを押す度に呼び出す予定
+
+	// フレームを追加する部分
+	// 検索ボタンを押す度に呼び出す予定
 	private void setupFrames(String name) {
 		AIFrame frame = AIFramesystem.getFrame(name);
 		center = frame;
@@ -101,72 +103,74 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener, Action
 		int down;
 		addFrame(frame, 2, 2);
 		openlist.add(frame);
-		while(openlist.size()>0){
+		while (openlist.size() > 0) {
 			frame = openlist.get(0);
-			
+
 			up = frameMap.get(frame).get_up();
 			down = frameMap.get(frame).get_down();
-			if(up>0){
-			search_up(frame,up-1,down);
+			if (up > 0) {
+				search_up(frame, up - 1, down);
 			}
-			if(down>0){
-			search_down(frame,up,down-1);
+			if (down > 0) {
+				search_down(frame, up, down - 1);
 			}
 			openlist.remove(frame);
 			closedlist.add(frame);
 
 		}
-		for(int i =0;i<closedlist.size();i++){
+		for (int i = 0; i < closedlist.size(); i++) {
 			System.out.println(closedlist.get(i).getName());
 			up = frameMap.get(closedlist.get(i)).get_up();
 			down = frameMap.get(closedlist.get(i)).get_down();
-			System.out.println("up:"+up+", down:"+down);
+			System.out.println("up:" + up + ", down:" + down);
 		}
 	}
-	
-	private void search_up(AIFrame frame,int up,int down){
-		//自分の親が登録されているかチェック
-		if (!(frame.readSlotValue(AIFramesystem, "親", false) == null)){
+
+	private void search_up(AIFrame frame, int up, int down) {
+		// 自分の親が登録されているかチェック
+		if (!(frame.readSlotValue(AIFramesystem, "親", false) == null)) {
 			// 自分の親の名前をとってくる
-		ArrayList<String> parentlist = frame.getmVals("親");
-		for(int i=0; i < parentlist.size(); i++){
-			AIFrame parentframe = AIFramesystem.getFrame(parentlist.get(i));
-			if(!openlist.contains(parentframe) & !closedlist.contains(parentframe)){
-				openlist.add(parentframe);
-				addFrame(parentframe,up,down);
+			ArrayList<String> parentlist = frame.getmVals("親");
+			for (int i = 0; i < parentlist.size(); i++) {
+				AIFrame parentframe = AIFramesystem.getFrame(parentlist.get(i));
+				if (!openlist.contains(parentframe)
+						& !closedlist.contains(parentframe)) {
+					openlist.add(parentframe);
+					addFrame(parentframe, up, down);
+				}
 			}
 		}
-		}
 	}
-	
-	private void search_down(AIFrame frame,int up,int down){
+
+	private void search_down(AIFrame frame, int up, int down) {
 		ArrayList<String> childlist = frame.getLeankersSlotNames("親");
-		for(int i=0; i < childlist.size(); i++){
+		for (int i = 0; i < childlist.size(); i++) {
 			AIFrame childframe = AIFramesystem.getFrame(childlist.get(i));
-			if(!openlist.contains(childframe) & !closedlist.contains(childframe)){
+			if (!openlist.contains(childframe)
+					& !closedlist.contains(childframe)) {
 				openlist.add(childframe);
-				addFrame(childframe,up,down);
+				addFrame(childframe, up, down);
 			}
 		}
 	}
-	
+
 	/**
 	 * ビューに AIFrameSystem のフレームを加える
+	 * 
 	 * @param node
 	 */
-	public void addFrame(AIFrame aIFrame,int up,int down) {
-		UIFrame uIFrame = new UIFrame(aIFrame,up,down);
-		if(aIFrame == center){
+	public void addFrame(AIFrame aIFrame, int up, int down) {
+		UIFrame uIFrame = new UIFrame(aIFrame, up, down);
+		if (aIFrame == center) {
 			uIFrame.setColor(Color.GREEN);
 		}
 		uIFrame.setVisible(true);
 		mapPanel.add(uIFrame);
 		frameMap.put(aIFrame, uIFrame);
 	}
-	
-	
-	//コマンドパネルを追加する部分
-	public void setupCommodPanel(){
+
+	// コマンドパネルを追加する部分
+	public void setupCommodPanel() {
 		commondPanel = new JPanel();
 		list = new JList(data);
 		list.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 25));
@@ -176,79 +180,80 @@ public class AIFrameGUI0 extends JFrame implements ListSelectionListener, Action
 		button = new JButton("検索");
 		button.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 50));
 		button.addActionListener(this);
-		 JScrollPane sp = new JScrollPane();
-		    sp.getViewport().setView(list);
-		    sp.setPreferredSize(new Dimension(100, 100));
+		JScrollPane sp = new JScrollPane();
+		sp.getViewport().setView(list);
+		sp.setPreferredSize(new Dimension(100, 100));
 		commondPanel.setLayout(new GridLayout(1, 3));
 		commondPanel.add(textfield);
 		commondPanel.add(sp);
 		commondPanel.add(button);
 		setupMapPanel();
-		add(commondPanel ,BorderLayout.SOUTH);
+		add(commondPanel, BorderLayout.SOUTH);
 	}
-	
-	//デモン手続きで親族を見つけその色を変える
-	 public void search_demon(String demon){
-		 for(int i=0; i<demonlist.size();i++){
-			 if(AIFramesystem.getFrame(demonlist.get(i))!=null){
-			 AIFrame changeframe = AIFramesystem.getFrame(demonlist.get(i));
-			 frameMap.get(changeframe).setColor(Color.BLUE);;
-			 }
-		 }
-		 if(center!=null){
-			 if(AIFramesystem.getFrame(center.getName())!=null){
-		 demonlist = (ArrayList<String>) AIFramesystem.readSlotValue(center.getName(), demon);
-			 }
-		 }
-		 for(int i=0; i<demonlist.size();i++){
-			 if(AIFramesystem.getFrame(demonlist.get(i))!=null){
-			 AIFrame changeframe = AIFramesystem.getFrame(demonlist.get(i));
-			 frameMap.get(changeframe).setColor(Color.RED);;
-			 }
-		 }
-	 }
 
-	 //登録されている人の名前をコンソールに列挙
-	 public void print_human_name(){
-		 ArrayList<String> list = AIFramesystem.getFrame("人間").getLeankersSlotNames("is-a");
-		 for(int i =0; i<list.size();i++){
-			 System.out.println(list.get(i));
-		 }
-	 }
-	 
+	// デモン手続きで親族を見つけその色を変える
+	public void search_demon(String demon) {
+		for (int i = 0; i < demonlist.size(); i++) {
+			if (AIFramesystem.getFrame(demonlist.get(i)) != null) {
+				AIFrame changeframe = AIFramesystem.getFrame(demonlist.get(i));
+				frameMap.get(changeframe).setColor(Color.BLUE);
+				;
+			}
+		}
+		if (center != null) {
+			if (AIFramesystem.getFrame(center.getName()) != null) {
+				demonlist = (ArrayList<String>) AIFramesystem.readSlotValue(
+						center.getName(), demon);
+			}
+		}
+		for (int i = 0; i < demonlist.size(); i++) {
+			if (AIFramesystem.getFrame(demonlist.get(i)) != null) {
+				AIFrame changeframe = AIFramesystem.getFrame(demonlist.get(i));
+				frameMap.get(changeframe).setColor(Color.RED);
+				;
+			}
+		}
+	}
+
+	// 登録されている人の名前をコンソールに列挙
+	public void print_human_name() {
+		ArrayList<String> list = AIFramesystem.getFrame("人間")
+				.getLeankersSlotNames("is-a");
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
+		}
+	}
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
-		JList lst = (JList)e.getSource();
-		//System.out.println(lst.getSelectedValue());
+		JList lst = (JList) e.getSource();
+		// System.out.println(lst.getSelectedValue());
 		search_demon((String) lst.getSelectedValue());
 		repaint();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		//いま出ているフレームをリセット
-		if(AIFramesystem.getFrame((String)textfield.getText())==null){
+		// いま出ているフレームをリセット
+		if (AIFramesystem.getFrame((String) textfield.getText()) == null) {
 			System.out.println("そのような名前のフレームは登録されていません\n以下の名前のフレームが存在します");
 			print_human_name();
-		}else{
-		resetFrames();
-		//新しいフレームをセット
-		
-		setupFrames(textfield.getText());
-		repaint();
+		} else {
+			resetFrames();
+			// 新しいフレームをセット
+
+			setupFrames(textfield.getText());
+			repaint();
 		}
 	}
 
 	public static void main(String[] args) {
 		OurFrameSystem ofs = new OurFrameSystem();
 
-	AIFrameGUI0 gui = new AIFrameGUI0(ofs);
-	gui.setVisible(true);
-}
-
-
-
+		AIFrameGUI0 gui = new AIFrameGUI0(ofs);
+		gui.setVisible(true);
+	}
 
 }

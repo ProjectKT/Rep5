@@ -56,7 +56,6 @@ public class AIFrameLayout0 extends MapLayout {
 
 	@Override
 	public void addLayoutComponent(String name, Component comp) {
-	
 		System.out.println("addLayoutComponent");
 		if (comp instanceof UIFrame) {
 			getMapPanel().frameMap.put(((UIFrame) comp).getFrame(), (UIFrame) comp);
