@@ -169,10 +169,12 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 	public void setupCommodPanel(){
 		commondPanel = new JPanel();
 		list = new JList(data);
+		list.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 25));
 		textfield = new JTextField("人名");
 		textfield.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 50));
 		list.addListSelectionListener(this);
 		button = new JButton("検索");
+		button.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 50));
 		button.addActionListener(this);
 		 JScrollPane sp = new JScrollPane();
 		    sp.getViewport().setView(list);
@@ -193,7 +195,11 @@ public class AIFrameGUIver0 extends JFrame implements ListSelectionListener, Act
 			 frameMap.get(changeframe).setColor(Color.BLUE);;
 			 }
 		 }
+		 if(center!=null){
+			 if(AIFramesystem.get_Frame(center.get_name())!=null){
 		 demonlist = (ArrayList<String>) AIFramesystem.readSlotValue(center.get_name(), demon);
+			 }
+		 }
 		 for(int i=0; i<demonlist.size();i++){
 			 if(AIFramesystem.get_Frame(demonlist.get(i))!=null){
 			 AIFrame changeframe = AIFramesystem.get_Frame(demonlist.get(i));
