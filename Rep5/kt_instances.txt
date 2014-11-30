@@ -1,37 +1,44 @@
-Kiyo is-a 男
-Kiyo 誕生日 19930524
-Kiyo 身長 xsd:nonNegativeInteger
-Kiyo 体重 xsd:nonNegativeInteger
-Kiyo 親 xsd:string
-Kiyo 眼鏡 true
-Kiyo is-a KiyoZoku
+キヨタカ is-a 人間
+キヨタカ 性別 男
+キヨタカ 誕生日 19930524
+キヨタカ 親 ヒトシ
+キヨタカ 親 スズコ
+
+ヒトシ is-a 人間
+ヒトシ 性別 男
+ヒトシ 誕生日 19620408
+ヒトシ 親 セイキチ
+ヒトシ 親 トメ
+
+セイキチ is-a 人間
+セイキチ 性別 男
+セイキチ 誕生日 19320804
+
+トメ is-a 人間
+トメ 性別 女
+トメ 誕生日 19361201
+
+スズコ is-a 人間
+スズコ 性別 女
+スズコ 誕生日 19631016
+
+レイア is-a 人間
+レイア 性別 女
+レイア 誕生日 19910501
+レイア 親 ヒトシ
+レイア 親 スズコ
+
+タイシン is-a 人間
+タイシン 性別 男
+タイシン 誕生日 19940703
+タイシン 親 ヒトシ
+タイシン 親 スズコ
+
+
 
 Shun is-a 男
 Shun 誕生日 19930706
 
-Kiyo 子 Kotori
-Kiyo 子 Rin
-
-Kiyojiro is-a 人間
-Kiyojiro 性別 男
-Kiyojiro 誕生日 19970524
-Kiyojiro 親 Kiyotaro
-Kiyojiro 親 Kiyomi
-Kiyootouto is-a 人間
-Kiyootouto 性別 男
-Kiyootouto 誕生日 19940524
-Kiyootouto 親 Kiyotaro
-Kiyootouto 親 Kiyomi
-佐藤清隆 is-a 人間
-佐藤清隆 性別 男
-佐藤清隆 誕生日 19930524
-佐藤清隆 親 Kiyotaro
-佐藤清隆 親 Kiyomi
-Kiyotaro is-a 人間
-Kiyotaro 性別 男
-Kiyotaro 誕生日 19500714
-Kiyomi is-a 人間
-Kiyomi 性別 女
 
 カズキ is-a 人間
 カズキ 性別 男
