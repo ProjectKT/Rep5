@@ -2,6 +2,44 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
   <title>知能プログラミング演習IIグループ作成 レポート</title>
+  <style type="text/css">
+<!--
+body {
+	padding: 10px;
+}
+
+div.algorithm {
+  border: 1px dashed #bbb;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+div.algorithm ol {
+  list-style-type: none;
+}
+div.algorithm div.legend {
+  background: #fcfcfc;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+div.algorithm div.legend ul:last-child {
+  margin-bottom: 0;
+}
+div.algorithm ol { padding-left: 5px; }
+div.algorithm li.i1 { padding-left: 30px; }
+div.algorithm li.i2 { padding-left: 60px; }
+div.algorithm li.i3 { padding-left: 90px; }
+div.algorithm li.i4 { padding-left:120px; }
+div.algorithm li.i5 { padding-left:150px; }
+div.algorithm li.i6 { padding-left:180px; }
+div.algorithm li.pad_top { padding-top: 5px; }
+div.algorithm li.bold { font-weight: bold; }
+
+div.algorithm .comment { color: #787979; }
+
+
+
+-->  
+  </style>
 </head>
 
 <!-- このグループ作成資料は，同じファイルを全員のGrepX（Grep5やGrep6等）ディレクトリにコピーして置くこと -->
@@ -107,6 +145,7 @@
 
 <h3>[プログラムの構造]</h3>
 <!--  どのような設計をしたか．-->
+<div style="padding: 0 20px;">
 <pre>
 AIFrameGUI0
 |
@@ -158,78 +197,195 @@ AIFramePanel0
 |
 |-drawline
 </pre>
+</div>
 
 <h3>[実装の説明]</h3>
 <!-- 
  どう実装したか，ソースコードを詳細に説明する．
  特に重要な箇所はレポートにペーストして説明する．
 -->
+<h4 style="font-size: large; color: #236; border-left: 8px #026 double; padding-left: 10px;">SemanticNet 関連</h4>
+<h4>[SemanticUI (SemanticNet GUI)]</h4>
+<p>SemanticNet の GUI は、データセットを表示する部分とグラフを表示する部分から構成されるが、前者は既存のコンポーネント <code>JTable</code> を使い、後者は <code>JComponent</code> を派生させた、地図のような操作が可能なグラフを表示するコンポーネント <code>MapPanel</code> を作り、それを使って実現した。</p>
+<p>この <code>MapPanel</code> は、地図のようにスクロールさせ、子コンポーネントを表示することができる、JPanel を継承したコンテナであり、その機能を提供するために、表示している中心の座標とズーム量を保持している。</p>
 <pre>
+public class MapPanel extends JPanel implements DesignMode {
+	
+	double zoom = 1.0f;
+	Point2D.Double center = new Point2D.Double(0, 0);
+	Rectangle viewportBounds = new Rectangle(0, 0, 0, 0);
+
+	...
+
+}
+</pre>
+<p>子コンポーネントとして <code>MapComponent</code> を持つことを前提としている。この <code>MapComponent</code> は、ワールド座標系における絶対座標、大きさの情報を持ち、<code>MapPanel</code> 内に描画する際に、 <code>MapPanel</code> からの相対座標を計算し、その位置にズームを考慮した適切な大きさで描画されるようにしている。</p>
+<pre>
+public class MapComponent extends JComponent {
+
+	// マップビュー
+	MapPanel panel;
+	// ワールド座標系での中心の位置
+	Point2D.Double center;
+	// 幅
+	double width;
+	// 高さ
+	double height;
+
+	...
+
+	@Override
+	public int getX() {
+		if (panel != null) {
+			return (int) panel.toRelativeX(center.x - width/2.0);
+		}
+		return super.getX();
+	}
+	
+	@Override
+	public int getY() {
+		if (panel != null) {
+			return (int) panel.toRelativeY(center.y - height/2.0);
+		}
+		return super.getY();
+	}
+	
+	@Override
+	public int getWidth() {
+		if (panel != null) {
+			return (int) panel.toRelativeSize(width);
+		}
+		return (int) width;
+	}
+	
+	@Override
+	public int getHeight() {
+		if (panel != null) {
+			return (int) panel.toRelativeSize(height);
+		}
+		return (int) height;
+	}
+
+	...
+}
+</pre>
+<p>このような新しいコンポーネント<code>MapPanel</code>, <code>MapComponent</code> を作り、それを継承して SemanticNet のグラフを表示するためのコンポーネント <code>SemanticNetPanel</code> を作っている。このコンポーネントは SemanticNet のノードを表す <code>UINode</code> コンポーネントを子コンポーネントとして持ち、(Swingの機能により)それらを表示し、かつ SemanticNet のリンクを描画するような機能を持っている。</p>
+<p>今回 SemanticNet のグラフを表示するにあたり、最も重要な部分と考えられる、ノードをきれいに配置する部分は、独自に実装した <code>SemanticNetLayout</code> というレイアウトマネージャが行っている。このレイアウトマネージャは、<b>Force-directed graph drawing</b> アルゴリズムに似たアルゴリズムでノードの配置を行っている。次に用いているアルゴリズムを示す。</p>
+  <div class="container algorithm">
+    <div class="legend">
+      <ul>
+        <li>nodes = [node1, node2, ..., nodeN]: ノードのリスト</li>
+        <li>Fi: i 番目のノードに働く力</li>
+        <li>Vi: i 番目のノードの速度</li>
+        <li>Pi: i 番目のノードの位置</li>
+      </ul>
+    </div>
+    <div>
+      function <b>updateUINodes()</b> : 全ノードの位置を更新する
+      <ol>
+        <li class="i1">e &lt;- 0 // 運動エネルギーの合計を 0 で初期化</li>
+        <li class="i1">for i=0:N {</li>
+        <li class="i2">node1 &lt;- nodes[i];</li>
+        <li class="i2">Fi = [0, 0]; // ノード node1 に働く力を 0 で初期化</li>
+        <li class="i2">&nbsp;</li>
+        <li class="i2 comment pad_top bold">// 他のノードとの反発力を計算</li>
+        <li class="i2">for (UINode node2 : (node1 以外のすべての UINode)) {</li>
+        <li class="i3">Fi &lt;- Fi + (定数) / (距離（node1, node2) ^ 2); // クーロン力を計算</li>
+        <li class="i2">}</li>
+        <li class="i2">&nbsp;</li>
+        <li class="i2 comment pad_top bold">// 繋がっているノードとの引力を計算</li>
+        <li class="i2">for (UINode node2 : node1 と繋がっているノード)</li>
+        <li class="i3">Fi &lt;- Fi + (バネ定数) * (距離 (node1, node2) - バネの自然長)  // フックの法則による力を計算<li>
+        <li class="i2">}</li>
+        <li class="i2 comment pad_top bold">// 原点 (0,0) に戻す力を加える</li>
+        <li class="i2">Fi &lt;- Fi - (定数) * (node1 の位置)</li>
+        <li class="i2">&nbsp;</li>
+        <li class="i2 comment pad_top bold">// 速度, 位置の計算</li>
+	 <li class="i2">Vi &lt;- (Vi +　(微小時間) * Fi / (node1 のリンク数)) * (減衰定数); // node1 の速度 V を求める</li>
+	 <li class="i2">Pi &lt;- Pi + (微小時間) * Vi; // node1 の次フレームの位置 P を求める</li>
+        <li class="i2">&nbsp;</li>
+        <li class="i2 comment pad_top bold">// 運動エネルギー e を更新する</li>
+	 <li class="i2">e &lt;- e + |Vi|</li>
+	 <li class="i1">}</li>
+        <li class="i2">&nbsp;</li>
+        <li class="i1 comment pad_top bold">// 各ノードの位置を更新する</li>
+        <li class="i1">for (UINode node : すべての UINode) {</li>
+        <li class="i2">node.setCenter(Pi);</li>
+	 <li class="i1">}</li>
+      </ol>
+    </div>
+  </div>
+<p>このような Force-directed graph drawing アルゴリズムに似たアルゴリズムを使い、ノードを綺麗に配置するようにした。</p>
+
+<h4 style="font-size: large; color: #236; border-left: 8px #026 double; padding-left: 10px;">AIFrame 関連</h4>
 <h4>[AIFramePanel,AIFrameLayout]</h4>
+<p>
 AIFramePanel0 てフレーム間の線を引いたりフレームの関係を調べる。
 AIFrameLayout0ではフレームの配置を決定している。
-</pre>
+</p>
 <h4>[AIDemonProcs]</h4>
-<pre>
-質疑応答システムについてデモンを使うことにした。
+<p>質疑応答システムについてデモンを使うことにした。
 デモンを使うことによって矛盾が生じにくくなる。
 また、少ないスロット(今回の場合は親のスロットのみ)で家族構成を検索することができる。
-そのため、記入する量が減らすことができる。
+そのため、記入する量が減らすことができる。</p>
 
-ここでデモンの実装の仕方について書く。
+<p>ここでデモンの実装の仕方について書く。</p>
 
-まず条件を満たすものを入れるリストrelistを用意する。
-次の文で自分の親が登録されているかチェックする。
-
+<p>まず条件を満たすものを入れるリストrelistを用意する。
+次の文で自分の親が登録されているかチェックする。</p>
+<pre>
 			//自分の親が登録されているかチェック
 			if (!(inFrame.readSlotValue(inFrameSystem, "親", false) == null)){
-
+</pre>
+<p>
 フレームから親の名前を取ってきてリストolistに入れる。
 親の数(普通は2)だけループさせ、olistからひとりずつ親の名前を取り出し、その名前を元にフレームを取ってくる。
 上と同じようにして親(祖父母)が登録されているかチェックし、名前をリストに入れ、祖父母の数だけループさせる。
 祖父母の逆リンクから子供の名前(祖父母を親だと見て接続している名前)を取ってきてリストklistに入れる。klistには親の兄弟(自分の親も含む)の名前が入ることになる。
-
+</p>
+<pre>
 			// 親の逆リンクから子供の名前(自分を親だと見て接続している名前)をとってくる
 			// klistは兄弟の名前のリスト
 			ArrayList klist = gparentframe.getLeankersSlotNames("親");
-
+</pre>
+<p>
 klistに入っている名前からフレームを取ってきて、それが自分の親でなく、かつ、性別スロットの値が「男」の場合はおじなのでrelistに格納する。(前のループで登録されていない場合のみ)
 最後にrelistを返すが、relistのサイズが0だった場合は対象が登録されていないということなのでメッセージを入れてから返す。
-
+</p>
+<pre>
 			 if(relist.size()==0)
 				 relist.add("登録されていないため分からない");
 			return AIFrame.makeEnum(new ArrayList(relist));
-
 </pre>
 
-<ul>
+
 <FONT color="#708090"><h4>[必須課題5-2＆発展課題5-4]</h4></FONT>
 <ul>
-<FONT color="#4169E1"><h4>[AIFrame]</h4></FONT>
-<li>leankersというHashMapを追加し、自分に対しリンクを持っているフレームを記憶できるようにした。(逆方向のリンク)
-<li>mSlotsにあるスロットの数を返すメソッドを追加、またmSlotsの指定された位置のスロット名を返すメソッドを追加し外部からスロットの中身を確認しやすくした。
-<li>指定されたスロットの中身をArrayListとして返すメソッドを追加した。
-<FONT color="#4169E1"><h4>[AIDemonProcs]</h4></FONT>
-<li>今回の課題5-2に合わせた仕様として家族親戚の情報のスロットを各個人のスロットにいれるのでは無く、上位の人間の概念クラスのデモン手続きとして登録した。<br>具体的には各個人のフレームにはその人の親、誕生日、性別をかならず登録する(逆に言えば人のインスタンスのフレームには親の情報しか家族関係の情報を入れない)。<br>たとえば兄がいる人はその人に兄スロットがあるのでは無く、人間クラスにある兄を求めるデモンを使うことで親の情報などを元に兄を求めることができる。<br>
-これにより弟からは兄として登録されているのに、弟の方では兄が登録されていないという矛盾が起きない<br>
-また個人のインスタンスの登録の時必要な情報が少ないのでデータ記入の際に楽ができる。
-<FONT color="#4169E1"><h4>[FrameQASystem2]</h4></FONT>
-<li>「名古屋市の隣接自治体の隣接自治体の花は？」といった質問に対応できるような質問応答システムにした。<br>
-「の」と「は？」を使うと名称の一部と区別できないのでそれぞれスペースと？で対応し「名古屋市　隣接自治体　隣接自治体　花？」といった質問を受け付けるようにした。<br>
-<li>「(フレーム名)？」でそのフレームのスロット名そのスロット内の値全てと逆リンクを張っているフレームを全て表示するようにした。</ul>
-</ul><ul>
+	<FONT color="#4169E1"><h4>[AIFrame]</h4></FONT>
+	<li>leankersというHashMapを追加し、自分に対しリンクを持っているフレームを記憶できるようにした。(逆方向のリンク)
+	<li>mSlotsにあるスロットの数を返すメソッドを追加、またmSlotsの指定された位置のスロット名を返すメソッドを追加し外部からスロットの中身を確認しやすくした。
+	<li>指定されたスロットの中身をArrayListとして返すメソッドを追加した。
+	<FONT color="#4169E1"><h4>[AIDemonProcs]</h4></FONT>
+	<li>今回の課題5-2に合わせた仕様として家族親戚の情報のスロットを各個人のスロットにいれるのでは無く、上位の人間の概念クラスのデモン手続きとして登録した。<br>具体的には各個人のフレームにはその人の親、誕生日、性別をかならず登録する(逆に言えば人のインスタンスのフレームには親の情報しか家族関係の情報を入れない)。<br>たとえば兄がいる人はその人に兄スロットがあるのでは無く、人間クラスにある兄を求めるデモンを使うことで親の情報などを元に兄を求めることができる。<br>
+	これにより弟からは兄として登録されているのに、弟の方では兄が登録されていないという矛盾が起きない<br>
+	また個人のインスタンスの登録の時必要な情報が少ないのでデータ記入の際に楽ができる。
+	<FONT color="#4169E1"><h4>[FrameQASystem2]</h4></FONT>
+	<li>「名古屋市の隣接自治体の隣接自治体の花は？」といった質問に対応できるような質問応答システムにした。<br>
+	「の」と「は？」を使うと名称の一部と区別できないのでそれぞれスペースと？で対応し「名古屋市　隣接自治体　隣接自治体　花？」といった質問を受け付けるようにした。<br>
+	<li>「(フレーム名)？」でそのフレームのスロット名そのスロット内の値全てと逆リンクを張っているフレームを全て表示するようにした。
+</ul>
+
 <FONT color="#708090"><h4>[必須課題5-3]</h4></FONT>
 今回必須課題5-2で作ったデモン手続きを生かした家族、親戚の関係を表すフレームシステムはデモンありきなのに対し、応用課題5-4はデモンではなくそれぞれのインスタンスのスロットありきなので、それぞれに合わせた二つのGUIを設計した。<br>
 <ul>
-<FONT color="#4169E1"><h4>[AIFrameGUI0]</h4></FONT>
-　必須課題5-2の家族親戚フレームを図で理解できることに特化させて設計したGUI、登録されている人の名前を入力し検索すると、簡易的なその人の家系図が表示される。<br>
-　その状態で姉、従兄弟などの親戚関係をリストから選択すると対応する人物の表示の色が変わりそのひとの親戚や家族が視覚的にわかりやすく調べることができる。<br>
-　当然色の変更には必須課題5-2で作成したデモンを活用している。<br>
-　家系図に表示する人は検索にかけられた人から上の世代、下の世代それぞれ二回までの移動で見つかる人<br>
-<FONT color="#4169E1"><h4>[PoorGUI]</h4></FONT>
-　応用課題5-4での名古屋のデータをツリー構造で表示するGUI、はじめに登録されているフレームを表示し、フレームのスロットのなかでフレームとして登録されているものをトリプルクリックすると、そのフレームがされに展開されくわしいフレームの関係を見ることとができる。<br>
-　完全にJTreeそのものな表示なのでおもしろみがないかもしれない。
-</ul>
+	<FONT color="#4169E1"><h4>[AIFrameGUI0]</h4></FONT>
+	　必須課題5-2の家族親戚フレームを図で理解できることに特化させて設計したGUI、登録されている人の名前を入力し検索すると、簡易的なその人の家系図が表示される。<br>
+	　その状態で姉、従兄弟などの親戚関係をリストから選択すると対応する人物の表示の色が変わりそのひとの親戚や家族が視覚的にわかりやすく調べることができる。<br>
+	　当然色の変更には必須課題5-2で作成したデモンを活用している。<br>
+	　家系図に表示する人は検索にかけられた人から上の世代、下の世代それぞれ二回までの移動で見つかる人<br>
+	<FONT color="#4169E1"><h4>[PoorGUI]</h4></FONT>
+	　応用課題5-4での名古屋のデータをツリー構造で表示するGUI、はじめに登録されているフレームを表示し、フレームのスロットのなかでフレームとして登録されているものをトリプルクリックすると、そのフレームがされに展開されくわしいフレームの関係を見ることとができる。<br>
+	　完全にJTreeそのものな表示なのでおもしろみがないかもしれない。
 </ul>
 <h3>[実行例]</h3>
 <!-- 実行例を示す．PNGやGIF等の絵を張っても良い．-->
