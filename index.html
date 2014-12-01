@@ -1,0 +1,196 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <title>知能プログラミング演習IIグループ作成 レポート</title>
+</head>
+
+<!-- このグループ作成資料は，同じファイルを全員のGrepX（Grep5やGrep6等）ディレクトリにコピーして置くこと -->
+
+<body>
+<center><h1>知能プログラミング演習II グループ作成レポート</h1></center>
+
+<h3>[名前・学籍番号]</h3>
+<!-- グループ全員の名前, 学籍番号を書き，個人作成書類へのリンクを張る -->
+<ul>
+<li><a href="../../../../cjh15067/workspace/kprep/rep5/index.html">佐藤清隆 24115067</a>: フレームのGUIレイアウト担当
+<li><a href="../../../../cjh15088/workspace/kprep/rep5/index.html">寺部和紀 24115088</a>: フレームのデモン担当
+<li><a href="../../../../cjh15109/workspace/kprep/rep5/index.html">早川駿 2411109</a>: フレームのデモン担当
+<li><a href="../../../../cjh15110/workspace/kprep/rep5/index.html">林幸汰 2411110</a>: フレームのGUI担当
+<li><a href="../../../../cjh15113/workspace/kprep/rep5/index.html">林政行 2411113</a>: セマンティック担当
+</ul>
+
+<h3>[役割分担]</h3>
+<!-- 役割分担を書く．-->
+<ul>
+<li>佐藤清隆 : フレームのGUIレイアウト担当
+<li>寺部和紀 : フレームのデモン担当
+<li>早川　駿 : フレームのデモン担当
+<li>林　幸汰 : フレームのGUI、質問応答システム担当
+<li>林　政行 : セマンティック全般、フレームのGUIの基礎作成担当
+<ul>
+
+
+
+<h3>[ソースファイル]</h3>
+<ul>
+<li><a href="../../../git/Rep5/Rep5/src/content/Observable.java">Observable.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/content/Observer.java">Observ.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIClassFrame.java">AIClassFrame.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIDemonProc.java">AIDemonProc.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIDemonProcs.java">AIDemonProcs.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIFrame.java">AIFrame.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIFrameSystem.java">AIFrameSystem.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIInstanceFrame.java">AIInstanceFrame.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AISlot.java">AISlot.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/AIWhenConstructedProc.java">AIWhenConstructedProc.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/FrameQASystem2.java">FrameQASystem2.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/Frame/OurFrameSystem.java">OurFrameSystem.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/semanticnet/Link.java">Link.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/semanticnet/Node.java">Node.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/semanticnet/OurSemanticNet.java">OurSemanticNet.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/semanticnet/SemanticNet.java">SemanticNet.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/input/MapDragListener.java">MapDragListener.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/input/MapZoomListener.java">MapZoomListener.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/AIFrameLayout0.java">AIFrameLayout0.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/AIFramePanel0.java">AIFramePanel0.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/MapComponent.java">MapComponent.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/MapLayout.java">MapLayout.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/MapPanel.java">MapPanel.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/SemanticNetLayout.java">SemanticNetLayout.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/SemanticNetPanel.java">SemanticNetPanel.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/UIFrame.java">UIFrame.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/UILeanker.java">UILeanker.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/UINode.java">UINode.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/components/UISlot.java">UISlot.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/AIFrameGUI0.java">AIFrameGUI0.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/PoorGUI.java">PoorGUI.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/ui/SemanticUI.java">SemanticUI.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/util/ArrayUtils.java">ArrayUtils.java</a>
+<li><a href="../../../git/Rep5/Rep5/src/util/SemanticNetUtils.java">SemanticNetUtils.java</a>
+<li><a href="../../../git/Rep5/Rep5/dbpedia_classes.txt">dbpedia_classes.txt</a>
+<li><a href="../../../git/Rep5/Rep5/kt_classes.txt">kt_classes.txt</a>
+<li><a href="../../../git/Rep5/Rep5/kt_instances.txt">kt_instances.txt</a>
+<li><a href="../../../git/Rep5/Rep5/nagoya_instances.txt">nagoya_instances.txt</a>
+<li><a href="../../../git/Rep5/Rep5/Semantic067.txt">Semantic067.txt</a>
+<li><a href="../../../git/Rep5/Rep5/Semantic088.txt">Semantic088.txt</a>
+<li><a href="../../../git/Rep5/Rep5/Semantic109.txt">Semantic109.txt</a>
+<li><a href="../../../git/Rep5/Rep5/Semantic110.txt">Semantic110.txt</a>
+<li><a href="../../../git/Rep5/Rep5/Semantic113.txt">Semantic113.txt</a>
+<li><a href="../../../git/Rep5/Rep5/SemanticSample.txt">SemanticSample.txt</a>
+<!-- 実装・変更したソースファイルへのリンク．修正する． -->
+<!-- ※ リンクは絶対パスに変更せず，上記のような相対パスのままで！ -->
+</ul>
+
+<hr>
+
+<h3>[課題]</h3>
+<!-- 課題を書く．-->
+
+<pre>
+    [必須課題5-1] セマンティックネットのプログラムを参考に，自分達（グループメンバー）についてのセマンティックネットを構築せよ（教科書p.101 練習問題1）。
+
+    [必須課題5-2] フレームのプログラムを参考に，自分達の家族や親戚，知人等について関連する知識をフレームで表現せよ。
+    また，この家族・親戚フレームを用いた質問応答システムを作成せよ（教科書p.101 練習問題2）。
+
+    [必須課題5-3] セマンティックネットやフレームの関係を図として示すためのユーザインターフェース(GUI) を設計し実装せよ（教科書p.101 練習問題3）。
+
+
+    [発展課題5-4] DBpedia Japaneseは，Wikipedia日本語版から生成された知識表現から成る巨大なデータベースである．
+    上記5-2で作成した質問応答システムを，DBpedia中の知識を使って質問に答えられるよう，拡張せよ．
+</pre>
+<h3>[独自仕様の説明]</h3>
+<!--
+ もし自分で独自に決めた仕様があれば，その説明を書く．
+-->
+各自の個人レポートに記入
+
+
+<h3>[プログラムの構造]</h3>
+<!--  どのような設計をしたか．-->
+<pre>
+AIFrameGUI0
+|
+|-initialize
+|
+|-setupMapPanel
+|
+|-setupCommodPanel
+|
+|-printHumanName
+|
+|-valueChanged
+|
+|-actionPerformed
+|
+|-main
+
+
+AIFrameLayout0
+|
+|-removeLayoutComponent
+|
+|-preferredLayoutSize
+|
+|-layoutContainer
+|
+|-addLayoutComponent
+|
+|-layoutUIFrame
+|
+|-clear
+
+
+AIFramePanel0
+|
+|-showFramesFor
+|
+|-addFrame
+|
+|-clear
+|
+|-searchUP
+|
+|-searchDown
+|
+|-highlightRelatedFrames
+|
+|-doPaintComponent
+|
+|-drawline
+</pre>
+
+<h3>[実装の説明]</h3>
+<!-- 
+ どう実装したか，ソースコードを詳細に説明する．
+ 特に重要な箇所はレポートにペーストして説明する．
+-->
+<pre>
+AIFramePanel0 てフレーム間の線を引いたりフレームの関係を調べたりしています
+AIFrameLayout0ではフレームの配置を決定しています
+</pre>
+
+
+<h3>[実行例]</h3>
+<!-- 実行例を示す．PNGやGIF等の絵を張っても良い．-->
+各自の個人レポート記入
+
+<h3>[グループでの考察]</h3>
+<!-- 
+グループ作成書類に書くように指定された考察事項があれば書く．
+もし指定された考察事項がなければ，個人作成課題に考察を書けばよい．
+-->
+
+
+
+
+<hr>
+
+
+
+<h3>[参考文献]</h3>
+
+<!-- 参考文献を書く．助けてもらった人がいれば，それも書く-->
+
+
+</body>
+</html>
